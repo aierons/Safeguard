@@ -433,7 +433,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4586438588638524, guid: 8904b2da288b82b449cefd90d37c6da8, type: 2}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 4586438588638524, guid: 8904b2da288b82b449cefd90d37c6da8, type: 2}
       propertyPath: m_LocalRotation.x
@@ -455,14 +455,16 @@ Prefab:
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1559269056577368, guid: 8904b2da288b82b449cefd90d37c6da8, type: 2}
-      propertyPath: m_Layer
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 1559269056577368, guid: 8904b2da288b82b449cefd90d37c6da8, type: 2}
-      propertyPath: m_TagString
-      value: Untagged
-      objectReference: {fileID: 0}
+    - target: {fileID: 114836357895158114, guid: 8904b2da288b82b449cefd90d37c6da8,
+        type: 2}
+      propertyPath: bankText
+      value: 
+      objectReference: {fileID: 1120236377}
+    - target: {fileID: 114836357895158114, guid: 8904b2da288b82b449cefd90d37c6da8,
+        type: 2}
+      propertyPath: gatherButton
+      value: 
+      objectReference: {fileID: 1963939759}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 8904b2da288b82b449cefd90d37c6da8, type: 2}
   m_IsPrefabParent: 0
@@ -1190,25 +1192,6 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1898320962}
---- !u!1 &1925564224 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1559269056577368, guid: 8904b2da288b82b449cefd90d37c6da8,
-    type: 2}
-  m_PrefabInternal: {fileID: 501832634}
---- !u!114 &1925564225
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1925564224}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6f381724b916d9b44b92aa2961c62ded, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bankText: {fileID: 1120236377}
-  gatherButton: {fileID: 1963939759}
-  movement: 2
 --- !u!1 &1963939757
 GameObject:
   m_ObjectHideFlags: 0

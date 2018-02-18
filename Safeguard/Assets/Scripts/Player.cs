@@ -13,6 +13,7 @@ public class Player : MonoBehaviour {
 	private int ore; 
 	private int wood;
 	private int actionCount;
+	private Vector3 targetPos;
 
 	private GameObject currentHex;
 
@@ -22,6 +23,7 @@ public class Player : MonoBehaviour {
 		wood = 0;
 		bankText.text = "";
 		actionCount = 3;
+		targetPos = transform.position;
 
 		gatherButton.onClick.AddListener (Gather);
 	}
@@ -30,6 +32,12 @@ public class Player : MonoBehaviour {
 	void Update () {
 		bankText.text = "Action Count: " + actionCount.ToString() + "\nOre: " + ore.ToString() + "\nWood: " + wood.ToString();
 
+		if (Input.GetKeyDown (KeyCode.Mouse0)) {
+			targetPos = Camera.main.ScreenToWorldPoint (Input.mousePosition);
+			targetPos.z = transform.position.z;
+		}
+
+		transform.position = Vector3.MoveTowards (transform.position, targetPos, Time.deltaTime * 10);
 	}
 
 	void Gather() {
