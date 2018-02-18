@@ -7,8 +7,7 @@ public class GridManager: MonoBehaviour
 	//instantiate it by dragging the prefab on this variable using unity editor
 	public GameObject Hex;
 	//next two variables can also be instantiated using unity editor
-	public int gridWidthInHexes = 10;
-	public int gridHeightInHexes = 10;
+	public int gridSideLength;
 
 	//Hexagon tile width and height in game world
 	private float hexWidth;
@@ -19,7 +18,7 @@ public class GridManager: MonoBehaviour
 	{
 		//renderer component attached to the Hex prefab is used to get the current width and height
 		hexWidth = Hex.GetComponent<Renderer>().bounds.size.x;
-		hexHeight = Hex.GetComponent<Renderer>().bounds.size.z;
+		hexHeight = Hex.GetComponent<Renderer>().bounds.size.y;
 	}
 
 	//Method to calculate the position of the first hexagon tile
@@ -28,8 +27,9 @@ public class GridManager: MonoBehaviour
 	{
 		Vector3 initPos;
 		//the initial position will be in the left upper corner
-		initPos = new Vector3(-hexWidth * gridWidthInHexes / 2f + hexWidth / 2, gridHeightInHexes / 2f * hexHeight - hexHeight / 2,
-			0);
+		/*initPos = new Vector3(-hexWidth * (gridSideLength + 6) / 2f + hexWidth / 2,
+			-hexHeight * (gridSideLength + 2) / 2f + hexHeight / 2, 0);*/
+		initPos = new Vector3 (0, 0, 0);
 
 		return initPos;
 	}
@@ -41,13 +41,13 @@ public class GridManager: MonoBehaviour
 		Vector3 initPos = calcInitPos();
 		//Every second row is offset by half of the tile width
 		float offset = 0;
-		if (gridPos.y % 2 != 0)
-			offset = hexWidth / 2;
+		offset = hexWidth / 2;
+		offset *= gridPos.y;
 
 		float x =  initPos.x + offset + gridPos.x * hexWidth;
 		//Every new line is offset in z direction by 3/4 of the hexagon height
-		float z = initPos.z - gridPos.y * hexHeight * 0.75f;
-		return new Vector3(x, z, 0);
+		float y = initPos.y + gridPos.y * hexHeight * 0.75f;
+		return new Vector3(x, y, 0);
 	}
 
 	//Finally the method which initialises and positions all the tiles
@@ -56,16 +56,19 @@ public class GridManager: MonoBehaviour
 		//Game object which is the parent of all the hex tiles
 		GameObject hexGridGO = new GameObject("HexGrid");
 
-		for (float y = 0; y < gridHeightInHexes; y++)
+
+		for (float y = 0; y < (gridSideLength * 2) - 1; y++)
 		{
-			for (float x = 0; x < gridWidthInHexes; x++)
+			for (float x = 0; x < (gridSideLength * 2) - 1; x++)
 			{
-				//GameObject assigned to Hex public variable is cloned
-				GameObject hex = (GameObject)Instantiate(Hex);
-				//Current position in grid
-				Vector2 gridPos = new Vector2(x, y);
-				hex.transform.position = calcWorldCoord(gridPos);
-				hex.transform.parent = hexGridGO.transform;
+				if (x + y >= gridSideLength - 1 && x + y <= 3 * (gridSideLength - 1)) {
+					//GameObject assigned to Hex public variable is cloned
+					GameObject hex = (GameObject)Instantiate (Hex);
+					//Current position in grid
+					Vector2 gridPos = new Vector2 (x, y);
+					hex.transform.position = calcWorldCoord (gridPos);
+					hex.transform.parent = hexGridGO.transform;
+				}
 			}
 		}
 	}
