@@ -20,6 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4542051820962402}
   - component: {fileID: 212768952792263406}
+  - component: {fileID: 114502023572604384}
   m_Layer: 8
   m_Name: Building
   m_TagString: Untagged
@@ -40,6 +41,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114502023572604384
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1955740828192640}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b77e8a16610869449b99472c361ab41e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cooldown: 0
 --- !u!212 &212768952792263406
 SpriteRenderer:
   m_ObjectHideFlags: 1

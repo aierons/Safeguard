@@ -7,10 +7,14 @@ public class Player : MonoBehaviour {
 
 	public Text bankText; 
 	public Button gatherButton;
+	public int movement;
 
+	private bool active;
 	private int ore; 
 	private int wood;
 	private int actionCount;
+
+	private GameObject currentHex;
 
 	// Use this for initialization
 	void Start () {
