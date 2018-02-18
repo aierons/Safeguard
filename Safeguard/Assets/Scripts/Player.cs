@@ -9,6 +9,7 @@ public class Player : MonoBehaviour {
 	public Button gatherButton;
 	public int movement;
 
+	private bool canMove;
 	private bool active;
 	private int ore; 
 	private int wood;
@@ -32,11 +33,18 @@ public class Player : MonoBehaviour {
 	void Update () {
 		bankText.text = "Action Count: " + actionCount.ToString() + "\nOre: " + ore.ToString() + "\nWood: " + wood.ToString();
 
-		if (Input.GetKeyDown (KeyCode.Mouse0)) {
-			targetPos = Camera.main.ScreenToWorldPoint (Input.mousePosition);
-			targetPos.z = transform.position.z;
-		}
+		//if (Input.GetKeyDown (KeyCode.Mouse0)) {
+			//if (Camera.main.ScreenToWorldPoint (Input.mousePosition) == transform) {
+				//active = true;
+			//}
+		//}
 
+		if (active && canMove) {
+			if (Input.GetKeyDown (KeyCode.Mouse0)) {
+				targetPos = Camera.main.ScreenToWorldPoint (Input.mousePosition);
+				targetPos.z = transform.position.z;
+			}
+		}
 		transform.position = Vector3.MoveTowards (transform.position, targetPos, Time.deltaTime * 10);
 	}
 
