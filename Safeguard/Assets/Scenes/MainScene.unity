@@ -465,25 +465,6 @@ Prefab:
       propertyPath: gatherButton
       value: 
       objectReference: {fileID: 1963939759}
-<<<<<<< HEAD
-    - target: {fileID: 114836357895158114, guid: 8904b2da288b82b449cefd90d37c6da8,
-        type: 2}
-      propertyPath: building
-      value: 
-      objectReference: {fileID: 1955740828192640, guid: 5a1b2b192494cdc45b9ca2f730057d7f,
-        type: 2}
-    - target: {fileID: 114836357895158114, guid: 8904b2da288b82b449cefd90d37c6da8,
-        type: 2}
-      propertyPath: buildButton
-      value: 
-      objectReference: {fileID: 1108991410}
-    - target: {fileID: 114836357895158114, guid: 8904b2da288b82b449cefd90d37c6da8,
-        type: 2}
-      propertyPath: buildingSprite
-      value: 
-      objectReference: {fileID: 1955740828192640, guid: 5a1b2b192494cdc45b9ca2f730057d7f,
-        type: 2}
-=======
     - target: {fileID: 1559269056577368, guid: 8904b2da288b82b449cefd90d37c6da8, type: 2}
       propertyPath: m_TagString
       value: Player
@@ -498,7 +479,6 @@ Prefab:
       propertyPath: moveButton
       value: 
       objectReference: {fileID: 504410250}
->>>>>>> 1222d8efa3c46e0d4f4aea8409a6d9794547250f
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 8904b2da288b82b449cefd90d37c6da8, type: 2}
   m_IsPrefabParent: 0
@@ -779,11 +759,7 @@ MonoBehaviour:
   m_Colors:
     m_NormalColor: {r: 0, g: 0.08965492, b: 1, a: 1}
     m_HighlightedColor: {r: 0, g: 0.006896496, b: 1, a: 1}
-<<<<<<< HEAD
-    m_PressedColor: {r: 0.40630594, g: 0.4068988, b: 0.3897059, a: 1}
-=======
     m_PressedColor: {r: 0.7607844, g: 0.7607844, b: 0.7607844, a: 1}
->>>>>>> 1222d8efa3c46e0d4f4aea8409a6d9794547250f
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
