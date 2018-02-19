@@ -10,8 +10,11 @@ public class Player : MonoBehaviour {
 	public int movement;
 
 	public Button gatherButton;
+	public Button buildButton;
 	public Button moveButton;
 	public Button endTurnButton;
+
+	public GameObject buildingSprite;
 
 	private bool canMove;
 	private bool active;
@@ -27,12 +30,13 @@ public class Player : MonoBehaviour {
 		ore = 0;
 		wood = 0;
 		bankText.text = "";
-		actionCount = 3;
+		actionCount = 10;
 		targetPos = transform.position;
 		canMove = false;
 		active = false;
 
 		gatherButton.onClick.AddListener (Gather);
+		buildButton.onClick.AddListener (Build);
 		moveButton.onClick.AddListener (Move);
 		endTurnButton.onClick.AddListener (EndTurn);
 	}
@@ -67,6 +71,15 @@ public class Player : MonoBehaviour {
 
 			actionCount -= 2;
 		}
+	}
+
+	void Build() {
+		if ((ore >= 3 && wood >=2) || (ore >= 2 && wood >= 3) && active) {
+			GameObject building = (GameObject)Instantiate (buildingSprite);
+			building.transform.position = this.transform.position;
+
+			actionCount--;
+		}	
 	}
 
 	void Move() {
