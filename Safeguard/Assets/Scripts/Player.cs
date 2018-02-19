@@ -6,14 +6,17 @@ using UnityEngine.UI;
 public class Player : MonoBehaviour {
 
 	public Text bankText; 
+	public Text actText;
 	public Button gatherButton;
 <<<<<<< HEAD
 	public Button buildButton;
 =======
+	public Button moveButton;
 >>>>>>> 1222d8efa3c46e0d4f4aea8409a6d9794547250f
 	public int movement;
 	public GameObject buildingSprite;
 
+	private bool canMove;
 	private bool active;
 	private int ore; 
 	private int wood;
@@ -37,23 +40,40 @@ public class Player : MonoBehaviour {
 		gatherButton.onClick.AddListener (Gather);
 		buildButton.onClick.AddListener (Build);
 =======
+		canMove = false;
+		active = false;
+
+		gatherButton.onClick.AddListener (Gather);
+		moveButton.onClick.AddListener (Move);
 >>>>>>> 1222d8efa3c46e0d4f4aea8409a6d9794547250f
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		bankText.text = "Action Count: " + actionCount.ToString() + "\nOre: " + ore.ToString() + "\nWood: " + wood.ToString();
+		bankText.text = "Action Count: " + actionCount.ToString() + "\nMovement Left:" + movement.ToString() + "\nOre: " + ore.ToString() + "\nWood: " + wood.ToString();
 
-		if (Input.GetKeyDown (KeyCode.Mouse0)) {
-			targetPos = Camera.main.ScreenToWorldPoint (Input.mousePosition);
-			targetPos.z = transform.position.z;
+		if (active && movement > 0 && canMove) {
+			print ("t");
+			if (Input.GetKeyDown (KeyCode.Mouse0)) {
+				targetPos = Camera.main.ScreenToWorldPoint (Input.mousePosition);
+				targetPos.z = transform.position.z;
+				transform.position = targetPos;
+				movement--;
+				canMove = false;
+			}
 		}
 
-		transform.position = Vector3.MoveTowards (transform.position, targetPos, Time.deltaTime * 10);
+		if (actionCount == 0) {
+			active = false;
+		}
+			
+		if (!active) {
+			actText.text = "No Active Character";
+		}
 	}
 
 	void Gather() {
-		if (actionCount >= 2) {
+		if (actionCount >= 2 && active) {
 			ore += 1;
 			wood += 1;
 
@@ -69,5 +89,16 @@ public class Player : MonoBehaviour {
 		}	
 	}
 =======
+	void Move() {
+		if (active) {
+			canMove = true;
+		}
+	}
+
+	void OnMouseDown() {
+		active = true;
+		actText.text = "Active Character: Jayson\nActions: " + actionCount.ToString();
+	}
+
 >>>>>>> 1222d8efa3c46e0d4f4aea8409a6d9794547250f
 }
