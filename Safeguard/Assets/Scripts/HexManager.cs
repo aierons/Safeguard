@@ -15,6 +15,9 @@ public class HexManager : MonoBehaviour {
 	//gathering variables
 	private int GCoolDown;
 
+	//factory variables
+	private bool hasFactory;
+
 	// Use this for initialization
 	void Start () {
 		

@@ -21,9 +21,10 @@ GameObject:
   - component: {fileID: 4586438588638524}
   - component: {fileID: 212619839073301116}
   - component: {fileID: 114836357895158114}
-  m_Layer: 8
+  - component: {fileID: 58471175175767248}
+  m_Layer: 9
   m_Name: Jason
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -35,12 +36,27 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1559269056577368}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 21.6, y: 12.5, z: 0}
+  m_LocalPosition: {x: 21.6, y: 12.5, z: -1}
   m_LocalScale: {x: 0.1, y: 0.1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!58 &58471175175767248
+CircleCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1559269056577368}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 10
 --- !u!114 &114836357895158114
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -53,8 +69,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bankText: {fileID: 0}
-  gatherButton: {fileID: 0}
+  actText: {fileID: 0}
   movement: 2
+  gatherButton: {fileID: 0}
+  buildButton: {fileID: 0}
+  moveButton: {fileID: 0}
+  endTurnButton: {fileID: 0}
+  buildingSprite: {fileID: 1955740828192640, guid: 5a1b2b192494cdc45b9ca2f730057d7f,
+    type: 2}
 --- !u!212 &212619839073301116
 SpriteRenderer:
   m_ObjectHideFlags: 1

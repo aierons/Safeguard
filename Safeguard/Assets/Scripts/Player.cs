@@ -30,7 +30,7 @@ public class Player : MonoBehaviour {
 		ore = 0;
 		wood = 0;
 		bankText.text = "";
-		actionCount = 10;
+		actionCount = 3;
 		targetPos = transform.position;
 		canMove = false;
 		active = false;
@@ -75,12 +75,22 @@ public class Player : MonoBehaviour {
 	}
 
 	void Build() {
-		if ((ore >= 3 && wood >=2) || (ore >= 2 && wood >= 3) && active) {
-			GameObject building = (GameObject)Instantiate (buildingSprite);
-			building.transform.position = this.transform.position;
-
-			actionCount--;
-		}	
+		if (active && actionCount > 0) {
+			if ((ore >= 3 && wood >= 2)) {
+				ore -= 3;
+				wood -= 2;
+				GameObject building = (GameObject)Instantiate (buildingSprite);
+				building.transform.position = this.transform.position;
+				actionCount--;
+			}
+			else if ((ore >= 2 && wood >= 3)) {
+				ore -= 2;
+				wood -= 3;
+				GameObject building = (GameObject)Instantiate (buildingSprite);
+				building.transform.position = this.transform.position;
+				actionCount--;
+			}
+		}
 	}
 
 	void Move() {
