@@ -7,7 +7,10 @@ public class Player : MonoBehaviour {
 
 	public Text bankText; 
 	public Button gatherButton;
+<<<<<<< HEAD
 	public Button buildButton;
+=======
+>>>>>>> 1222d8efa3c46e0d4f4aea8409a6d9794547250f
 	public int movement;
 	public GameObject buildingSprite;
 
@@ -28,10 +31,13 @@ public class Player : MonoBehaviour {
 		bankText.text = "";
 		actionCount = 10;
 		targetPos = transform.position;
+<<<<<<< HEAD
 		buildingPos = buildingSprite.GetComponent<Transform> ().position;
 
 		gatherButton.onClick.AddListener (Gather);
 		buildButton.onClick.AddListener (Build);
+=======
+>>>>>>> 1222d8efa3c46e0d4f4aea8409a6d9794547250f
 	}
 	
 	// Update is called once per frame
@@ -55,10 +61,13 @@ public class Player : MonoBehaviour {
 		}
 	}
 
+<<<<<<< HEAD
 	void Build() {
 		if ((ore >= 3 && wood >=2) || (ore >= 2 && wood >= 3)) {
 			buildingPos = this.transform.position;
 			print (buildingPos);
 		}	
 	}
+=======
+>>>>>>> 1222d8efa3c46e0d4f4aea8409a6d9794547250f
 }
