@@ -7,9 +7,11 @@ public class Player : MonoBehaviour {
 
 	public Text bankText; 
 	public Text actText;
+	public int movement;
+
 	public Button gatherButton;
 	public Button moveButton;
-	public int movement;
+	public Button endTurnButton;
 
 	private bool canMove;
 	private bool active;
@@ -32,6 +34,7 @@ public class Player : MonoBehaviour {
 
 		gatherButton.onClick.AddListener (Gather);
 		moveButton.onClick.AddListener (Move);
+		endTurnButton.onClick.AddListener (EndTurn);
 	}
 	
 	// Update is called once per frame
@@ -39,7 +42,6 @@ public class Player : MonoBehaviour {
 		bankText.text = "Action Count: " + actionCount.ToString() + "\nMovement Left:" + movement.ToString() + "\nOre: " + ore.ToString() + "\nWood: " + wood.ToString();
 
 		if (active && movement > 0 && canMove) {
-			print ("t");
 			if (Input.GetKeyDown (KeyCode.Mouse0)) {
 				targetPos = Camera.main.ScreenToWorldPoint (Input.mousePosition);
 				targetPos.z = transform.position.z;
@@ -63,7 +65,7 @@ public class Player : MonoBehaviour {
 			ore += 1;
 			wood += 1;
 
-			actionCount--;
+			actionCount -= 2;
 		}
 	}
 
@@ -76,6 +78,12 @@ public class Player : MonoBehaviour {
 	void OnMouseDown() {
 		active = true;
 		actText.text = "Active Character: Jayson\nActions: " + actionCount.ToString();
+	}
+
+	void EndTurn() {
+		active = false;
+		actionCount = 3;
+		movement = 2;
 	}
 
 }
