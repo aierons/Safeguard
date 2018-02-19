@@ -474,6 +474,11 @@ Prefab:
       propertyPath: actText
       value: 
       objectReference: {fileID: 2142216961}
+    - target: {fileID: 114836357895158114, guid: 8904b2da288b82b449cefd90d37c6da8,
+        type: 2}
+      propertyPath: moveButton
+      value: 
+      objectReference: {fileID: 504410250}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 8904b2da288b82b449cefd90d37c6da8, type: 2}
   m_IsPrefabParent: 0
@@ -840,7 +845,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -67.3}
-  m_SizeDelta: {x: 100.45999, y: 98.3}
+  m_SizeDelta: {x: 113.4, y: 98.3}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &1120236377
 MonoBehaviour:

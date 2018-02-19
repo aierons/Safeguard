@@ -8,6 +8,7 @@ public class Player : MonoBehaviour {
 	public Text bankText; 
 	public Text actText;
 	public Button gatherButton;
+	public Button moveButton;
 	public int movement;
 
 	private bool canMove;
@@ -26,26 +27,26 @@ public class Player : MonoBehaviour {
 		bankText.text = "";
 		actionCount = 3;
 		targetPos = transform.position;
-		canMove = true;
+		canMove = false;
 		active = false;
 
 		gatherButton.onClick.AddListener (Gather);
-		gatherButton.onClick.AddListener (Move);
+		moveButton.onClick.AddListener (Move);
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		bankText.text = "Action Count: " + actionCount.ToString() + "\nOre: " + ore.ToString() + "\nWood: " + wood.ToString();
+		bankText.text = "Action Count: " + actionCount.ToString() + "\nMovement Left:" + movement.ToString() + "\nOre: " + ore.ToString() + "\nWood: " + wood.ToString();
 
 		if (active && movement > 0 && canMove) {
 			print ("t");
 			if (Input.GetKeyDown (KeyCode.Mouse0)) {
 				targetPos = Camera.main.ScreenToWorldPoint (Input.mousePosition);
 				targetPos.z = transform.position.z;
+				transform.position = targetPos;
+				movement--;
+				canMove = false;
 			}
-			transform.position = Vector3.MoveTowards (transform.position, targetPos, Time.deltaTime * 10);
-			movement--;
-			canMove = false;
 		}
 
 		if (actionCount == 0) {
@@ -67,7 +68,9 @@ public class Player : MonoBehaviour {
 	}
 
 	void Move() {
-		canMove = true;
+		if (active) {
+			canMove = true;
+		}
 	}
 
 	void OnMouseDown() {
