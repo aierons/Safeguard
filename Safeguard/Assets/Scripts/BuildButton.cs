@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class BuildButton : MonoBehaviour {
 
+	//public GameObject player;
+
+	private Vector3 playerPos;
+
+
 	// Use this for initialization
 	void Start () {
 		
@@ -11,6 +16,5 @@ public class BuildButton : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
 	}
 }
