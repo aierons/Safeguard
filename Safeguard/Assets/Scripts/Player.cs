@@ -57,13 +57,14 @@ public class Player : MonoBehaviour {
 			
 		if (!active) {
 			actText.text = "No Active Character";
+			bankText.text = "Action Count: " + "\nMovement Left:" + "\nOre: " + ore.ToString() + "\nWood: " + wood.ToString();
 		}
 	}
 
 	void Gather() {
 		if (actionCount >= 2 && active) {
-			ore += 1;
-			wood += 1;
+			ore += Random.Range(0, 3);
+			wood += Random.Range(0,3);
 
 			actionCount -= 2;
 		}
