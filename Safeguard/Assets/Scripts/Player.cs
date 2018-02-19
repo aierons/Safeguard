@@ -9,10 +9,13 @@ public class Player : MonoBehaviour {
 	public Text actText;
 	public Button gatherButton;
 <<<<<<< HEAD
+<<<<<<< HEAD
 	public Button buildButton;
 =======
 	public Button moveButton;
 >>>>>>> 1222d8efa3c46e0d4f4aea8409a6d9794547250f
+=======
+>>>>>>> parent of 1222d8e... Finished move (minus limitation)
 	public int movement;
 	public GameObject buildingSprite;
 
@@ -35,6 +38,7 @@ public class Player : MonoBehaviour {
 		actionCount = 10;
 		targetPos = transform.position;
 <<<<<<< HEAD
+<<<<<<< HEAD
 		buildingPos = buildingSprite.GetComponent<Transform> ().position;
 
 		gatherButton.onClick.AddListener (Gather);
@@ -46,21 +50,27 @@ public class Player : MonoBehaviour {
 		gatherButton.onClick.AddListener (Gather);
 		moveButton.onClick.AddListener (Move);
 >>>>>>> 1222d8efa3c46e0d4f4aea8409a6d9794547250f
+=======
+		canMove = true;
+		active = false;
+
+		gatherButton.onClick.AddListener (Gather);
+		gatherButton.onClick.AddListener (Move);
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		bankText.text = "Action Count: " + actionCount.ToString() + "\nMovement Left:" + movement.ToString() + "\nOre: " + ore.ToString() + "\nWood: " + wood.ToString();
+		bankText.text = "Action Count: " + actionCount.ToString() + "\nOre: " + ore.ToString() + "\nWood: " + wood.ToString();
 
 		if (active && movement > 0 && canMove) {
 			print ("t");
 			if (Input.GetKeyDown (KeyCode.Mouse0)) {
 				targetPos = Camera.main.ScreenToWorldPoint (Input.mousePosition);
 				targetPos.z = transform.position.z;
-				transform.position = targetPos;
-				movement--;
-				canMove = false;
 			}
+			transform.position = Vector3.MoveTowards (transform.position, targetPos, Time.deltaTime * 10);
+			movement--;
+			canMove = false;
 		}
 
 		if (actionCount == 0) {
@@ -90,9 +100,7 @@ public class Player : MonoBehaviour {
 	}
 =======
 	void Move() {
-		if (active) {
-			canMove = true;
-		}
+		canMove = true;
 	}
 
 	void OnMouseDown() {
