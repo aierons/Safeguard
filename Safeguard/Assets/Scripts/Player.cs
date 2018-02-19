@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class Player : MonoBehaviour {
 
 	public Text bankText; 
+	public Text actText;
 	public Button gatherButton;
 	public int movement;
 
@@ -25,35 +26,53 @@ public class Player : MonoBehaviour {
 		bankText.text = "";
 		actionCount = 3;
 		targetPos = transform.position;
+		canMove = true;
+		active = false;
 
 		gatherButton.onClick.AddListener (Gather);
+		gatherButton.onClick.AddListener (Move);
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		bankText.text = "Action Count: " + actionCount.ToString() + "\nOre: " + ore.ToString() + "\nWood: " + wood.ToString();
 
-		//if (Input.GetKeyDown (KeyCode.Mouse0)) {
-			//if (Camera.main.ScreenToWorldPoint (Input.mousePosition) == transform) {
-				//active = true;
-			//}
-		//}
-
-		if (active && canMove) {
+		if (active && movement > 0 && canMove) {
+			print ("t");
 			if (Input.GetKeyDown (KeyCode.Mouse0)) {
 				targetPos = Camera.main.ScreenToWorldPoint (Input.mousePosition);
 				targetPos.z = transform.position.z;
 			}
+			transform.position = Vector3.MoveTowards (transform.position, targetPos, Time.deltaTime * 10);
+			movement--;
+			canMove = false;
 		}
-		transform.position = Vector3.MoveTowards (transform.position, targetPos, Time.deltaTime * 10);
+
+		if (actionCount == 0) {
+			active = false;
+		}
+			
+		if (!active) {
+			actText.text = "No Active Character";
+		}
 	}
 
 	void Gather() {
-		if (actionCount >= 2) {
+		if (actionCount >= 2 && active) {
 			ore += 1;
 			wood += 1;
 
 			actionCount--;
 		}
 	}
+
+	void Move() {
+		canMove = true;
+	}
+
+	void OnMouseDown() {
+		active = true;
+		actText.text = "Active Character: Jayson\nActions: " + actionCount.ToString();
+	}
+
 }
