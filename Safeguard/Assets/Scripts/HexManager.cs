@@ -14,6 +14,11 @@ public class HexManager : MonoBehaviour {
 	private int adjBuilds;
 	public Text GCDText;
 
+	//public Sprite Sprite0;
+	//public Sprite SpriteGCD1;
+	//public Sprite SpriteGCD2;
+	//public Sprite SpriteGCD3;
+
 	//gathering variables
 	private int GCoolDown;
 
@@ -34,17 +39,32 @@ public class HexManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		GCDText = (UnityEngine.UI.Text)Instantiate (GCDText);
+		GCDText.transform.SetParent(GameObject.FindGameObjectWithTag("UICanvas").transform);
 		GCDText.text = "";
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		GCDText = (UnityEngine.UI.Text)Instantiate (GCDText);
-		GCDText.text = "";
 	}
 
 	public void DisplayGCD() {
-		GCDText.transform.position = transform.position;
+		Vector3 offset = new Vector3 (323, 236, 0);
+		GCDText.transform.position = transform.position + offset;
 		GCDText.text = GetGCoolDown().ToString ();
+		/*
+		if (GCoolDown == 0) {
+			GetComponent<SpriteRenderer>().sprite = Sprite0; 
+		}
+		if (GCoolDown == 1) {
+			GetComponent<SpriteRenderer>().sprite = SpriteGCD1; 
+		}
+		if (GCoolDown == 2) {
+			GetComponent<SpriteRenderer>().sprite = SpriteGCD2; 
+		}
+		if (GCoolDown == 3) {
+			GetComponent<SpriteRenderer>().sprite = SpriteGCD3; 
+		}
+		*/
 	}
 }
