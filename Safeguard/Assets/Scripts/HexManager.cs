@@ -30,6 +30,10 @@ public class HexManager : MonoBehaviour {
 	public int x;
 	public int y;
 
+	public int getPollution() {
+		return pollution;
+	}
+
 	public void incrememntPollution() {
 		if (pollution < 3) {
 			++pollution;
@@ -39,6 +43,20 @@ public class HexManager : MonoBehaviour {
 	public void decrementPollution() {
 		if (pollution > 0) {
 			--pollution;
+		}
+	}
+
+	public int getAdjBuilds() {
+		return adjBuilds;
+	}
+
+	public void incrementBuilding() {
+		++adjBuilds;
+	}
+
+	public void decrementBuilding() {
+		if (adjBuilds > 0) {
+			--adjBuilds;
 		}
 	}
 
@@ -93,8 +111,17 @@ public class HexManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (pollution >= 3) {
-			this.gameObject.GetComponent<SpriteRenderer> ().color = new Color (0, 0, 0);
+		if (pollution == 0) {
+			this.gameObject.GetComponent<SpriteRenderer> ().color = new Color (1, 1, 1);
+		}
+		if (pollution == 1) {
+			this.gameObject.GetComponent<SpriteRenderer> ().color = new Color (1, 1, 0);
+		}
+		if (pollution == 2) {
+			this.gameObject.GetComponent<SpriteRenderer> ().color = new Color (1, 0, 1);
+		}
+		if (pollution == 3) {
+			this.gameObject.GetComponent<SpriteRenderer> ().color = new Color (1, 0, 0);
 		}
 	}
 
@@ -161,22 +188,28 @@ public class HexManager : MonoBehaviour {
 			GameObject n4 = gridManager.getHex (fx, fy - 1);
 			GameObject n5 = gridManager.getHex (fx - 1, fy + 1);
 			GameObject n6 = gridManager.getHex (fx + 1, fy - 1);
-			if (n1 != null) {
+			if (n1 != null && n1.GetComponent<HexManager>().getAdjBuilds() == 0
+				&& !n1.GetComponent<HexManager>().getHasBuilding()) {
 				n1.GetComponent<HexManager> ().incrememntPollution ();
 			}
-			if (n2 != null) {
+			if (n2 != null && n2.GetComponent<HexManager>().getAdjBuilds() == 0
+				&& !n2.GetComponent<HexManager>().getHasBuilding()) {
 				n2.GetComponent<HexManager> ().incrememntPollution ();
 			}
-			if (n3 != null) {
+			if (n3 != null && n3.GetComponent<HexManager>().getAdjBuilds() == 0
+				&& !n3.GetComponent<HexManager>().getHasBuilding()) {
 				n3.GetComponent<HexManager> ().incrememntPollution ();
 			}
-			if (n4 != null) {
+			if (n4 != null && n4.GetComponent<HexManager>().getAdjBuilds() == 0
+				&& !n4.GetComponent<HexManager>().getHasBuilding()) {
 				n4.GetComponent<HexManager> ().incrememntPollution ();
 			}
-			if (n5 != null) {
+			if (n5 != null && n5.GetComponent<HexManager>().getAdjBuilds() == 0
+				&& !n5.GetComponent<HexManager>().getHasBuilding()) {
 				n5.GetComponent<HexManager> ().incrememntPollution ();
 			}
-			if (n6 != null) {
+			if (n6 != null && n6.GetComponent<HexManager>().getAdjBuilds() == 0
+				&& !n6.GetComponent<HexManager>().getHasBuilding()) {
 				n6.GetComponent<HexManager> ().incrememntPollution ();
 			}
 		}
