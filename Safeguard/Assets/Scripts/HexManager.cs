@@ -9,10 +9,10 @@ public class HexManager : MonoBehaviour {
 	private int pollution;
 
 	//building variables
+	public Text buildingText;
 	private bool HasBuilding;
 	private bool buildingLife;
 	private int adjBuilds;
-	public Text GCDText;
 
 	//public Sprite Sprite0;
 	//public Sprite SpriteGCD1;
@@ -20,6 +20,7 @@ public class HexManager : MonoBehaviour {
 	//public Sprite SpriteGCD3;
 
 	//gathering variables
+	public Text GCDText;
 	private int GCoolDown;
 
 	//factory variables
@@ -36,12 +37,16 @@ public class HexManager : MonoBehaviour {
 	public void LowerGCoolDown() {
 		GCoolDown -= 1;
 	}
-
+		
 	// Use this for initialization
 	void Start () {
 		GCDText = (UnityEngine.UI.Text)Instantiate (GCDText);
 		GCDText.transform.SetParent(GameObject.FindGameObjectWithTag("UICanvas").transform);
 		GCDText.text = "";
+
+		buildingText = (UnityEngine.UI.Text)Instantiate (buildingText);
+		buildingText.transform.SetParent(GameObject.FindGameObjectWithTag("UICanvas").transform);
+		buildingText.text = "";
 	}
 	
 	// Update is called once per frame
@@ -66,5 +71,11 @@ public class HexManager : MonoBehaviour {
 			GetComponent<SpriteRenderer>().sprite = SpriteGCD3; 
 		}
 		*/
+	}
+
+	public void DisplayBuilding() {
+		Vector3 offset = new Vector3 (750, 325, 0);
+		buildingText.transform.position = transform.position + offset;
+		buildingText.text = GetGCoolDown().ToString ();
 	}
 }

@@ -52,6 +52,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef258182662e69f4a968be3702eee74f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buildingText: {fileID: 114747438614262534, guid: 7fb28d9b9b671b243a8069f81059c692,
+    type: 2}
   GCDText: {fileID: 114006702055890062, guid: 224d3389bb919b44a9f1b2234e4fea5c, type: 2}
 --- !u!212 &212883179959623158
 SpriteRenderer:

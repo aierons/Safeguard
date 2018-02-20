@@ -83,7 +83,7 @@ public class Player : MonoBehaviour {
 				actionCount -= 2;
 				currentHex.GetComponent<HexManager> ().StartGCoolDown ();
 				currentHex.GetComponent<HexManager> ().DisplayGCD();
-				msgText.text= "You have gathered " + o.ToString() + " ore, and " + w.ToString() + "wood";
+				msgText.text= "You have gathered " + o.ToString() + " ore, and " + w.ToString() + " wood";
 			}
 		}
 	}
@@ -96,6 +96,9 @@ public class Player : MonoBehaviour {
 				GameObject building = (GameObject)Instantiate (buildingSprite);
 				building.transform.position = this.transform.position;
 				actionCount--;
+
+				currentHex.GetComponent<HexManager> ().StartGCoolDown ();
+				currentHex.GetComponent<HexManager> ().DisplayBuilding ();
 			}
 			else if ((ore >= 2 && wood >= 3)) {
 				ore -= 2;
@@ -103,6 +106,9 @@ public class Player : MonoBehaviour {
 				GameObject building = (GameObject)Instantiate (buildingSprite);
 				building.transform.position = this.transform.position;
 				actionCount--;
+
+				currentHex.GetComponent<HexManager> ().StartGCoolDown ();
+				currentHex.GetComponent<HexManager> ().DisplayBuilding ();
 			}
 		}
 	}
@@ -125,5 +131,7 @@ public class Player : MonoBehaviour {
 		currentHex.GetComponent<HexManager> ().LowerGCoolDown ();
 		currentHex.GetComponent<HexManager> ().DisplayGCD();
 		msgText.text = "";
+
+		currentHex.GetComponent<HexManager> ().DisplayBuilding();
 	}
 }
