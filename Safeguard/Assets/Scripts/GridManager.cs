@@ -20,6 +20,10 @@ public class GridManager: MonoBehaviour
 
 	static IList<GameObject> grid;
 
+	public int GetSideLength() {
+		return gridSideLength;
+	}
+
 	public GameObject getHexGridGO() {
 		return hexGridGO;
 	}

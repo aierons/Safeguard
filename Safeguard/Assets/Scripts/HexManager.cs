@@ -129,13 +129,15 @@ public class HexManager : MonoBehaviour {
 
 	public void DisplayGCD() {
 
+		int sl = GameObject.Find ("GameManager").GetComponent<GridManager> ().GetSideLength ();
+
 		//Vector3 offset = new Vector3 (730, 300, 0);
 		float offset = 0;
 		offset = hexWidth / 2;
 		offset *= y;
 
-		float xc =  (730) + offset + x * hexWidth;
-		float yc = (300) + y * hexHeight * 0.75f; 
+		float xc =  (730) + offset + (x) * hexWidth;
+		float yc = (300) + (y) * hexHeight * 0.75f;
 
 		//int x = ((int)transform.position.x + 730) + (int)hexWidth;
 		//int y = ((int)transform.position.y + 300) + (int)hexHeight;
