@@ -84,12 +84,17 @@ public class Player : MonoBehaviour {
 	}
 
 	void Gather() {
+		GameObject gaman = GameObject.Find ("GameManager");
+		GridManager gridManager = gaman.GetComponent<GridManager> ();
+
 		if (currentHex.GetComponent<HexManager> ().GetGCoolDown () == 0
-			&& currentHex.GetComponent<HexManager>().getPollution() == 0) {
+			&& currentHex.GetComponent<HexManager>().getPollution() == 0
+			&& !(currentHex.transform.position == gridManager.getHex (0, -3).transform.position
+				|| currentHex.transform.position == gridManager.getHex (0, 3).transform.position)) {
 			if (actionCount >= 2 && active) {
-				int o = Random.Range (3, 3);
+				int o = Random.Range (1, 3);
 				ore += o;
-				int w = Random.Range (3, 3);
+				int w = Random.Range (1, 3);
 				wood += w;
 
 				actionCount -= 2;
@@ -107,15 +112,16 @@ public class Player : MonoBehaviour {
 		if (currentHex.GetComponent<HexManager> ().GetBuildingCoolDown () == 0 && currentHex.GetComponent<HexManager> ().getHasBuilding () == false
 			&& currentHex.GetComponent<HexManager>().getPollution() == 0) {
 			if (active && actionCount > 0) {
-				if (ore >= 1 && wood >= 1 && currentHex.transform.position == gridManager.getHex (0, -3).transform.position) {
+				if (ore >= 5 && wood >= 5 && (currentHex.transform.position == gridManager.getHex (0, -3).transform.position
+					|| currentHex.transform.position == gridManager.getHex (0, 3).transform.position)) {
 					currentHex.GetComponent<SpriteRenderer> ().color = new Color (0, 1, 0);
-					//ore -= 5;
+					ore -= 5;
+					wood -= 5;
 					actionCount--;
 					replacedFactories++;
-				} else if (ore >= 1 && wood >= 1 && currentHex.transform.position == gridManager.getHex (0, 3).transform.position) {
-					currentHex.GetComponent<SpriteRenderer> ().color = new Color (0, 1, 0);
-					actionCount--;
-					replacedFactories++;
+				} else if (currentHex.transform.position == gridManager.getHex (0, -3).transform.position
+					|| currentHex.transform.position == gridManager.getHex (0, 3).transform.position) {
+					return;
 				} else if ((ore >= 3 && wood >= 2)) {
 					ore -= 3;
 					wood -= 2;
@@ -180,7 +186,7 @@ public class Player : MonoBehaviour {
 	}
 
 	void Clean() {
-		if (currentHex.GetComponent<HexManager> ().getPollution() != 0) {
+		if (active && currentHex.GetComponent<HexManager> ().getPollution() != 0) {
 			currentHex.GetComponent<HexManager> ().decrementPollution ();
 			--actionCount;
 		}
@@ -246,6 +252,14 @@ public class Player : MonoBehaviour {
 				
 				}
 				hex.GetComponent<HexManager> ().pollute ();
+				if (replacedFactories >= 2) {
+					msgText.text = "You win!"; 
+				}
+			}
+		}
+		foreach (GameObject hex in grid) {
+			if (hex != null) {
+				hex.GetComponent<HexManager> ().refresh ();
 			}
 		}
 

@@ -7,6 +7,7 @@ public class HexManager : MonoBehaviour {
 
 	//pollution variables
 	private int pollution;
+	private bool pollutedThisTurn = false;
 
 	//building variables
 	public Text buildingText;
@@ -32,9 +33,14 @@ public class HexManager : MonoBehaviour {
 		return pollution;
 	}
 
+	public void setPollution(int poll) {
+		pollution = poll;
+	}
+
 	public void incrememntPollution() {
-		if (pollution < 3) {
+		if (pollution < 3 && !pollutedThisTurn) {
 			++pollution;
+			pollutedThisTurn = true;
 		}
 	}
 
@@ -177,7 +183,7 @@ public class HexManager : MonoBehaviour {
 	}
 
 	public void pollute() {
-		if (pollution >= 3) {
+		if (pollution >= 3 && !pollutedThisTurn) {
 			GameObject gm = GameObject.Find ("GameManager");
 			GridManager gridManager = gm.GetComponent<GridManager> ();
 			int fx = x - gridManager.gridSideLength + 1;
@@ -213,5 +219,9 @@ public class HexManager : MonoBehaviour {
 				n6.GetComponent<HexManager> ().incrememntPollution ();
 			}
 		}
+	}
+
+	public void refresh() {
+		pollutedThisTurn = false;
 	}
 }

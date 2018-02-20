@@ -6,9 +6,8 @@ public class FactoryManager : HexManager {
 
 	// Use this for initialization
 	void Start () {
-		this.GetComponent<HexManager> ().incrememntPollution ();
-		this.GetComponent<HexManager> ().incrememntPollution ();
-		this.GetComponent<HexManager> ().incrememntPollution ();
+		this.GetComponent<HexManager> ().setPollution (3);
+		this.GetComponent<HexManager> ().refresh ();
 	}
 	
 	// Update is called once per frame
