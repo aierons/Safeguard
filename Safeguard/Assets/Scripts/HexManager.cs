@@ -54,7 +54,7 @@ public class HexManager : MonoBehaviour {
 	}
 
 	public void DisplayGCD() {
-		Vector3 offset = new Vector3 (323, 236, 0);
+		Vector3 offset = new Vector3 (770, 350, 0);
 		GCDText.transform.position = transform.position + offset;
 		GCDText.text = GetGCoolDown().ToString ();
 		/*
