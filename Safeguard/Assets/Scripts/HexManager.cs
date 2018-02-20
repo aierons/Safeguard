@@ -129,17 +129,19 @@ public class HexManager : MonoBehaviour {
 
 	public void DisplayGCD() {
 
+		int sl = GameObject.Find ("GameManager").GetComponent<GridManager> ().GetSideLength ();
+
 		//Vector3 offset = new Vector3 (730, 300, 0);
 		float offset = 0;
 		offset = hexWidth / 2;
-		offset *= y;
+		offset *= y - sl + 1;
 
-		float xc =  (730) + offset + x * hexWidth;
-		float yc = (300) + y * hexHeight * 0.75f; 
+		float xc =  (transform.position.x + 730+ 500) + offset + (x - sl + 1) * hexWidth;
+		float yc = (transform.position.y + 300) + (y - sl + 1) * hexHeight * 0.75f;
 
 		//int x = ((int)transform.position.x + 730) + (int)hexWidth;
 		//int y = ((int)transform.position.y + 300) + (int)hexHeight;
-		GCDText.transform.position = new Vector3(xc, yc, 0);
+		GCDText.transform.position = new Vector3(xc+ hexWidth, yc+ hexHeight, 0);
 		GCDText.text = GetGCoolDown().ToString ();
 	}
 
