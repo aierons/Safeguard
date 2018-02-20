@@ -10,8 +10,8 @@ public class HexManager : MonoBehaviour {
 
 	//building variables
 	public Text buildingText;
-	private bool HasBuilding;
-	private bool buildingLife;
+	private bool hasBuilding;
+	private int buildingLife;
 	private int adjBuilds;
 
 	//public Sprite Sprite0;
@@ -37,6 +37,22 @@ public class HexManager : MonoBehaviour {
 	public void LowerGCoolDown() {
 		GCoolDown -= 1;
 	}
+
+	public int GetBuildingCoolDown() {
+		return buildingLife;
+	}
+
+	public void StartBuildingCoolDown() {
+		buildingLife = 3;
+	}
+
+	public void LowerBuildingCoolDown() {
+		buildingLife -= 1;
+	}
+
+	public bool getHasBuilding() {
+		return hasBuilding;
+	}
 		
 	// Use this for initialization
 	void Start () {
@@ -47,6 +63,8 @@ public class HexManager : MonoBehaviour {
 		buildingText = (UnityEngine.UI.Text)Instantiate (buildingText);
 		buildingText.transform.SetParent(GameObject.FindGameObjectWithTag("UICanvas").transform);
 		buildingText.text = "";
+
+		hasBuilding = false;
 	}
 	
 	// Update is called once per frame
@@ -74,8 +92,8 @@ public class HexManager : MonoBehaviour {
 	}
 
 	public void DisplayBuilding() {
-		Vector3 offset = new Vector3 (750, 325, 0);
+		Vector3 offset = new Vector3 (700, 300, 0);
 		buildingText.transform.position = transform.position + offset;
-		buildingText.text = GetGCoolDown().ToString ();
+		buildingText.text = GetBuildingCoolDown().ToString ();
 	}
 }

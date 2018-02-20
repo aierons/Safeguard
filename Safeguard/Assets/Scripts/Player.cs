@@ -89,26 +89,31 @@ public class Player : MonoBehaviour {
 	}
 
 	void Build() {
-		if (active && actionCount > 0) {
-			if ((ore >= 3 && wood >= 2)) {
-				ore -= 3;
-				wood -= 2;
-				GameObject building = (GameObject)Instantiate (buildingSprite);
-				building.transform.position = this.transform.position;
-				actionCount--;
+		bool hasBuilding = currentHex.GetComponent<HexManager> ().getHasBuilding ();
+		if (currentHex.GetComponent<HexManager> ().GetBuildingCoolDown () == 0 && hasBuilding == false) {
+			if (active && actionCount > 0) {
+				if ((ore >= 3 && wood >= 2)) {
+					ore -= 3;
+					wood -= 2;
+					GameObject building = (GameObject)Instantiate (buildingSprite);
+					building.transform.position = this.transform.position;
+					actionCount--;
 
-				currentHex.GetComponent<HexManager> ().StartGCoolDown ();
-				currentHex.GetComponent<HexManager> ().DisplayBuilding ();
-			}
-			else if ((ore >= 2 && wood >= 3)) {
-				ore -= 2;
-				wood -= 3;
-				GameObject building = (GameObject)Instantiate (buildingSprite);
-				building.transform.position = this.transform.position;
-				actionCount--;
+					currentHex.GetComponent<HexManager> ().StartBuildingCoolDown ();
+					currentHex.GetComponent<HexManager> ().DisplayBuilding ();
+					hasBuilding = true;
 
-				currentHex.GetComponent<HexManager> ().StartGCoolDown ();
-				currentHex.GetComponent<HexManager> ().DisplayBuilding ();
+				} else if ((ore >= 2 && wood >= 3)) {
+					ore -= 2;
+					wood -= 3;
+					GameObject building = (GameObject)Instantiate (buildingSprite);
+					building.transform.position = this.transform.position;
+					actionCount--;
+
+					currentHex.GetComponent<HexManager> ().StartBuildingCoolDown ();
+					currentHex.GetComponent<HexManager> ().DisplayBuilding ();
+					hasBuilding = true;
+				}
 			}
 		}
 	}
@@ -132,6 +137,7 @@ public class Player : MonoBehaviour {
 		currentHex.GetComponent<HexManager> ().DisplayGCD();
 		msgText.text = "";
 
+		currentHex.GetComponent<HexManager> ().LowerBuildingCoolDown ();
 		currentHex.GetComponent<HexManager> ().DisplayBuilding();
 	}
 }
