@@ -72,7 +72,7 @@ public class HexManager : MonoBehaviour {
 	}
 
 	public void DisplayGCD() {
-		Vector3 offset = new Vector3 (770, 350, 0);
+		Vector3 offset = new Vector3 (730, 300, 0);
 		GCDText.transform.position = transform.position + offset;
 		GCDText.text = GetGCoolDown().ToString ();
 		/*
@@ -95,5 +95,9 @@ public class HexManager : MonoBehaviour {
 		Vector3 offset = new Vector3 (700, 300, 0);
 		buildingText.transform.position = transform.position + offset;
 		buildingText.text = GetBuildingCoolDown().ToString ();
+	}
+
+	public void SwitchHasBuilding() {
+		hasBuilding = !hasBuilding;
 	}
 }
