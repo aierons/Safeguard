@@ -16,7 +16,13 @@ public class GridManager: MonoBehaviour
 	private float hexHeight;
 	private GameObject mouseHex;
 
+	private GameObject hexGridGO;
+
 	static IList<GameObject> grid;
+
+	public GameObject getHexGridGO() {
+		return hexGridGO;
+	}
 
 	public IList<GameObject> getGrid() {
 		return grid;
@@ -83,7 +89,7 @@ public class GridManager: MonoBehaviour
 	void createGrid()
 	{
 		//Game object which is the parent of all the hex tiles
-		GameObject hexGridGO = new GameObject("HexGrid");
+		hexGridGO = new GameObject("HexGrid");
 		bool factory1 = true;
 		bool factory2 = true;
 

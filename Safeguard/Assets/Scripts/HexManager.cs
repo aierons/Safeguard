@@ -18,10 +18,8 @@ public class HexManager : MonoBehaviour {
 
 	private GameObject building;
 
-	//public Sprite Sprite0;
-	//public Sprite SpriteGCD1;
-	//public Sprite SpriteGCD2;
-	//public Sprite SpriteGCD3;
+	private float hexWidth;
+	private float hexHeight;
 
 	//gathering variables
 	public Text GCDText;
@@ -67,6 +65,10 @@ public class HexManager : MonoBehaviour {
 		
 	// Use this for initialization
 	void Start () {
+
+		hexWidth = GetComponent<Renderer>().bounds.size.x;
+		hexHeight = GetComponent<Renderer>().bounds.size.y;
+
 		GCDText = (UnityEngine.UI.Text)Instantiate (GCDText);
 		GCDText.transform.SetParent(GameObject.FindGameObjectWithTag("UICanvas").transform);
 		GCDText.text = "";
@@ -83,23 +85,19 @@ public class HexManager : MonoBehaviour {
 	}
 
 	public void DisplayGCD() {
-		Vector3 offset = new Vector3 (730, 300, 0);
-		GCDText.transform.position = transform.position + offset;
+
+		//Vector3 offset = new Vector3 (730, 300, 0);
+		float offset = 0;
+		offset = hexWidth / 2;
+		offset *= y;
+
+		float xc =  (730) + offset + x * hexWidth;
+		float yc = (300) + y * hexHeight * 0.75f; 
+
+		//int x = ((int)transform.position.x + 730) + (int)hexWidth;
+		//int y = ((int)transform.position.y + 300) + (int)hexHeight;
+		GCDText.transform.position = new Vector3(xc, yc, 0);
 		GCDText.text = GetGCoolDown().ToString ();
-		/*
-		if (GCoolDown == 0) {
-			GetComponent<SpriteRenderer>().sprite = Sprite0; 
-		}
-		if (GCoolDown == 1) {
-			GetComponent<SpriteRenderer>().sprite = SpriteGCD1; 
-		}
-		if (GCoolDown == 2) {
-			GetComponent<SpriteRenderer>().sprite = SpriteGCD2; 
-		}
-		if (GCoolDown == 3) {
-			GetComponent<SpriteRenderer>().sprite = SpriteGCD3; 
-		}
-		*/
 	}
 
 	public void DisplayBuilding() {
