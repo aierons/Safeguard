@@ -104,7 +104,7 @@ public class GridManager: MonoBehaviour
 					GameObject factory = (GameObject)Instantiate (Factory);
 					Vector2 gridPos = new Vector2 (x, y);
 					factory.transform.position = calcWorldCoord (gridPos);
-					factory.transform.parent = hexGridGO.transform;
+					factory.transform.SetParent(hexGridGO.transform);
 					FactoryManager fm = factory.GetComponent<FactoryManager> ();
 					fm.x = x;
 					fm.y = y;
@@ -116,7 +116,7 @@ public class GridManager: MonoBehaviour
 					GameObject factory = (GameObject)Instantiate (Factory);
 					Vector2 gridPos = new Vector2 (x, y);
 					factory.transform.position = calcWorldCoord (gridPos);
-					factory.transform.parent = hexGridGO.transform;
+					factory.transform.SetParent(hexGridGO.transform);
 					FactoryManager fm = factory.GetComponent<FactoryManager> ();
 					fm.x = x;
 					fm.y = y;
@@ -130,7 +130,7 @@ public class GridManager: MonoBehaviour
 					//Current position in grid
 					Vector2 gridPos = new Vector2 (x, y);
 					hex.transform.position = calcWorldCoord (gridPos);
-					hex.transform.parent = hexGridGO.transform;
+					hex.transform.SetParent(hexGridGO.transform);
 					HexManager hm = hex.GetComponent<HexManager> ();
 					hm.x = x;
 					hm.y = y;

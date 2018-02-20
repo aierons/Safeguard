@@ -84,7 +84,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingText: {fileID: 0}
-  buildingSprite: {fileID: 0}
+  buildingSprite: {fileID: 1955740828192640, guid: 5a1b2b192494cdc45b9ca2f730057d7f,
+    type: 2}
   GCDText: {fileID: 0}
   x: 0
   y: 0
