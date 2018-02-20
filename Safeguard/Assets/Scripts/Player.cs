@@ -7,6 +7,7 @@ public class Player : MonoBehaviour {
 
 	public Text bankText; 
 	public Text actText;
+	public Text msgText;
 	public int movement;
 
 	public Button gatherButton;
@@ -35,6 +36,7 @@ public class Player : MonoBehaviour {
 		ore = 0;
 		wood = 0;
 		bankText.text = "";
+		msgText.text = "";
 		actionCount = 3;
 		targetPos = transform.position;
 		canMove = false;
@@ -71,11 +73,18 @@ public class Player : MonoBehaviour {
 	}
 
 	void Gather() {
-		if (actionCount >= 2 && active) {
-			ore += Random.Range(0, 3);
-			wood += Random.Range(0,3);
+		if (currentHex.GetComponent<HexManager> ().GetGCoolDown () == 0) {
+			if (actionCount >= 2 && active) {
+				int o = Random.Range (0, 3);
+				ore += o;
+				int w = Random.Range (0, 3);
+				wood += w;
 
-			actionCount -= 2;
+				actionCount -= 2;
+				currentHex.GetComponent<HexManager> ().StartGCoolDown ();
+				currentHex.GetComponent<HexManager> ().DisplayGCD();
+				msgText.text= "You have gathered " + o.ToString() + " ore, and " + w.ToString() + "wood";
+			}
 		}
 	}
 
@@ -113,6 +122,8 @@ public class Player : MonoBehaviour {
 		active = false;
 		actionCount = 3;
 		movement = 2;
+		currentHex.GetComponent<HexManager> ().LowerGCoolDown ();
+		currentHex.GetComponent<HexManager> ().DisplayGCD();
+		msgText.text = "";
 	}
-
 }
