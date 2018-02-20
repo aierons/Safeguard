@@ -13,6 +13,7 @@ public class Player : MonoBehaviour {
 	public Button gatherButton;
 	public Button buildButton;
 	public Button moveButton;
+	public Button cleanButton;
 	public Button endTurnButton;
 
 	//public GameObject buildingSprite;
@@ -48,6 +49,7 @@ public class Player : MonoBehaviour {
 		gatherButton.onClick.AddListener (Gather);
 		buildButton.onClick.AddListener (Build);
 		moveButton.onClick.AddListener (Move);
+		cleanButton.onClick.AddListener (Clean);
 		endTurnButton.onClick.AddListener (EndTurn);
 	}
 	
@@ -80,11 +82,12 @@ public class Player : MonoBehaviour {
 	}
 
 	void Gather() {
-		if (currentHex.GetComponent<HexManager> ().GetGCoolDown () == 0) {
+		if (currentHex.GetComponent<HexManager> ().GetGCoolDown () == 0
+			&& currentHex.GetComponent<HexManager>().getPollution() == 0) {
 			if (actionCount >= 2 && active) {
-				int o = Random.Range (0, 3);
+				int o = Random.Range (3, 3);
 				ore += o;
-				int w = Random.Range (0, 3);
+				int w = Random.Range (3, 3);
 				wood += w;
 
 				actionCount -= 2;
@@ -97,7 +100,8 @@ public class Player : MonoBehaviour {
 
 	void Build() {
 		bool hasBuilding = currentHex.GetComponent<HexManager> ().getHasBuilding ();
-		if (currentHex.GetComponent<HexManager> ().GetBuildingCoolDown () == 0 && hasBuilding == false) {
+		if (currentHex.GetComponent<HexManager> ().GetBuildingCoolDown () == 0 && hasBuilding == false
+			&& currentHex.GetComponent<HexManager>().getPollution() == 0) {
 			if (active && actionCount > 0) {
 				if ((ore >= 3 && wood >= 2)) {
 					ore -= 3;
@@ -111,6 +115,34 @@ public class Player : MonoBehaviour {
 					currentHex.GetComponent<HexManager> ().DisplayBuilding ();
 					currentHex.GetComponent<HexManager> ().SwitchHasBuilding ();
 
+					GameObject gaman = GameObject.Find ("GameManager");
+					GridManager gridManager = gaman.GetComponent<GridManager> ();
+					int fx = currentHex.GetComponent<HexManager>().x - gridManager.gridSideLength + 1;
+					int fy = currentHex.GetComponent<HexManager>().y - gridManager.gridSideLength + 1;
+					GameObject n1 = gridManager.getHex (fx + 1, fy);
+					GameObject n2 = gridManager.getHex (fx, fy + 1);
+					GameObject n3 = gridManager.getHex (fx - 1, fy);
+					GameObject n4 = gridManager.getHex (fx, fy - 1);
+					GameObject n5 = gridManager.getHex (fx - 1, fy + 1);
+					GameObject n6 = gridManager.getHex (fx + 1, fy - 1);
+					if (n1 != null) {
+						n1.GetComponent<HexManager> ().incrementBuilding ();
+					}
+					if (n2 != null) {
+						n2.GetComponent<HexManager> ().incrementBuilding ();
+					}
+					if (n3 != null) {
+						n3.GetComponent<HexManager> ().incrementBuilding ();
+					}
+					if (n4 != null) {
+						n4.GetComponent<HexManager> ().incrementBuilding ();
+					}
+					if (n5 != null) {
+						n5.GetComponent<HexManager> ().incrementBuilding ();
+					}
+					if (n6 != null) {
+						n6.GetComponent<HexManager> ().incrementBuilding ();
+					}
 
 				} else if ((ore >= 2 && wood >= 3)) {
 					ore -= 2;
@@ -131,6 +163,13 @@ public class Player : MonoBehaviour {
 	void Move() {
 		if (active) {
 			canMove = true;
+		}
+	}
+
+	void Clean() {
+		if (currentHex.GetComponent<HexManager> ().getPollution() != 0) {
+			currentHex.GetComponent<HexManager> ().decrementPollution ();
+			--actionCount;
 		}
 	}
 
@@ -163,7 +202,37 @@ public class Player : MonoBehaviour {
 					//building.SetActive (false);
 					hex.GetComponent<HexManager> ().RemoveBuilding();
 					hex.GetComponent<HexManager> ().SwitchHasBuilding ();
+
+					GridManager gridManager = gm.GetComponent<GridManager> ();
+					int fx = hex.GetComponent<HexManager>().x - gridManager.gridSideLength + 1;
+					int fy = hex.GetComponent<HexManager>().y - gridManager.gridSideLength + 1;
+					GameObject n1 = gridManager.getHex (fx + 1, fy);
+					GameObject n2 = gridManager.getHex (fx, fy + 1);
+					GameObject n3 = gridManager.getHex (fx - 1, fy);
+					GameObject n4 = gridManager.getHex (fx, fy - 1);
+					GameObject n5 = gridManager.getHex (fx - 1, fy + 1);
+					GameObject n6 = gridManager.getHex (fx + 1, fy - 1);
+					if (n1 != null) {
+						n1.GetComponent<HexManager> ().decrementBuilding ();
+					}
+					if (n2 != null) {
+						n2.GetComponent<HexManager> ().decrementBuilding ();
+					}
+					if (n3 != null) {
+						n3.GetComponent<HexManager> ().decrementBuilding ();
+					}
+					if (n4 != null) {
+						n4.GetComponent<HexManager> ().decrementBuilding ();
+					}
+					if (n5 != null) {
+						n5.GetComponent<HexManager> ().decrementBuilding ();
+					}
+					if (n6 != null) {
+						n6.GetComponent<HexManager> ().decrementBuilding ();
+					}
+				
 				}
+				hex.GetComponent<HexManager> ().pollute ();
 			}
 		}
 
