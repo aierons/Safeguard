@@ -30,6 +30,18 @@ public class HexManager : MonoBehaviour {
 	public int x;
 	public int y;
 
+	public void incrememntPollution() {
+		if (pollution < 3) {
+			++pollution;
+		}
+	}
+
+	public void decrementPollution() {
+		if (pollution > 0) {
+			--pollution;
+		}
+	}
+
 	public bool checkLegalMove(GameObject other) {
 		HexManager otherHex = other.GetComponent<HexManager> ();
 		int xa = Mathf.Abs (this.x - otherHex.x);
@@ -76,10 +88,14 @@ public class HexManager : MonoBehaviour {
 		buildingText.text = "";
 
 		hasBuilding = false;
+		pollution = 0;
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		if (pollution >= 3) {
+			this.gameObject.GetComponent<SpriteRenderer> ().color = new Color (0, 0, 0);
+		}
 	}
 
 	public void DisplayGCD() {
@@ -131,5 +147,38 @@ public class HexManager : MonoBehaviour {
 
 	public void RemoveBuilding() {
 		building.SetActive (false);
+	}
+
+	public void pollute() {
+		if (pollution >= 3) {
+			GameObject gm = GameObject.Find ("GameManager");
+			GridManager gridManager = gm.GetComponent<GridManager> ();
+			int fx = x - gridManager.gridSideLength + 1;
+			int fy = y - gridManager.gridSideLength + 1;
+			GameObject n1 = gridManager.getHex (fx + 1, fy);
+			GameObject n2 = gridManager.getHex (fx, fy + 1);
+			GameObject n3 = gridManager.getHex (fx - 1, fy);
+			GameObject n4 = gridManager.getHex (fx, fy - 1);
+			GameObject n5 = gridManager.getHex (fx - 1, fy + 1);
+			GameObject n6 = gridManager.getHex (fx + 1, fy - 1);
+			if (n1 != null) {
+				n1.GetComponent<HexManager> ().incrememntPollution ();
+			}
+			if (n2 != null) {
+				n2.GetComponent<HexManager> ().incrememntPollution ();
+			}
+			if (n3 != null) {
+				n3.GetComponent<HexManager> ().incrememntPollution ();
+			}
+			if (n4 != null) {
+				n4.GetComponent<HexManager> ().incrememntPollution ();
+			}
+			if (n5 != null) {
+				n5.GetComponent<HexManager> ().incrememntPollution ();
+			}
+			if (n6 != null) {
+				n6.GetComponent<HexManager> ().incrememntPollution ();
+			}
+		}
 	}
 }

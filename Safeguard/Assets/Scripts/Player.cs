@@ -164,6 +164,7 @@ public class Player : MonoBehaviour {
 					hex.GetComponent<HexManager> ().RemoveBuilding();
 					hex.GetComponent<HexManager> ().SwitchHasBuilding ();
 				}
+				hex.GetComponent<HexManager> ().pollute ();
 			}
 		}
 

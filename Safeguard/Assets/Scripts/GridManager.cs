@@ -25,8 +25,7 @@ public class GridManager: MonoBehaviour
 	public GameObject getHex(int x, int y) {
 		int realX = x + gridSideLength - 1;
 		int realY = y + gridSideLength - 1;
-		if (realX + realY >= gridSideLength - 1 && realX + realY <= 3 * (gridSideLength - 1)
-			&& realX > 0 && realX < (gridSideLength*2 - 1) && realY >= 0
+		if (realX >= 0 && realX < (gridSideLength*2 - 1) && realY >= 0
 			&& realY < (gridSideLength*2 - 1)) {
 			return grid[realX + ((gridSideLength * 2) - 1) * realY];
 		} else {
