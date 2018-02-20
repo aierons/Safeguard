@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class GridManager: MonoBehaviour
 {
@@ -12,6 +13,20 @@ public class GridManager: MonoBehaviour
 	//Hexagon tile width and height in game world
 	private float hexWidth;
 	private float hexHeight;
+
+	static IList<GameObject> grid;
+
+	public GameObject getHex(int x, int y) {
+		int realX = x + gridSideLength - 1;
+		int realY = y + gridSideLength - 1;
+		if (realX + realY >= gridSideLength - 1 && realX + realY <= 3 * (gridSideLength - 1)
+			&& realX > 0 && realX < (gridSideLength*2 - 1) && realY >= 0
+			&& realY < (gridSideLength*2 - 1)) {
+			return grid[realX + ((gridSideLength * 2) - 1) * realY];
+		} else {
+			return null;
+		}
+	}
 
 	//Method to initialise Hexagon width and height
 	void setSizes()
@@ -57,9 +72,9 @@ public class GridManager: MonoBehaviour
 		GameObject hexGridGO = new GameObject("HexGrid");
 
 
-		for (float y = 0; y < (gridSideLength * 2) - 1; y++)
+		for (int y = 0; y < (gridSideLength * 2) - 1; y++)
 		{
-			for (float x = 0; x < (gridSideLength * 2) - 1; x++)
+			for (int x = 0; x < (gridSideLength * 2) - 1; x++)
 			{
 				if (x + y >= gridSideLength - 1 && x + y <= 3 * (gridSideLength - 1)) {
 					//GameObject assigned to Hex public variable is cloned
@@ -68,14 +83,20 @@ public class GridManager: MonoBehaviour
 					Vector2 gridPos = new Vector2 (x, y);
 					hex.transform.position = calcWorldCoord (gridPos);
 					hex.transform.parent = hexGridGO.transform;
+					grid.Add (hex);
+				} else {
+					grid.Add(null);
 				}
 			}
 		}
 	}
 
 	//The grid should be generated on game start
-	void Start()
+	void Awake()
 	{
+		if (grid == null) {
+			grid = new List<GameObject> ();
+		}
 		setSizes();
 		createGrid();
 	}

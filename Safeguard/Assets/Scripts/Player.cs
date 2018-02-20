@@ -27,6 +27,11 @@ public class Player : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		GameObject gm = GameObject.Find ("GameManager");
+		GridManager gridManager = gm.GetComponent<GridManager> ();
+		currentHex = gridManager.getHex (0, 0);
+		transform.position = currentHex.transform.position;
+
 		ore = 0;
 		wood = 0;
 		bankText.text = "";
