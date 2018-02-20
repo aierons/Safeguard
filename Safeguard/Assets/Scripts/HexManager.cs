@@ -23,8 +23,15 @@ public class HexManager : MonoBehaviour {
 	public Text GCDText;
 	private int GCoolDown;
 
-	//factory variables
-	private bool hasFactory;
+	public int x;
+	public int y;
+
+	public bool checkLegalMove(GameObject other) {
+		HexManager otherHex = other.GetComponent<HexManager> ();
+		int xa = Mathf.Abs (this.x - otherHex.x);
+		int ya = Mathf.Abs (this.y - otherHex.y);
+		return xa <= 1 && ya <= 1 && Mathf.Abs((otherHex.x - this.x) + (otherHex.y - this.y)) < 2;
+	}
 
 	public int GetGCoolDown() {
 		return GCoolDown;
@@ -99,5 +106,17 @@ public class HexManager : MonoBehaviour {
 
 	public void SwitchHasBuilding() {
 		hasBuilding = !hasBuilding;
+	}
+
+	void OnMouseEnter() {
+		GameObject gm = GameObject.Find ("GameManager");
+		GridManager gridManager = gm.GetComponent<GridManager> ();
+		gridManager.setMouseHex (this.gameObject);
+	}
+
+	void OnMouseExit() {
+		GameObject gm = GameObject.Find ("GameManager");
+		GridManager gridManager = gm.GetComponent<GridManager> ();
+		gridManager.setMouseHex (null);
 	}
 }

@@ -34,6 +34,7 @@ public class Player : MonoBehaviour {
 		GridManager gridManager = gm.GetComponent<GridManager> ();
 		currentHex = gridManager.getHex (0, 0);
 		transform.position = currentHex.transform.position;
+		transform.position -= new Vector3 (0, 0, 1);
 
 		ore = 0;
 		wood = 0;
@@ -53,12 +54,16 @@ public class Player : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		bankText.text = "Action Count: " + actionCount.ToString() + "\nMovement Left:" + movement.ToString() + "\nOre: " + ore.ToString() + "\nWood: " + wood.ToString();
-
-		if (active && movement > 0 && canMove) {
-			if (Input.GetKeyDown (KeyCode.Mouse0)) {
-				targetPos = Camera.main.ScreenToWorldPoint (Input.mousePosition);
-				targetPos.z = transform.position.z;
+		GameObject gm = GameObject.Find ("GameManager");
+		GridManager gridManager = gm.GetComponent<GridManager> ();
+		GameObject mouseHex = gridManager.getMouseHex ();
+		if (active && movement > 0 && canMove && mouseHex != null) {
+			HexManager mhMan = mouseHex.GetComponent<HexManager> ();
+			if (Input.GetKeyDown (KeyCode.Mouse0) && mhMan.checkLegalMove (currentHex)) {
+				targetPos = mouseHex.transform.position;
 				transform.position = targetPos;
+				transform.position -= new Vector3 (0, 0, 1);
+				currentHex = mouseHex;
 				movement--;
 				canMove = false;
 			}
@@ -146,7 +151,8 @@ public class Player : MonoBehaviour {
 			currentHex.GetComponent<HexManager> ().LowerBuildingCoolDown ();
 			currentHex.GetComponent<HexManager> ().DisplayBuilding ();
 		}
-		if (currentHex.GetComponent<HexManager> ().GetBuildingCoolDown () == 0) {
+		if (currentHex.GetComponent<HexManager> ().GetBuildingCoolDown () == 0
+			&& currentHex.GetComponent<HexManager> ().getHasBuilding()) {
 			building.SetActive (false);
 			currentHex.GetComponent<HexManager> ().SwitchHasBuilding ();
 		}

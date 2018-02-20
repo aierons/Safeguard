@@ -215,6 +215,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Hex: {fileID: 1223390681550348, guid: 12e33641e2e85334988808094611579f, type: 2}
+  Factory: {fileID: 1832741516922570, guid: 63c291d1b83195747949ff77f167e1c5, type: 2}
   gridSideLength: 4
 --- !u!4 &203564995
 Transform:
