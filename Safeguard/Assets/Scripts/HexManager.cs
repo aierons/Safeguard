@@ -14,6 +14,10 @@ public class HexManager : MonoBehaviour {
 	private int buildingLife;
 	private int adjBuilds;
 
+	public GameObject buildingSprite;
+
+	private GameObject building;
+
 	//public Sprite Sprite0;
 	//public Sprite SpriteGCD1;
 	//public Sprite SpriteGCD2;
@@ -118,5 +122,14 @@ public class HexManager : MonoBehaviour {
 		GameObject gm = GameObject.Find ("GameManager");
 		GridManager gridManager = gm.GetComponent<GridManager> ();
 		gridManager.setMouseHex (null);
+	}
+
+	public void MakeBuilding() {
+		building = (GameObject)Instantiate (buildingSprite);
+		building.transform.position = this.transform.position;
+	}
+
+	public void RemoveBuilding() {
+		building.SetActive (false);
 	}
 }

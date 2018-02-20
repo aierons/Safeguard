@@ -18,6 +18,10 @@ public class GridManager: MonoBehaviour
 
 	static IList<GameObject> grid;
 
+	public IList<GameObject> getGrid() {
+		return grid;
+	}
+
 	public GameObject getHex(int x, int y) {
 		int realX = x + gridSideLength - 1;
 		int realY = y + gridSideLength - 1;

@@ -15,9 +15,9 @@ public class Player : MonoBehaviour {
 	public Button moveButton;
 	public Button endTurnButton;
 
-	public GameObject buildingSprite;
+	//public GameObject buildingSprite;
 
-	private GameObject building;
+	//private GameObject building;
 
 	private bool canMove;
 	private bool active;
@@ -102,10 +102,11 @@ public class Player : MonoBehaviour {
 				if ((ore >= 3 && wood >= 2)) {
 					ore -= 3;
 					wood -= 2;
-					building = (GameObject)Instantiate (buildingSprite);
-					building.transform.position = this.transform.position;
+					//building = (GameObject)Instantiate (buildingSprite);
+					//building.transform.position = this.transform.position;
 					actionCount--;
 
+					currentHex.GetComponent<HexManager> ().MakeBuilding ();
 					currentHex.GetComponent<HexManager> ().StartBuildingCoolDown ();
 					currentHex.GetComponent<HexManager> ().DisplayBuilding ();
 					currentHex.GetComponent<HexManager> ().SwitchHasBuilding ();
@@ -114,10 +115,11 @@ public class Player : MonoBehaviour {
 				} else if ((ore >= 2 && wood >= 3)) {
 					ore -= 2;
 					wood -= 3;
-					GameObject building = (GameObject)Instantiate (buildingSprite);
-					building.transform.position = this.transform.position;
+					//GameObject building = (GameObject)Instantiate (buildingSprite);
+					//building.transform.position = this.transform.position;
 					actionCount--;
 
+					currentHex.GetComponent<HexManager> ().MakeBuilding ();
 					currentHex.GetComponent<HexManager> ().StartBuildingCoolDown ();
 					currentHex.GetComponent<HexManager> ().DisplayBuilding ();
 					currentHex.GetComponent<HexManager> ().SwitchHasBuilding ();
@@ -141,20 +143,30 @@ public class Player : MonoBehaviour {
 		active = false;
 		actionCount = 3;
 		movement = 2;
-		if (currentHex.GetComponent<HexManager> ().GetGCoolDown() > 0) {
-			currentHex.GetComponent<HexManager> ().LowerGCoolDown ();
-			currentHex.GetComponent<HexManager> ().DisplayGCD ();
-		}
 		msgText.text = "";
 
-		if (currentHex.GetComponent<HexManager> ().GetBuildingCoolDown() > 0) {
-			currentHex.GetComponent<HexManager> ().LowerBuildingCoolDown ();
-			currentHex.GetComponent<HexManager> ().DisplayBuilding ();
+		GameObject gm = GameObject.Find ("GameManager");
+		IList<GameObject> grid = gm.GetComponent<GridManager> ().getGrid ();
+		foreach(GameObject hex in grid) {
+			if (hex != null) {
+				if (hex.GetComponent<HexManager> ().GetGCoolDown () > 0) {
+					hex.GetComponent<HexManager> ().LowerGCoolDown ();
+					hex.GetComponent<HexManager> ().DisplayGCD ();
+				}
+
+				if (hex.GetComponent<HexManager> ().GetBuildingCoolDown () > 0) {
+					hex.GetComponent<HexManager> ().LowerBuildingCoolDown ();
+					hex.GetComponent<HexManager> ().DisplayBuilding ();
+				}
+				if (hex.GetComponent<HexManager> ().GetBuildingCoolDown () == 0
+				   && hex.GetComponent<HexManager> ().getHasBuilding ()) {
+					//building.SetActive (false);
+					hex.GetComponent<HexManager> ().RemoveBuilding();
+					hex.GetComponent<HexManager> ().SwitchHasBuilding ();
+				}
+			}
 		}
-		if (currentHex.GetComponent<HexManager> ().GetBuildingCoolDown () == 0
-			&& currentHex.GetComponent<HexManager> ().getHasBuilding()) {
-			building.SetActive (false);
-			currentHex.GetComponent<HexManager> ().SwitchHasBuilding ();
-		}
+
+
 	}
 }
