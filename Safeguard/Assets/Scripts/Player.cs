@@ -20,6 +20,7 @@ public class Player : MonoBehaviour {
 
 	//private GameObject building;
 
+	private int replacedFactories;
 	private bool canMove;
 	private bool active;
 	private int ore; 
@@ -45,6 +46,7 @@ public class Player : MonoBehaviour {
 		targetPos = transform.position;
 		canMove = false;
 		active = false;
+		replacedFactories = 0;
 
 		gatherButton.onClick.AddListener (Gather);
 		buildButton.onClick.AddListener (Build);
@@ -99,11 +101,22 @@ public class Player : MonoBehaviour {
 	}
 
 	void Build() {
-		bool hasBuilding = currentHex.GetComponent<HexManager> ().getHasBuilding ();
-		if (currentHex.GetComponent<HexManager> ().GetBuildingCoolDown () == 0 && hasBuilding == false
+		GameObject gaman = GameObject.Find ("GameManager");
+		GridManager gridManager = gaman.GetComponent<GridManager> ();
+
+		if (currentHex.GetComponent<HexManager> ().GetBuildingCoolDown () == 0 && currentHex.GetComponent<HexManager> ().getHasBuilding () == false
 			&& currentHex.GetComponent<HexManager>().getPollution() == 0) {
 			if (active && actionCount > 0) {
-				if ((ore >= 3 && wood >= 2)) {
+				if (ore >= 1 && wood >= 1 && currentHex.transform.position == gridManager.getHex (0, -3).transform.position) {
+					currentHex.GetComponent<SpriteRenderer> ().color = new Color (0, 1, 0);
+					//ore -= 5;
+					actionCount--;
+					replacedFactories++;
+				} else if (ore >= 1 && wood >= 1 && currentHex.transform.position == gridManager.getHex (0, 3).transform.position) {
+					currentHex.GetComponent<SpriteRenderer> ().color = new Color (0, 1, 0);
+					actionCount--;
+					replacedFactories++;
+				} else if ((ore >= 3 && wood >= 2)) {
 					ore -= 3;
 					wood -= 2;
 					//building = (GameObject)Instantiate (buildingSprite);
@@ -115,10 +128,10 @@ public class Player : MonoBehaviour {
 					currentHex.GetComponent<HexManager> ().DisplayBuilding ();
 					currentHex.GetComponent<HexManager> ().SwitchHasBuilding ();
 
-					GameObject gaman = GameObject.Find ("GameManager");
-					GridManager gridManager = gaman.GetComponent<GridManager> ();
-					int fx = currentHex.GetComponent<HexManager>().x - gridManager.gridSideLength + 1;
-					int fy = currentHex.GetComponent<HexManager>().y - gridManager.gridSideLength + 1;
+					//GameObject gaman = GameObject.Find ("GameManager");
+					//GridManager gridManager = gaman.GetComponent<GridManager> ();
+					int fx = currentHex.GetComponent<HexManager> ().x - gridManager.gridSideLength + 1;
+					int fy = currentHex.GetComponent<HexManager> ().y - gridManager.gridSideLength + 1;
 					GameObject n1 = gridManager.getHex (fx + 1, fy);
 					GameObject n2 = gridManager.getHex (fx, fy + 1);
 					GameObject n3 = gridManager.getHex (fx - 1, fy);
