@@ -24,7 +24,7 @@ GameObject:
   - component: {fileID: 58471175175767248}
   m_Layer: 9
   m_Name: Jason
-  m_TagString: Player
+  m_TagString: Jayson
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -68,15 +68,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f381724b916d9b44b92aa2961c62ded, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bankText: {fileID: 0}
-  actText: {fileID: 0}
   msgText: {fileID: 0}
+  xoffset: 0
+  yoffset: 1.3
   movement: 2
-  gatherButton: {fileID: 0}
-  buildButton: {fileID: 0}
-  moveButton: {fileID: 0}
-  cleanButton: {fileID: 0}
-  endTurnButton: {fileID: 0}
 --- !u!212 &212619839073301116
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -109,10 +104,10 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -952699413
-  m_SortingLayer: 1
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 544ecf471f5da5c4a8582c2930cf8116, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.86206913, g: 0, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

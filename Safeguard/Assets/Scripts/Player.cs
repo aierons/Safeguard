@@ -5,26 +5,21 @@ using UnityEngine.UI;
 
 public class Player : MonoBehaviour {
 
-	public Text bankText; 
-	public Text actText;
-	public Text msgText;
-	public int movement;
-
-	public Button gatherButton;
-	public Button buildButton;
-	public Button moveButton;
-	public Button cleanButton;
-	public Button endTurnButton;
 
 	//public GameObject buildingSprite;
 
 	//private GameObject building;
 
-	private int replacedFactories;
+	private TeamManager team;
+
+	public Text msgText;
+
+	public float xoffset;
+	public float yoffset;
+
+	public int movement;
 	private bool canMove;
 	private bool active;
-	private int ore; 
-	private int wood;
 	private int actionCount;
 	private Vector3 targetPos;
 
@@ -32,32 +27,27 @@ public class Player : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		team = GameObject.FindGameObjectWithTag ("Team").GetComponent<TeamManager> ();
+
 		GameObject gm = GameObject.Find ("GameManager");
 		GridManager gridManager = gm.GetComponent<GridManager> ();
 		currentHex = gridManager.getHex (0, 0);
 		transform.position = currentHex.transform.position;
 		transform.position -= new Vector3 (0, 0, 1);
+		transform.position += new Vector3 (xoffset, yoffset, 0);
 
-		ore = 0;
-		wood = 0;
-		bankText.text = "";
 		msgText.text = "";
+
 		actionCount = 3;
 		targetPos = transform.position;
 		canMove = false;
 		active = false;
-		replacedFactories = 0;
 
-		gatherButton.onClick.AddListener (Gather);
-		buildButton.onClick.AddListener (Build);
-		moveButton.onClick.AddListener (Move);
-		cleanButton.onClick.AddListener (Clean);
-		endTurnButton.onClick.AddListener (EndTurn);
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		bankText.text = "Action Count: " + actionCount.ToString() + "\nMovement Left:" + movement.ToString() + "\nOre: " + ore.ToString() + "\nWood: " + wood.ToString();
+		
 		GameObject gm = GameObject.Find ("GameManager");
 		GridManager gridManager = gm.GetComponent<GridManager> ();
 		GameObject mouseHex = gridManager.getMouseHex ();
@@ -67,6 +57,7 @@ public class Player : MonoBehaviour {
 				targetPos = mouseHex.transform.position;
 				transform.position = targetPos;
 				transform.position -= new Vector3 (0, 0, 1);
+				transform.position += new Vector3 (xoffset, yoffset, 0);
 				currentHex = mouseHex;
 				movement--;
 				canMove = false;
@@ -77,13 +68,21 @@ public class Player : MonoBehaviour {
 			active = false;
 		}
 			
-		if (!active) {
-			actText.text = "No Active Character";
-			bankText.text = "Action Count: " + "\nMovement Left:" + "\nOre: " + ore.ToString() + "\nWood: " + wood.ToString();
-		}
 	}
 
-	void Gather() {
+	public bool isActive() {
+		return active;
+	}
+
+	public void setActive(bool b) {
+		active = b;
+	}
+
+	public int getActionCount() {
+		return actionCount;
+	}
+
+	public void Gather() {
 		GameObject gaman = GameObject.Find ("GameManager");
 		GridManager gridManager = gaman.GetComponent<GridManager> ();
 
@@ -93,9 +92,9 @@ public class Player : MonoBehaviour {
 				|| currentHex.transform.position == gridManager.getHex (0, 3).transform.position)) {
 			if (actionCount >= 2 && active) {
 				int o = Random.Range (1, 3);
-				ore += o;
+				team.ore += o;
 				int w = Random.Range (1, 3);
-				wood += w;
+				team.wood += w;
 
 				actionCount -= 2;
 				currentHex.GetComponent<HexManager> ().StartGCoolDown ();
@@ -105,26 +104,26 @@ public class Player : MonoBehaviour {
 		}
 	}
 
-	void Build() {
+	public void Build() {
 		GameObject gaman = GameObject.Find ("GameManager");
 		GridManager gridManager = gaman.GetComponent<GridManager> ();
 
 		if (currentHex.GetComponent<HexManager> ().GetBuildingCoolDown () == 0 && currentHex.GetComponent<HexManager> ().getHasBuilding () == false
 			&& currentHex.GetComponent<HexManager>().getPollution() == 0) {
 			if (active && actionCount > 0) {
-				if (ore >= 5 && wood >= 5 && (currentHex.transform.position == gridManager.getHex (0, -3).transform.position
+				if (team.ore >= 5 && team.wood >= 5 && (currentHex.transform.position == gridManager.getHex (0, -3).transform.position
 					|| currentHex.transform.position == gridManager.getHex (0, 3).transform.position)) {
 					currentHex.GetComponent<SpriteRenderer> ().color = new Color (0, 1, 0);
-					ore -= 5;
-					wood -= 5;
+					team.ore -= 5;
+					team.wood -= 5;
 					actionCount--;
-					replacedFactories++;
+					team.replacedFactories++;
 				} else if (currentHex.transform.position == gridManager.getHex (0, -3).transform.position
 					|| currentHex.transform.position == gridManager.getHex (0, 3).transform.position) {
 					return;
-				} else if ((ore >= 3 && wood >= 2)) {
-					ore -= 3;
-					wood -= 2;
+				} else if ((team.ore >= 3 && team.wood >= 2)) {
+					team.ore -= 3;
+					team.wood -= 2;
 					//building = (GameObject)Instantiate (buildingSprite);
 					//building.transform.position = this.transform.position;
 					actionCount--;
@@ -163,9 +162,9 @@ public class Player : MonoBehaviour {
 						n6.GetComponent<HexManager> ().incrementBuilding ();
 					}
 
-				} else if ((ore >= 2 && wood >= 3)) {
-					ore -= 2;
-					wood -= 3;
+				} else if ((team.ore >= 2 && team.wood >= 3)) {
+					team.ore -= 2;
+					team.wood -= 3;
 					//GameObject building = (GameObject)Instantiate (buildingSprite);
 					//building.transform.position = this.transform.position;
 					actionCount--;
@@ -179,13 +178,13 @@ public class Player : MonoBehaviour {
 		}
 	}
 
-	void Move() {
+	public void Move() {
 		if (active) {
 			canMove = true;
 		}
 	}
 
-	void Clean() {
+	public void Clean() {
 		if (active && currentHex.GetComponent<HexManager> ().getPollution() != 0) {
 			currentHex.GetComponent<HexManager> ().decrementPollution ();
 			--actionCount;
@@ -194,75 +193,19 @@ public class Player : MonoBehaviour {
 
 	void OnMouseDown() {
 		active = true;
-		actText.text = "Active Character: Jayson\nActions: " + actionCount.ToString();
+		for(int i = 0; i < 3; i++)
+		{
+			Transform Go = GameObject.FindGameObjectWithTag ("Team").transform.GetChild (i);
+			if (Go.tag != this.tag) {
+				Go.GetComponent<Player> ().setActive (false);
+			}
+		}
 	}
 
-	void EndTurn() {
+	public void EndTurn() {
 		active = false;
 		actionCount = 3;
 		movement = 2;
 		msgText.text = "";
-
-		GameObject gm = GameObject.Find ("GameManager");
-		IList<GameObject> grid = gm.GetComponent<GridManager> ().getGrid ();
-		foreach(GameObject hex in grid) {
-			if (hex != null) {
-				if (hex.GetComponent<HexManager> ().GetGCoolDown () > 0) {
-					hex.GetComponent<HexManager> ().LowerGCoolDown ();
-					hex.GetComponent<HexManager> ().DisplayGCD ();
-				}
-
-				if (hex.GetComponent<HexManager> ().GetBuildingCoolDown () > 0) {
-					hex.GetComponent<HexManager> ().LowerBuildingCoolDown ();
-					hex.GetComponent<HexManager> ().DisplayBuilding ();
-				}
-				if (hex.GetComponent<HexManager> ().GetBuildingCoolDown () == 0
-				   && hex.GetComponent<HexManager> ().getHasBuilding ()) {
-					//building.SetActive (false);
-					hex.GetComponent<HexManager> ().RemoveBuilding();
-					hex.GetComponent<HexManager> ().SwitchHasBuilding ();
-
-					GridManager gridManager = gm.GetComponent<GridManager> ();
-					int fx = hex.GetComponent<HexManager>().x - gridManager.gridSideLength + 1;
-					int fy = hex.GetComponent<HexManager>().y - gridManager.gridSideLength + 1;
-					GameObject n1 = gridManager.getHex (fx + 1, fy);
-					GameObject n2 = gridManager.getHex (fx, fy + 1);
-					GameObject n3 = gridManager.getHex (fx - 1, fy);
-					GameObject n4 = gridManager.getHex (fx, fy - 1);
-					GameObject n5 = gridManager.getHex (fx - 1, fy + 1);
-					GameObject n6 = gridManager.getHex (fx + 1, fy - 1);
-					if (n1 != null) {
-						n1.GetComponent<HexManager> ().decrementBuilding ();
-					}
-					if (n2 != null) {
-						n2.GetComponent<HexManager> ().decrementBuilding ();
-					}
-					if (n3 != null) {
-						n3.GetComponent<HexManager> ().decrementBuilding ();
-					}
-					if (n4 != null) {
-						n4.GetComponent<HexManager> ().decrementBuilding ();
-					}
-					if (n5 != null) {
-						n5.GetComponent<HexManager> ().decrementBuilding ();
-					}
-					if (n6 != null) {
-						n6.GetComponent<HexManager> ().decrementBuilding ();
-					}
-				
-				}
-				hex.GetComponent<HexManager> ().pollute ();
-				if (replacedFactories >= 2) {
-					msgText.text = "You win!"; 
-				}
-			}
-		}
-		foreach (GameObject hex in grid) {
-			if (hex != null) {
-				hex.GetComponent<HexManager> ().refresh ();
-			}
-		}
-
-
 	}
 }
