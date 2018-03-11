@@ -868,6 +868,26 @@ Transform:
   m_PrefabParentObject: {fileID: 4589010873679484, guid: ab5977d89f8759140a7f06211d6fe79f,
     type: 2}
   m_PrefabInternal: {fileID: 290186161}
+--- !u!1 &1090706381 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1502332363192106, guid: ab5977d89f8759140a7f06211d6fe79f,
+    type: 2}
+  m_PrefabInternal: {fileID: 290186161}
+--- !u!58 &1090706382
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1090706381}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 2.9999998
 --- !u!1 &1108991408
 GameObject:
   m_ObjectHideFlags: 0
@@ -1689,6 +1709,26 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1963939757}
+--- !u!1 &2130163271 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1933787869378404, guid: 93eab8aabcd6ebf40b6dce6cbc5f1be8,
+    type: 2}
+  m_PrefabInternal: {fileID: 369939587}
+--- !u!58 &2130163272
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2130163271}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 3.3849998
 --- !u!1 &2142216959
 GameObject:
   m_ObjectHideFlags: 0

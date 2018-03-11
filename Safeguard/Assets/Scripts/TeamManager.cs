@@ -51,12 +51,9 @@ public class TeamManager : MonoBehaviour {
 
 		bankText.text = "Ore: " + ore.ToString() + "\nWood: " + wood.ToString();
 
-		if (Jayson.isActive()) {
-			actText.text = "Active Character: Jayson\nAction Count: " + Jayson.getActionCount().ToString() + "\nMovement Left:" + Jayson.movement.ToString();
-		} else if (Mariana.isActive ()) {
-			actText.text = "Active Character: Mariana\nAction Count: " + Mariana.getActionCount().ToString() + "\nMovement Left:" + Jayson.movement.ToString();
-		} else if (Zoya.isActive ()){
-			actText.text = "Active Character: Zoya\nAction Count: " + Zoya.getActionCount().ToString() + "\nMovement Left:" + Jayson.movement.ToString();
+		if (getActivePlayer ()) {
+			actText.text = "Active Character:" + getActivePlayer ().tag + "\nAction Count: " + getActivePlayer ().getActionCount ().ToString ()
+			+ "\nMovement Left:" + getActivePlayer ().movement.ToString ();
 		}
 		else {
 			actText.text = "No Active Character";
@@ -70,8 +67,10 @@ public class TeamManager : MonoBehaviour {
 			return Jayson;
 		} else if (Zoya.isActive ()) {
 			return Zoya;
-		} else {
+		} else if (Mariana.isActive ()) {
 			return Mariana;
+		} else {
+			return null;
 		}
 	}
 
