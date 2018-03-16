@@ -11,8 +11,10 @@ public class TeamManager : MonoBehaviour {
 
 	public Text bankText; 
 	public Text actText;
+	public Text pollText;
 
 	public int replacedFactories;
+	public int pollutionLimit;
 
 	public Button gatherButton;
 	public Button buildButton;
@@ -23,8 +25,8 @@ public class TeamManager : MonoBehaviour {
 	public int ore; 
 	public int wood;
 
-	private double totalHexes;
-	private double pollutedHexes;
+	public double totalHexes;
+	public double pollutedHexes;
 
 
 	// Use this for initialization
@@ -57,7 +59,7 @@ public class TeamManager : MonoBehaviour {
 		bankText.text = "Ore: " + ore.ToString() + "\nWood: " + wood.ToString();
 
 		if (getActivePlayer ()) {
-			actText.text = "Active Character:" + getActivePlayer ().tag + "\nAction Count: " + getActivePlayer ().getActionCount ().ToString ()
+			actText.text = "Active Character: " + getActivePlayer ().tag + "\nAction Count: " + getActivePlayer ().getActionCount ().ToString ()
 			+ "\nMovement Left:" + getActivePlayer ().movement.ToString ();
 		}
 		else {
@@ -69,9 +71,10 @@ public class TeamManager : MonoBehaviour {
 			actText.text = "You win!"; 
 		}
 
-		if (pollutedHexes >= totalHexes*0.80 ) {
+		if ((int)((pollutedHexes/totalHexes)*100) >= pollutionLimit) {
 			actText.text = "You lose!";
 		}
+		pollText.text = ((int)((pollutedHexes / totalHexes) * 100)).ToString () + "% of Tiles Polluted\n(Limit = " + pollutionLimit.ToString () + "%)";
 	}
 		
 

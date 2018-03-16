@@ -218,8 +218,13 @@ public class Player : MonoBehaviour {
 
 	public void Clean() {
 		if (active && currentHex.GetComponent<HexManager> ().getPollution() != 0
-			&& !currentHex.GetComponent<HexManager>().isFactory()) {
+			&& !currentHex.GetComponent<HexManager>().isFactory() && actionCount > 0) {
 			currentHex.GetComponent<HexManager> ().decrementPollution ();
+			if (currentHex.GetComponent<HexManager> ().getPollution () == 0) {
+				GameObject t = GameObject.Find ("Team");
+				TeamManager tm = t.GetComponent<TeamManager> ();
+				--tm.pollutedHexes;
+			}
 			--actionCount;
 		}
 	}
