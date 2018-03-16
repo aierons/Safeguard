@@ -8,13 +8,15 @@ public class FactoryManager : HexManager {
 	void Start () {
 		this.GetComponent<HexManager> ().setPollution (3);
 		this.GetComponent<HexManager> ().refresh ();
+		this.factory = true;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if (this.getHasBuilding()) {
-			//pollution = 0;
-		}
+	}
+
+	void decrementPollution() {
+		this.pollution = 0;
 	}
 
 }

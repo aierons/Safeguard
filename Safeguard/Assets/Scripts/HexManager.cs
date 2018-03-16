@@ -6,8 +6,10 @@ using UnityEngine.UI;
 public class HexManager : MonoBehaviour {
 
 	//pollution variables
-	private int pollution;
+	protected int pollution;
 	private bool pollutedThisTurn = false;
+
+	protected bool factory = false;
 
 	//building variables
 	public Text buildingText;
@@ -29,12 +31,21 @@ public class HexManager : MonoBehaviour {
 	public int x;
 	public int y;
 
+	public Sprite sprite;
+	public Sprite CD3sprite;
+	public Sprite CD2sprite;
+	public Sprite CD1sprite;
+
 	public int getPollution() {
 		return pollution;
 	}
 
 	public void setPollution(int poll) {
 		pollution = poll;
+	}
+
+	public bool isFactory() {
+		return factory;
 	}
 
 	public void incrememntPollution() {
@@ -64,11 +75,46 @@ public class HexManager : MonoBehaviour {
 		}
 	}
 
-	public bool checkLegalMove(GameObject other) {
+	public bool checkLegalMove(GameObject other, Player mover, int depth) {
 		HexManager otherHex = other.GetComponent<HexManager> ();
 		int xa = Mathf.Abs (this.x - otherHex.x);
 		int ya = Mathf.Abs (this.y - otherHex.y);
-		return xa <= 1 && ya <= 1 && Mathf.Abs((otherHex.x - this.x) + (otherHex.y - this.y)) < 2;
+		if (xa <= 1 && ya <= 1 && Mathf.Abs ((otherHex.x - this.x) + (otherHex.y - this.y)) < 2) {
+			mover.movement -= depth;
+			return true;
+		} else if (mover.movement > depth) {
+			GameObject gm = GameObject.Find ("GameManager");
+			GridManager gridManager = gm.GetComponent<GridManager> ();
+			int fx = other.GetComponent<HexManager> ().x - gridManager.gridSideLength + 1;
+			int fy = other.GetComponent<HexManager> ().y - gridManager.gridSideLength + 1;
+			GameObject n1 = gridManager.getHex (fx + 1, fy);
+			GameObject n2 = gridManager.getHex (fx, fy + 1);
+			GameObject n3 = gridManager.getHex (fx - 1, fy);
+			GameObject n4 = gridManager.getHex (fx, fy - 1);
+			GameObject n5 = gridManager.getHex (fx - 1, fy + 1);
+			GameObject n6 = gridManager.getHex (fx + 1, fy - 1);
+			bool legal = false;
+			if (n1 != null && this.checkLegalMove (n1, mover, depth + 1)) {
+				legal = true;
+			}
+			if (!legal && n2 != null && this.checkLegalMove (n2, mover, depth + 1)) {
+				legal = true;
+			}
+			if (!legal && n3 != null && this.checkLegalMove (n3, mover, depth + 1)) {
+				legal = true;
+			}
+			if (!legal && n4 != null && this.checkLegalMove (n4, mover, depth + 1)) {
+				legal = true;
+			}
+			if (!legal && n5 != null && this.checkLegalMove (n5, mover, depth + 1)) {
+				legal = true;
+			}
+			if (!legal && n6 != null && this.checkLegalMove (n6, mover, depth + 1)) {
+				legal = true;
+			}
+			return legal;
+		}
+		return false;
 	}
 
 	public int GetGCoolDown() {
@@ -119,6 +165,18 @@ public class HexManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		if (GCoolDown == 3) {
+			this.gameObject.GetComponent<SpriteRenderer> ().sprite = CD3sprite;
+		}
+		if (GCoolDown == 2) {
+			this.gameObject.GetComponent<SpriteRenderer> ().sprite = CD2sprite;
+		}
+		if (GCoolDown == 1) {
+			this.gameObject.GetComponent<SpriteRenderer> ().sprite = CD1sprite;
+		}
+		if (GCoolDown == 0) {
+			this.gameObject.GetComponent<SpriteRenderer> ().sprite = sprite;
+		}
 		if (pollution == 0) {
 			this.gameObject.GetComponent<SpriteRenderer> ().color = new Color (1, 1, 1);
 		}
@@ -130,6 +188,17 @@ public class HexManager : MonoBehaviour {
 		}
 		if (pollution == 3) {
 			this.gameObject.GetComponent<SpriteRenderer> ().color = new Color (1, 0, 0);
+		}
+		if (hasBuilding) {
+			if (buildingLife == 3) {
+				building.GetComponent<SpriteRenderer> ().color = new Color (1, 1, 1);
+			}
+			if (buildingLife == 2) {
+				building.GetComponent<SpriteRenderer> ().color = new Color (0, 1, 0);
+			}
+			if (buildingLife == 1) {
+				building.GetComponent<SpriteRenderer> ().color = new Color (1, 0, 0);
+			}
 		}
 	}
 
@@ -195,27 +264,27 @@ public class HexManager : MonoBehaviour {
 			GameObject n5 = gridManager.getHex (fx - 1, fy + 1);
 			GameObject n6 = gridManager.getHex (fx + 1, fy - 1);
 			if (n1 != null && n1.GetComponent<HexManager>().getAdjBuilds() == 0
-				&& !n1.GetComponent<HexManager>().getHasBuilding()) {
+				&& !n1.GetComponent<HexManager>().getHasBuilding() && !n1.GetComponent<HexManager>().isFactory()) {
 				n1.GetComponent<HexManager> ().incrememntPollution ();
 			}
 			if (n2 != null && n2.GetComponent<HexManager>().getAdjBuilds() == 0
-				&& !n2.GetComponent<HexManager>().getHasBuilding()) {
+				&& !n2.GetComponent<HexManager>().getHasBuilding() && !n2.GetComponent<HexManager>().isFactory()) {
 				n2.GetComponent<HexManager> ().incrememntPollution ();
 			}
 			if (n3 != null && n3.GetComponent<HexManager>().getAdjBuilds() == 0
-				&& !n3.GetComponent<HexManager>().getHasBuilding()) {
+				&& !n3.GetComponent<HexManager>().getHasBuilding() && !n3.GetComponent<HexManager>().isFactory()) {
 				n3.GetComponent<HexManager> ().incrememntPollution ();
 			}
 			if (n4 != null && n4.GetComponent<HexManager>().getAdjBuilds() == 0
-				&& !n4.GetComponent<HexManager>().getHasBuilding()) {
+				&& !n4.GetComponent<HexManager>().getHasBuilding() && !n4.GetComponent<HexManager>().isFactory()) {
 				n4.GetComponent<HexManager> ().incrememntPollution ();
 			}
 			if (n5 != null && n5.GetComponent<HexManager>().getAdjBuilds() == 0
-				&& !n5.GetComponent<HexManager>().getHasBuilding()) {
+				&& !n5.GetComponent<HexManager>().getHasBuilding() && !n5.GetComponent<HexManager>().isFactory()) {
 				n5.GetComponent<HexManager> ().incrememntPollution ();
 			}
 			if (n6 != null && n6.GetComponent<HexManager>().getAdjBuilds() == 0
-				&& !n6.GetComponent<HexManager>().getHasBuilding()) {
+				&& !n6.GetComponent<HexManager>().getHasBuilding() && !n6.GetComponent<HexManager>().isFactory()) {
 				n6.GetComponent<HexManager> ().incrememntPollution ();
 			}
 		}

@@ -18,6 +18,9 @@ public class Player : MonoBehaviour {
 	public float yoffset;
 
 	public int movement;
+	public int buildingDiscount;
+	public int gatherBonus;
+	private int maxMovement;
 	private bool canMove;
 	private bool active;
 	private int actionCount;
@@ -43,6 +46,8 @@ public class Player : MonoBehaviour {
 		canMove = false;
 		active = false;
 
+		maxMovement = movement;
+
 	}
 	
 	// Update is called once per frame
@@ -53,21 +58,20 @@ public class Player : MonoBehaviour {
 		GameObject mouseHex = gridManager.getMouseHex ();
 		if (active && movement > 0 && canMove && mouseHex != null) {
 			HexManager mhMan = mouseHex.GetComponent<HexManager> ();
-			if (Input.GetKeyDown (KeyCode.Mouse0) && mhMan.checkLegalMove (currentHex)) {
+			if (Input.GetKeyDown (KeyCode.Mouse0) && mhMan.checkLegalMove (currentHex, this, 1) && !mouseHex.Equals (currentHex)) {
 				targetPos = mouseHex.transform.position;
 				transform.position = targetPos;
 				transform.position -= new Vector3 (0, 0, 1);
 				transform.position += new Vector3 (xoffset, yoffset, 0);
 				currentHex = mouseHex;
-				movement--;
 				canMove = false;
 			}
 		}
-
+		/*
 		if (actionCount == 0) {
 			active = false;
 		}
-			
+		*/
 	}
 
 	public bool isActive() {
@@ -83,6 +87,7 @@ public class Player : MonoBehaviour {
 	}
 
 	public void Gather() {
+		canMove = false;
 		GameObject gaman = GameObject.Find ("GameManager");
 		GridManager gridManager = gaman.GetComponent<GridManager> ();
 
@@ -91,9 +96,9 @@ public class Player : MonoBehaviour {
 			&& !(currentHex.transform.position == gridManager.getHex (0, -3).transform.position
 				|| currentHex.transform.position == gridManager.getHex (0, 3).transform.position)) {
 			if (actionCount >= 2 && active) {
-				int o = Random.Range (1, 3);
+				int o = Random.Range (1 + gatherBonus, 3 + gatherBonus);
 				team.ore += o;
-				int w = Random.Range (1, 3);
+				int w = Random.Range (1 + gatherBonus, 3 + gatherBonus);
 				team.wood += w;
 
 				actionCount -= 2;
@@ -105,23 +110,50 @@ public class Player : MonoBehaviour {
 	}
 
 	public void Build() {
+		canMove = false;
 		GameObject gaman = GameObject.Find ("GameManager");
 		GridManager gridManager = gaman.GetComponent<GridManager> ();
 
-		if (currentHex.GetComponent<HexManager> ().GetBuildingCoolDown () == 0 && currentHex.GetComponent<HexManager> ().getHasBuilding () == false
-			&& currentHex.GetComponent<HexManager>().getPollution() == 0) {
+		if ((currentHex.GetComponent<HexManager> ().GetBuildingCoolDown () == 0 && currentHex.GetComponent<HexManager> ().getHasBuilding () == false
+			&& currentHex.GetComponent<HexManager>().getPollution() == 0) ||
+			currentHex.GetComponent<HexManager>().isFactory()) {
 			if (active && actionCount > 0) {
-				if (team.ore >= 5 && team.wood >= 5 && (currentHex.transform.position == gridManager.getHex (0, -3).transform.position
-					|| currentHex.transform.position == gridManager.getHex (0, 3).transform.position)) {
+				if (team.ore >= 5 - buildingDiscount && team.wood >= 5 - buildingDiscount && currentHex.GetComponent<HexManager>().isFactory()) {
+					int fx = currentHex.GetComponent<HexManager> ().x - gridManager.gridSideLength + 1;
+					int fy = currentHex.GetComponent<HexManager> ().y - gridManager.gridSideLength + 1;
+					GameObject n1 = gridManager.getHex (fx + 1, fy);
+					GameObject n2 = gridManager.getHex (fx, fy + 1);
+					GameObject n3 = gridManager.getHex (fx - 1, fy);
+					GameObject n4 = gridManager.getHex (fx, fy - 1);
+					GameObject n5 = gridManager.getHex (fx - 1, fy + 1);
+					GameObject n6 = gridManager.getHex (fx + 1, fy - 1);
+					if (n1 != null && n1.GetComponent<HexManager>().getPollution() != 0) {
+						return;
+					}
+					if (n2 != null && n2.GetComponent<HexManager>().getPollution() != 0) {
+						return;
+					}
+					if (n3 != null && n3.GetComponent<HexManager>().getPollution() != 0) {
+						return;
+					}
+					if (n4 != null && n4.GetComponent<HexManager>().getPollution() != 0) {
+						return;
+					}
+					if (n5 != null && n5.GetComponent<HexManager>().getPollution() != 0) {
+						return;
+					}
+					if (n6 != null && n6.GetComponent<HexManager>().getPollution() != 0) {
+						return;
+					}
 					currentHex.GetComponent<SpriteRenderer> ().color = new Color (0, 1, 0);
+					currentHex.GetComponent<HexManager> ().decrementPollution ();
 					team.ore -= 5;
 					team.wood -= 5;
 					actionCount--;
 					team.replacedFactories++;
-				} else if (currentHex.transform.position == gridManager.getHex (0, -3).transform.position
-					|| currentHex.transform.position == gridManager.getHex (0, 3).transform.position) {
+				} else if (currentHex.GetComponent<HexManager>().isFactory()) {
 					return;
-				} else if ((team.ore >= 3 && team.wood >= 2)) {
+				} else if (team.ore >= team.wood && (team.ore >= 3 -buildingDiscount && team.wood >= 2 - buildingDiscount)) {
 					team.ore -= 3;
 					team.wood -= 2;
 					//building = (GameObject)Instantiate (buildingSprite);
@@ -162,7 +194,7 @@ public class Player : MonoBehaviour {
 						n6.GetComponent<HexManager> ().incrementBuilding ();
 					}
 
-				} else if ((team.ore >= 2 && team.wood >= 3)) {
+				} else if ((team.ore >= 2 - buildingDiscount && team.wood >= 3 - buildingDiscount)) {
 					team.ore -= 2;
 					team.wood -= 3;
 					//GameObject building = (GameObject)Instantiate (buildingSprite);
@@ -185,7 +217,8 @@ public class Player : MonoBehaviour {
 	}
 
 	public void Clean() {
-		if (active && currentHex.GetComponent<HexManager> ().getPollution() != 0) {
+		if (active && currentHex.GetComponent<HexManager> ().getPollution() != 0
+			&& !currentHex.GetComponent<HexManager>().isFactory()) {
 			currentHex.GetComponent<HexManager> ().decrementPollution ();
 			--actionCount;
 		}
@@ -203,9 +236,9 @@ public class Player : MonoBehaviour {
 	}
 
 	public void EndTurn() {
-		active = false;
+		//active = false;
 		actionCount = 3;
-		movement = 2;
+		movement = maxMovement;
 		msgText.text = "";
 	}
 }

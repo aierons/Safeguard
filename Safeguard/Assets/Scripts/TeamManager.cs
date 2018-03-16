@@ -23,9 +23,14 @@ public class TeamManager : MonoBehaviour {
 	public int ore; 
 	public int wood;
 
+	private double totalHexes;
+	private double pollutedHexes;
+
 
 	// Use this for initialization
 	void Start () {
+		totalHexes = Mathf.Infinity;
+		pollutedHexes = 0;
 
 		Jayson = GameObject.FindGameObjectWithTag ("Jayson").GetComponent<Player> ();
 		Zoya = GameObject.FindGameObjectWithTag ("Zoya").GetComponent<Player> ();
@@ -59,6 +64,14 @@ public class TeamManager : MonoBehaviour {
 			actText.text = "No Active Character";
 			bankText.text = "Ore: " + ore.ToString() + "\nWood: " + wood.ToString();
 		}
+
+		if (replacedFactories >= 4) {
+			actText.text = "You win!"; 
+		}
+
+		if (pollutedHexes >= totalHexes*0.80 ) {
+			actText.text = "You lose!";
+		}
 	}
 		
 
@@ -75,19 +88,27 @@ public class TeamManager : MonoBehaviour {
 	}
 
 	void Gather() {
-		getActivePlayer ().Gather ();
+		if (getActivePlayer() != null) {
+			getActivePlayer ().Gather ();
+		}
 	}
 
 	void Build() {
-		getActivePlayer ().Build ();
+		if (getActivePlayer() != null) {
+			getActivePlayer ().Build ();
+		}
 	}
 
 	void Move() {
-		getActivePlayer ().Move ();
+		if (getActivePlayer() != null) {
+			getActivePlayer ().Move ();
+		}
 	}
 
 	void Clean() {
-		getActivePlayer ().Clean ();
+		if (getActivePlayer() != null) {
+			getActivePlayer ().Clean ();
+		}
 	}
 
 	void EndTurn() {
@@ -99,11 +120,11 @@ public class TeamManager : MonoBehaviour {
 		IList<GameObject> grid = gm.GetComponent<GridManager> ().getGrid ();
 		foreach(GameObject hex in grid) {
 			if (hex != null) {
+				hex.GetComponent<HexManager> ().pollute ();
 				if (hex.GetComponent<HexManager> ().GetGCoolDown () > 0) {
 					hex.GetComponent<HexManager> ().LowerGCoolDown ();
 					hex.GetComponent<HexManager> ().DisplayGCD ();
 				}
-
 				if (hex.GetComponent<HexManager> ().GetBuildingCoolDown () > 0) {
 					hex.GetComponent<HexManager> ().LowerBuildingCoolDown ();
 					hex.GetComponent<HexManager> ().DisplayBuilding ();
@@ -141,18 +162,21 @@ public class TeamManager : MonoBehaviour {
 					if (n6 != null) {
 						n6.GetComponent<HexManager> ().decrementBuilding ();
 					}
-
-				}
-				hex.GetComponent<HexManager> ().pollute ();
-				if (replacedFactories >= 2) {
-					actText.text = "You win!"; 
 				}
 			}
 		}
+		double hexes = 0;
+		double pHexes = 0;
 		foreach (GameObject hex in grid) {
 			if (hex != null) {
+				++hexes;
 				hex.GetComponent<HexManager> ().refresh ();
+				if (hex.GetComponent<HexManager> ().getPollution () > 0) {
+					++pHexes;
+				}
 			}
 		}
+		totalHexes = hexes;
+		pollutedHexes = pHexes;
 	}
 }

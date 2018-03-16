@@ -95,6 +95,8 @@ public class GridManager: MonoBehaviour
 		hexGridGO = new GameObject("HexGrid");
 		bool factory1 = true;
 		bool factory2 = true;
+		bool factory3 = true;
+		bool factory4 = true;
 
 		for (int y = 0; y < (gridSideLength * 2) - 1; y++)
 		{
@@ -122,6 +124,30 @@ public class GridManager: MonoBehaviour
 					fm.y = y;
 					grid.Add (factory);
 					factory2 = false;
+					continue;
+				}
+				if (y == 0 && x == (gridSideLength * 2) - 2 && factory3) {
+					GameObject factory = (GameObject)Instantiate (Factory);
+					Vector2 gridPos = new Vector2 (x, y);
+					factory.transform.position = calcWorldCoord (gridPos);
+					factory.transform.SetParent(hexGridGO.transform);
+					FactoryManager fm = factory.GetComponent<FactoryManager> ();
+					fm.x = x;
+					fm.y = y;
+					grid.Add (factory);
+					factory3 = false;
+					continue;
+				}
+				if (y == (gridSideLength * 2) - 2 && x == 0 && factory4) {
+					GameObject factory = (GameObject)Instantiate (Factory);
+					Vector2 gridPos = new Vector2 (x, y);
+					factory.transform.position = calcWorldCoord (gridPos);
+					factory.transform.SetParent(hexGridGO.transform);
+					FactoryManager fm = factory.GetComponent<FactoryManager> ();
+					fm.x = x;
+					fm.y = y;
+					grid.Add (factory);
+					factory4 = false;
 					continue;
 				}
 				if (x + y >= gridSideLength - 1 && x + y <= 3 * (gridSideLength - 1)) {
