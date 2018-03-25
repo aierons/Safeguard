@@ -57,7 +57,7 @@ public class TeamManager : MonoBehaviour {
 	void Update () {
 
 		//bankText.text = "Ore: " + ore.ToString() + "\nWood: " + wood.ToString();
-		bankText.text = ore.ToString() +"\n" + wood.ToString();
+		bankText.text = "x" + ore.ToString() +"\n\n" + "x" + wood.ToString();
 
 		if (getActivePlayer ()) {
 			actText.text = "Active Character: " + getActivePlayer ().tag + "\nAction Count: " + getActivePlayer ().getActionCount ().ToString ()
@@ -65,7 +65,7 @@ public class TeamManager : MonoBehaviour {
 		}
 		else {
 			actText.text = "No Active Character";
-			bankText.text = ore.ToString() +"\n" + wood.ToString();
+			bankText.text = "x" + ore.ToString() +"\n\n" + "x" + wood.ToString();
 		}
 
 		if (replacedFactories >= 4) {
