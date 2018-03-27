@@ -210,9 +210,15 @@ public class HexManager : MonoBehaviour {
 				building.GetComponent<SpriteRenderer> ().color = new Color (1, 0, 0);
 			}
 		}
+		/*
+		if (textStatus && Input.GetMouseButtonDown (0)) {
+			pls ();
+		}
+		*/
 		//DisplayCooldownInfo ();
 		//DisplayPopUp();
 	}
+
 
 	public void DisplayGCD() {
 		int sl = GameObject.Find ("GameManager").GetComponent<GridManager> ().GetSideLength ();
@@ -256,7 +262,11 @@ public class HexManager : MonoBehaviour {
 			textStatus = true;
 			Debug.Log ("mouse enter");
 		}
-	*/
+
+		if (!textStatus) {
+			textStatus = true;
+		}
+		*/
 
 		if (textStatus == false) {
 			popupText.GetComponent<TextMesh> ().text = "Gathering Cooldown: " + GetGCoolDown ().ToString () + "\nBuilding Cooldown: " + GetBuildingCoolDown ().ToString ();
@@ -265,12 +275,17 @@ public class HexManager : MonoBehaviour {
 		}
 	}
 
+	void pls() {
+		popupText.GetComponent<TextMesh> ().text = "Gathering Cooldown: " + GetGCoolDown ().ToString () + "\nBuilding Cooldown: " + GetBuildingCoolDown ().ToString ();
+		textStatus = true;
+		Instantiate (popupText, new Vector3 (transform.position.x, transform.position.y + 2, 0), popupText.rotation);
+	}
+
 	void DisplayCooldownInfo() {
 		Vector3 offset = new Vector3 (700, 300, 0);
 		if (Input.GetMouseButton (0)) {
 			if (!textStatus) { 
 				infoText.text = "Gathering Cooldown: " + GetGCoolDown ().ToString () + "\nBuilding Cooldown: " + GetBuildingCoolDown ().ToString ();
-				infoText.transform.position = transform.position + offset;
 				Debug.Log ("mouse down");
 				textStatus = true;
 			} else if (textStatus) {
