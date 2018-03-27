@@ -5,6 +5,11 @@ using UnityEngine.UI;
 
 public class HexManager : MonoBehaviour {
 
+	//pop up window variables
+	public Text infoText;
+	public Transform popupText; 
+	public static bool textStatus = false; 
+
 	//pollution variables
 	protected int pollution;
 	private bool pollutedThisTurn = false;
@@ -147,6 +152,11 @@ public class HexManager : MonoBehaviour {
 		
 	// Use this for initialization
 	void Start () {
+		infoText = (UnityEngine.UI.Text)Instantiate (infoText);
+		infoText.transform.SetParent(GameObject.FindGameObjectWithTag("UICanvas").transform);
+		infoText.text = "";
+	//	infoText.enabled = false;
+		//popupText = (UnityEngine.Transform)Instantiate (popupText);
 
 		hexWidth = GetComponent<Renderer>().bounds.size.x;
 		hexHeight = GetComponent<Renderer>().bounds.size.y;
@@ -200,10 +210,11 @@ public class HexManager : MonoBehaviour {
 				building.GetComponent<SpriteRenderer> ().color = new Color (1, 0, 0);
 			}
 		}
+		//DisplayCooldownInfo ();
+		//DisplayPopUp();
 	}
 
 	public void DisplayGCD() {
-
 		int sl = GameObject.Find ("GameManager").GetComponent<GridManager> ().GetSideLength ();
 
 		//Vector3 offset = new Vector3 (730, 300, 0);
@@ -234,14 +245,65 @@ public class HexManager : MonoBehaviour {
 		GameObject gm = GameObject.Find ("GameManager");
 		GridManager gridManager = gm.GetComponent<GridManager> ();
 		gridManager.setMouseHex (this.gameObject);
+
+		/*
+		Vector3 offset = new Vector3 (700, 300, 0);
+
+		if (!textStatus) { 
+			infoText.text = "literally anything just work";
+			//infoText.text = "Gathering Cooldown: " + GetGCoolDown ().ToString () + "Building Cooldown: " + GetBuildingCoolDown ().ToString ();
+			//infoText.transform.position = transform.position + offset;
+			textStatus = true;
+			Debug.Log ("mouse enter");
+		}
+	*/
+
+		if (textStatus == false) {
+			popupText.GetComponent<TextMesh> ().text = "Gathering Cooldown: " + GetGCoolDown ().ToString () + "\nBuilding Cooldown: " + GetBuildingCoolDown ().ToString ();
+			textStatus = true;
+			Instantiate (popupText, new Vector3 (transform.position.x, transform.position.y + 2, 0), popupText.rotation);
+		}
 	}
 
+	void DisplayCooldownInfo() {
+		Vector3 offset = new Vector3 (700, 300, 0);
+		if (Input.GetMouseButton (0)) {
+			if (!textStatus) { 
+				infoText.text = "Gathering Cooldown: " + GetGCoolDown ().ToString () + "\nBuilding Cooldown: " + GetBuildingCoolDown ().ToString ();
+				infoText.transform.position = transform.position + offset;
+				Debug.Log ("mouse down");
+				textStatus = true;
+			} else if (textStatus) {
+				textStatus = false; 
+				infoText.text = "";
+			}
+		}
+	}
+
+	void DisplayPopUp() {
+		if (textStatus == false) {
+			popupText.GetComponent<TextMesh> ().text = "Gathering Cooldown: " + GetGCoolDown ().ToString () + "\nBuilding Cooldown: " + GetBuildingCoolDown ().ToString ();
+			Instantiate (popupText, new Vector3 (transform.position.x, transform.position.y + 2, 0), popupText.rotation);
+		}
+
+		if (textStatus == true) {
+			textStatus = false;
+			Instantiate (popupText, new Vector3 (transform.position.x, transform.position.y + 2, 0), popupText.rotation);
+			//popupText.GetComponent<TextMesh> ().text = "";
+		}
+	}
+				
 	void OnMouseExit() {
 		GameObject gm = GameObject.Find ("GameManager");
 		GridManager gridManager = gm.GetComponent<GridManager> ();
 		gridManager.setMouseHex (null);
-	}
 
+		if (textStatus == true) {
+			textStatus = false;
+			//infoText.text = "";
+		}
+	}
+		
 	public void MakeBuilding() {
 		building = (GameObject)Instantiate (buildingSprite);
 		building.transform.position = this.transform.position;

@@ -60,8 +60,8 @@ public class TeamManager : MonoBehaviour {
 		bankText.text = "x" + ore.ToString() +"\n\n" + "x" + wood.ToString();
 
 		if (getActivePlayer ()) {
-			actText.text = "Active Character: " + getActivePlayer ().tag + "\nAction Count: " + getActivePlayer ().getActionCount ().ToString ()
-			+ "\nMovement Left:" + getActivePlayer ().movement.ToString ();
+			actText.text = "Active Character: " + getActivePlayer ().tag + "\nACTIONS LEFT: " + getActivePlayer ().getActionCount ().ToString ()
+			+ "\nMOVEMENTS LEFT:" + getActivePlayer ().movement.ToString ();
 		}
 		else {
 			actText.text = "No Active Character";
