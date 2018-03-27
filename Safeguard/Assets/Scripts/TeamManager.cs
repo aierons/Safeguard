@@ -12,6 +12,7 @@ public class TeamManager : MonoBehaviour {
 	public Text bankText; 
 	public Text actText;
 	public Text pollText;
+	public Text badText;
 
 	public int replacedFactories;
 	public int pollutionLimit;
@@ -21,9 +22,14 @@ public class TeamManager : MonoBehaviour {
 	public Button moveButton;
 	public Button cleanButton;
 	public Button endTurnButton;
+	public Button rushButton;
 
 	public int ore; 
 	public int wood;
+	public int clay;
+	public int sand;
+	public int shell;
+	public int leather;
 
 	public double totalHexes;
 	public double pollutedHexes;
@@ -39,15 +45,22 @@ public class TeamManager : MonoBehaviour {
 		Mariana = GameObject.FindGameObjectWithTag ("Mariana").GetComponent<Player>();
 		ore = 0;
 		wood = 0;
+		sand = 0;
+		clay = 0;
+		shell = 0; //can replace ore or clay
+		leather = 0; //can replace woo or sand
+
 
 
 		bankText.text = "";
+		badText.text = "";
 
 		gatherButton.onClick.AddListener (Gather);
 		buildButton.onClick.AddListener (Build);
 		moveButton.onClick.AddListener (Move);
 		cleanButton.onClick.AddListener (Clean);
 		endTurnButton.onClick.AddListener (EndTurn);
+		rushButton.onClick.AddListener (Rush);
 
 		replacedFactories = 0;
 		
@@ -57,7 +70,8 @@ public class TeamManager : MonoBehaviour {
 	void Update () {
 
 		//bankText.text = "Ore: " + ore.ToString() + "\nWood: " + wood.ToString();
-		bankText.text = "x" + ore.ToString() +"\n\n" + "x" + wood.ToString();
+		bankText.text = "x" + ore.ToString() +"\n\n" + "x" + wood.ToString() + "\n\n" + "x" + sand.ToString() + "\n\n" + "x" + clay.ToString();
+		badText.text = "Shell x" + shell.ToString () + " Leather x" + leather.ToString ();
 
 		if (getActivePlayer ()) {
 			actText.text = "Active Character: " + getActivePlayer ().tag + "\nAction Count: " + getActivePlayer ().getActionCount ().ToString ()
@@ -65,7 +79,8 @@ public class TeamManager : MonoBehaviour {
 		}
 		else {
 			actText.text = "No Active Character";
-			bankText.text = "x" + ore.ToString() +"\n\n" + "x" + wood.ToString();
+			bankText.text = "x" + ore.ToString() +"\n\n" + "x" + wood.ToString() + "\n\n" + "x" + sand.ToString() + "\n\n" + "x" + clay.ToString();
+			badText.text = "Shell x" + shell.ToString () + " Leather x" + leather.ToString ();
 		}
 
 		if (replacedFactories >= 4) {
@@ -112,6 +127,12 @@ public class TeamManager : MonoBehaviour {
 	void Clean() {
 		if (getActivePlayer() != null) {
 			getActivePlayer ().Clean ();
+		}
+	}
+
+	void Rush(){
+		if (getActivePlayer () != null) {
+			getActivePlayer ().Rush ();
 		}
 	}
 
