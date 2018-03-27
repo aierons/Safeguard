@@ -22,7 +22,6 @@ GameObject:
   - component: {fileID: 212883179959623158}
   - component: {fileID: 114995201127447690}
   - component: {fileID: 60850495716047660}
-  - component: {fileID: 114099782957598090}
   m_Layer: 0
   m_Name: Hex
   m_TagString: Untagged
@@ -60,36 +59,6 @@ PolygonCollider2D:
       - {x: -2.3190231, y: 1.3438663}
       - {x: -0.000011444092, y: 2.6766691}
       - {x: 2.3152695, y: 1.3306141}
---- !u!114 &114099782957598090
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1223390681550348}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -1862395651, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Delegates:
-  - eventID: 0
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 114995201127447690}
-          m_MethodName: onMouseOverHex
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-      m_TypeName: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI,
-        Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  delegates: []
 --- !u!114 &114995201127447690
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -101,8 +70,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef258182662e69f4a968be3702eee74f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  infoText: {fileID: 114858678180093946, guid: ea49920406715b949a408c597b551780, type: 2}
-  popupText: {fileID: 4160758943938448, guid: f0f2a59be61edc14dbff296b86c5ae3f, type: 2}
   buildingText: {fileID: 114747438614262534, guid: 7fb28d9b9b671b243a8069f81059c692,
     type: 2}
   buildingSprite: {fileID: 1955740828192640, guid: 5a1b2b192494cdc45b9ca2f730057d7f,

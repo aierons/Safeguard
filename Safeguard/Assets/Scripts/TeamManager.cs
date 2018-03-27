@@ -74,8 +74,8 @@ public class TeamManager : MonoBehaviour {
 		badText.text = "Shell x" + shell.ToString () + " Leather x" + leather.ToString ();
 
 		if (getActivePlayer ()) {
-			actText.text = "Active Character: " + getActivePlayer ().tag + "\nActions Left: " + getActivePlayer ().getActionCount ().ToString ()
-			+ "\nMovements Left:" + getActivePlayer ().movement.ToString ();
+			actText.text = "Active Character: " + getActivePlayer ().tag + "\nAction Count: " + getActivePlayer ().getActionCount ().ToString ()
+			+ "\nMovement Left:" + getActivePlayer ().movement.ToString ();
 		}
 		else {
 			actText.text = "No Active Character";
