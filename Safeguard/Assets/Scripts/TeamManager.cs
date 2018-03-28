@@ -24,6 +24,8 @@ public class TeamManager : MonoBehaviour {
 
 	public int ore; 
 	public int wood;
+	public int clay;
+	public int sand;
 
 	public double totalHexes;
 	public double pollutedHexes;
@@ -39,6 +41,8 @@ public class TeamManager : MonoBehaviour {
 		Mariana = GameObject.FindGameObjectWithTag ("Mariana").GetComponent<Player>();
 		ore = 0;
 		wood = 0;
+		clay = 0;
+		sand = 0;
 
 
 		bankText.text = "";
@@ -57,15 +61,15 @@ public class TeamManager : MonoBehaviour {
 	void Update () {
 
 		//bankText.text = "Ore: " + ore.ToString() + "\nWood: " + wood.ToString();
-		bankText.text = "x" + ore.ToString() +"\n\n" + "x" + wood.ToString();
+		bankText.text = "x" + ore.ToString() +"\n\n" + "x" + wood.ToString() + "\n\n" + "x" + clay.ToString() +"\n\n" + "x" + sand.ToString();
 
 		if (getActivePlayer ()) {
 			actText.text = "Active Character: " + getActivePlayer ().tag + "\nAction Count: " + getActivePlayer ().getActionCount ().ToString ()
-			+ "\nMovement Left:" + getActivePlayer ().movement.ToString ();
+			+ "\nMovement Left: " + getActivePlayer ().movement.ToString ();
 		}
 		else {
 			actText.text = "No Active Character";
-			bankText.text = "x" + ore.ToString() +"\n\n" + "x" + wood.ToString();
+			bankText.text = "x" + ore.ToString() +"\n\n" + "x" + wood.ToString() + "\n\n" + "x" + clay.ToString() +"\n\n" + "x" + sand.ToString();
 		}
 
 		if (replacedFactories >= 4) {
@@ -127,11 +131,9 @@ public class TeamManager : MonoBehaviour {
 				hex.GetComponent<HexManager> ().pollute ();
 				if (hex.GetComponent<HexManager> ().GetGCoolDown () > 0) {
 					hex.GetComponent<HexManager> ().LowerGCoolDown ();
-					hex.GetComponent<HexManager> ().DisplayGCD ();
 				}
 				if (hex.GetComponent<HexManager> ().GetBuildingCoolDown () > 0) {
 					hex.GetComponent<HexManager> ().LowerBuildingCoolDown ();
-					hex.GetComponent<HexManager> ().DisplayBuilding ();
 				}
 				if (hex.GetComponent<HexManager> ().GetBuildingCoolDown () == 0
 					&& hex.GetComponent<HexManager> ().getHasBuilding ()) {

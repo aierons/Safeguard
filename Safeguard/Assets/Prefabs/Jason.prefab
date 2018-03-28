@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4586438588638524}
   - component: {fileID: 212619839073301116}
   - component: {fileID: 114836357895158114}
-  - component: {fileID: 58471175175767248}
+  - component: {fileID: 60592120930177392}
   m_Layer: 9
   m_Name: Jason
   m_TagString: Jayson
@@ -37,13 +37,13 @@ Transform:
   m_GameObject: {fileID: 1559269056577368}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.1, y: 0.1, z: 1}
+  m_LocalScale: {x: 3, y: 3, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!58 &58471175175767248
-CircleCollider2D:
+--- !u!60 &60592120930177392
+PolygonCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
@@ -55,8 +55,73 @@ CircleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 10
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 2.81, y: 3.92}
+    newSize: {x: 20, y: 20}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: 0.005, y: -1.4699999}
+      - {x: 0.015, y: -1.64}
+      - {x: 0.035, y: -1.8}
+      - {x: 0.095, y: -1.87}
+      - {x: 0.415, y: -1.87}
+      - {x: 0.475, y: -1.6899999}
+      - {x: 0.415, y: -1.5999999}
+      - {x: 0.45499998, y: -1.41}
+      - {x: 0.49499997, y: -1.37}
+      - {x: 0.505, y: -1.09}
+      - {x: 0.675, y: -1.1}
+      - {x: 0.91499996, y: -1.0699999}
+      - {x: 0.97499996, y: -0.97999996}
+      - {x: 0.97499996, y: -0.83}
+      - {x: 0.72499996, y: -0.56}
+      - {x: 0.72499996, y: -0.45999998}
+      - {x: 0.645, y: -0.37}
+      - {x: 0.655, y: -0.11}
+      - {x: 0.815, y: 0.24}
+      - {x: 0.79499996, y: 0.48}
+      - {x: 0.825, y: 0.84}
+      - {x: 0.825, y: 1.1999999}
+      - {x: 0.675, y: 1.53}
+      - {x: 0.53499997, y: 1.6999999}
+      - {x: 0.385, y: 1.8399999}
+      - {x: 0.035, y: 1.8399999}
+      - {x: -0.085, y: 1.8299999}
+      - {x: -0.33499998, y: 1.73}
+      - {x: -0.585, y: 1.5699999}
+      - {x: -0.715, y: 1.38}
+      - {x: -0.79499996, y: 1.0699999}
+      - {x: -0.79499996, y: 0.69}
+      - {x: -0.775, y: 0.58}
+      - {x: -0.775, y: 0.39999998}
+      - {x: -0.765, y: 0.19999999}
+      - {x: -0.655, y: 0.06}
+      - {x: -0.625, y: -0.37}
+      - {x: -0.705, y: -0.47}
+      - {x: -0.715, y: -0.55}
+      - {x: -0.945, y: -0.83}
+      - {x: -0.955, y: -0.87}
+      - {x: -0.955, y: -0.96}
+      - {x: -0.935, y: -1.01}
+      - {x: -0.895, y: -1.06}
+      - {x: -0.655, y: -1.0699999}
+      - {x: -0.585, y: -1}
+      - {x: -0.45499998, y: -1.0699999}
+      - {x: -0.48499998, y: -1.38}
+      - {x: -0.39499998, y: -1.49}
+      - {x: -0.435, y: -1.63}
+      - {x: -0.45499998, y: -1.79}
+      - {x: -0.36499998, y: -1.87}
+      - {x: -0.145, y: -1.87}
+      - {x: -0.105, y: -1.8499999}
+      - {x: -0.024999999, y: -1.8}
+      - {x: -0.005, y: -1.66}
 --- !u!114 &114836357895158114
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -70,8 +135,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   msgText: {fileID: 0}
   xoffset: 0
-  yoffset: 1.3
-  movement: 2
+  yoffset: 7
+  movement: 3
+  buildingDiscount: 0
+  gatherBonus: 0
 --- !u!212 &212619839073301116
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -104,10 +171,10 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -952699413
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 544ecf471f5da5c4a8582c2930cf8116, type: 3}
-  m_Color: {r: 0.86206913, g: 0, b: 1, a: 1}
+  m_Sprite: {fileID: 21300000, guid: 35070f18d067e80498ccf062055204b1, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

@@ -9,7 +9,7 @@ public class HexManager : MonoBehaviour {
 	protected int pollution;
 	private bool pollutedThisTurn = false;
 
-	protected bool factory = false;
+	public GridManager.TileType tile = GridManager.TileType.EMPTY;
 
 	//building variables
 	public Text buildingText;
@@ -36,6 +36,10 @@ public class HexManager : MonoBehaviour {
 	public Sprite CD2sprite;
 	public Sprite CD1sprite;
 
+	public Text infoText;
+	public Transform popupText;
+	public static bool textStatus = false;
+
 	public int getPollution() {
 		return pollution;
 	}
@@ -45,7 +49,7 @@ public class HexManager : MonoBehaviour {
 	}
 
 	public bool isFactory() {
-		return factory;
+		return tile == GridManager.TileType.FACTORY;
 	}
 
 	public void incrememntPollution() {
@@ -76,11 +80,14 @@ public class HexManager : MonoBehaviour {
 	}
 
 	public bool checkLegalMove(GameObject other, Player mover, int depth) {
+		if (other == null) {
+			return false;
+		}
 		HexManager otherHex = other.GetComponent<HexManager> ();
 		int xa = Mathf.Abs (this.x - otherHex.x);
 		int ya = Mathf.Abs (this.y - otherHex.y);
 		if (xa <= 1 && ya <= 1 && Mathf.Abs ((otherHex.x - this.x) + (otherHex.y - this.y)) < 2) {
-			mover.movement -= depth;
+			mover.setMinMove (depth);
 			return true;
 		} else if (mover.movement > depth) {
 			GameObject gm = GameObject.Find ("GameManager");
@@ -94,22 +101,22 @@ public class HexManager : MonoBehaviour {
 			GameObject n5 = gridManager.getHex (fx - 1, fy + 1);
 			GameObject n6 = gridManager.getHex (fx + 1, fy - 1);
 			bool legal = false;
-			if (n1 != null && this.checkLegalMove (n1, mover, depth + 1)) {
+			if (this.checkLegalMove (n1, mover, depth + 1)) {
 				legal = true;
 			}
-			if (!legal && n2 != null && this.checkLegalMove (n2, mover, depth + 1)) {
+			if (this.checkLegalMove (n2, mover, depth + 1)) {
 				legal = true;
 			}
-			if (!legal && n3 != null && this.checkLegalMove (n3, mover, depth + 1)) {
+			if (this.checkLegalMove (n3, mover, depth + 1)) {
 				legal = true;
 			}
-			if (!legal && n4 != null && this.checkLegalMove (n4, mover, depth + 1)) {
+			if (this.checkLegalMove (n4, mover, depth + 1)) {
 				legal = true;
 			}
-			if (!legal && n5 != null && this.checkLegalMove (n5, mover, depth + 1)) {
+			if (this.checkLegalMove (n5, mover, depth + 1)) {
 				legal = true;
 			}
-			if (!legal && n6 != null && this.checkLegalMove (n6, mover, depth + 1)) {
+			if (this.checkLegalMove (n6, mover, depth + 1)) {
 				legal = true;
 			}
 			return legal;
@@ -178,16 +185,16 @@ public class HexManager : MonoBehaviour {
 			this.gameObject.GetComponent<SpriteRenderer> ().sprite = sprite;
 		}
 		if (pollution == 0) {
-			this.gameObject.GetComponent<SpriteRenderer> ().color = new Color (1, 1, 1);
+			this.gameObject.GetComponent<SpriteRenderer> ().color = new Color32 (255, 255, 255, 255);
 		}
 		if (pollution == 1) {
-			this.gameObject.GetComponent<SpriteRenderer> ().color = new Color (1, 1, 0);
+			this.gameObject.GetComponent<SpriteRenderer> ().color = new Color32 (255, 175, 255, 255);
 		}
 		if (pollution == 2) {
-			this.gameObject.GetComponent<SpriteRenderer> ().color = new Color (1, 0, 1);
+			this.gameObject.GetComponent<SpriteRenderer> ().color = new Color32 (255, 125, 255, 255);
 		}
 		if (pollution == 3) {
-			this.gameObject.GetComponent<SpriteRenderer> ().color = new Color (1, 0, 0);
+			this.gameObject.GetComponent<SpriteRenderer> ().color = new Color32 (255, 25, 255, 255);
 		}
 		if (hasBuilding) {
 			if (buildingLife == 3) {
@@ -200,30 +207,8 @@ public class HexManager : MonoBehaviour {
 				building.GetComponent<SpriteRenderer> ().color = new Color (1, 0, 0);
 			}
 		}
-	}
-
-	public void DisplayGCD() {
-
-		int sl = GameObject.Find ("GameManager").GetComponent<GridManager> ().GetSideLength ();
-
-		//Vector3 offset = new Vector3 (730, 300, 0);
-		float offset = 0;
-		offset = hexWidth / 2;
-		offset *= y - sl + 1;
-
-		float xc =  (transform.position.x + 730+ 500) + offset + (x - sl + 1) * hexWidth;
-		float yc = (transform.position.y + 300) + (y - sl + 1) * hexHeight * 0.75f;
-
-		//int x = ((int)transform.position.x + 730) + (int)hexWidth;
-		//int y = ((int)transform.position.y + 300) + (int)hexHeight;
-		GCDText.transform.position = new Vector3(xc+ hexWidth, yc+ hexHeight, 0);
-		GCDText.text = GetGCoolDown().ToString ();
-	}
-
-	public void DisplayBuilding() {
-		Vector3 offset = new Vector3 (700, 300, 0);
-		buildingText.transform.position = transform.position + offset;
-		buildingText.text = GetBuildingCoolDown().ToString ();
+		GameObject gm = GameObject.Find ("GameManager");
+		GridManager gridManager = gm.GetComponent<GridManager> ();
 	}
 
 	public void SwitchHasBuilding() {
@@ -234,12 +219,65 @@ public class HexManager : MonoBehaviour {
 		GameObject gm = GameObject.Find ("GameManager");
 		GridManager gridManager = gm.GetComponent<GridManager> ();
 		gridManager.setMouseHex (this.gameObject);
+
+		GameObject pop = GameObject.Find ("PopupText(Clone)");
+		if (pop != null) {
+			Destroy (pop);
+		}
+		if (!textStatus && !this.isFactory()) {
+			popupText.GetComponent<TextMesh> ().text = 
+				"Tile Type: " + tile.ToString() +
+				"\nPollution Level: " + getPollution().ToString() +
+				"\nGathering Cooldown: " + GetGCoolDown ().ToString () + 
+				"\nBuilding Cooldown: " + GetBuildingCoolDown ().ToString ();
+			textStatus = true;
+			Instantiate (popupText, new Vector3 (transform.position.x, transform.position.y + 2, 0), popupText.rotation);
+		}
+
+		Vector3 offset = new Vector3 (700, 300, 0);
 	}
 
+	/*void pls() {
+		popupText.GetComponent<TextMesh> ().text = "Gathering Cooldown: " + GetGCoolDown ().ToString () + "\nBuilding Cooldown: " + GetBuildingCoolDown ().ToString ();
+		textStatus = true;
+		Instantiate (popupText, new Vector3 (transform.position.x, transform.position.y + 2, 0), popupText.rotation);
+	}
+
+	void DisplayCooldownInfo() {
+		Vector3 offset = new Vector3 (700, 300, 0);
+		if (Input.GetMouseButton (0)) {
+			if (!textStatus) { 
+				infoText.text = "Gathering Cooldown: " + GetGCoolDown ().ToString () + "\nBuilding Cooldown: " + GetBuildingCoolDown ().ToString ();
+				Debug.Log ("mouse down");
+				textStatus = true;
+			} else if (textStatus) {
+				textStatus = false; 
+				infoText.text = "";
+			}
+		}
+	}
+
+	void DisplayPopUp() {
+		if (textStatus == false) {
+			popupText.GetComponent<TextMesh> ().text = "Gathering Cooldown: " + GetGCoolDown ().ToString () + "\nBuilding Cooldown: " + GetBuildingCoolDown ().ToString ();
+			Instantiate (popupText, new Vector3 (transform.position.x, transform.position.y + 2, 0), popupText.rotation);
+		}
+
+		if (textStatus == true) {
+			textStatus = false;
+			Instantiate (popupText, new Vector3 (transform.position.x, transform.position.y + 2, 0), popupText.rotation);
+			//popupText.GetComponent<TextMesh> ().text = "";
+		}
+	}*/
+				
 	void OnMouseExit() {
 		GameObject gm = GameObject.Find ("GameManager");
 		GridManager gridManager = gm.GetComponent<GridManager> ();
 		gridManager.setMouseHex (null);
+
+		if (textStatus && !this.isFactory()) {
+			textStatus = false;
+		}
 	}
 
 	public void MakeBuilding() {

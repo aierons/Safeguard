@@ -8,7 +8,7 @@ public class FactoryManager : HexManager {
 	void Start () {
 		this.GetComponent<HexManager> ().setPollution (3);
 		this.GetComponent<HexManager> ().refresh ();
-		this.factory = true;
+		this.tile = GridManager.TileType.FACTORY;
 	}
 	
 	// Update is called once per frame

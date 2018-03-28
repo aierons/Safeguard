@@ -36,7 +36,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1832741516922570}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 34.977715, y: 9.344618, z: 0}
+  m_LocalPosition: {x: 21.957653, y: -7.7678, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -51,14 +51,14 @@ PolygonCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 4.8, y: 5.53}
+    oldSize: {x: 30.000002, y: 30.000002}
     newSize: {x: 4.8, y: 5.53}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -66,12 +66,12 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: -2.2832909, y: 1.3099394}
-      - {x: -2.283043, y: -1.2898731}
-      - {x: 0.013034821, y: -2.6541867}
-      - {x: 2.2718048, y: -1.352521}
-      - {x: 2.292347, y: 1.3372116}
-      - {x: 0.009056091, y: 2.6289415}
+    - - {x: 14.830532, y: -7.2824144}
+      - {x: -0.007926941, y: -14.692594}
+      - {x: -14.656381, y: -7.263795}
+      - {x: -14.855831, y: 7.507799}
+      - {x: 0.10445976, y: 14.795587}
+      - {x: 14.747608, y: 7.390073}
 --- !u!114 &114383538427405048
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -83,12 +83,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2daecad47c625f34395030ea185df548, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tile: 5
   buildingText: {fileID: 0}
   buildingSprite: {fileID: 1955740828192640, guid: 5a1b2b192494cdc45b9ca2f730057d7f,
     type: 2}
   GCDText: {fileID: 0}
   x: 0
   y: 0
+  sprite: {fileID: 21300000, guid: 794fb7ac32c5c2647af073e2426a6967, type: 3}
+  CD3sprite: {fileID: 21300000, guid: 9d489bc27828168498e59cea88ee232e, type: 3}
+  CD2sprite: {fileID: 21300000, guid: 466d3574b1b8cc74e8779bb7c057225a, type: 3}
+  CD1sprite: {fileID: 21300000, guid: 9ff999db685948c4089fd8c20d197c81, type: 3}
+  infoText: {fileID: 0}
+  popupText: {fileID: 4160758943938448, guid: f0f2a59be61edc14dbff296b86c5ae3f, type: 2}
 --- !u!212 &212389729896926274
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -123,7 +130,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 5ff4626657bb49c4fa4861efe7be9f52, type: 3}
+  m_Sprite: {fileID: 21300000, guid: b249f2195c780054c9ebdd789718c8db, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

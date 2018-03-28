@@ -8,17 +8,43 @@ public class GridManager: MonoBehaviour
 	//instantiate it by dragging the prefab on this variable using unity editor
 	public GameObject Hex;
 	public GameObject Factory;
+
+	public Sprite OreSprite;
+	public Sprite OreCD3;
+	public Sprite OreCD2;
+	public Sprite OreCD1;
+
+	public Sprite ClaySprite;
+	public Sprite ClayCD3;
+	public Sprite ClayCD2;
+	public Sprite ClayCD1;
+
+	public Sprite SandSprite;
+	public Sprite SandCD3;
+	public Sprite SandCD2;
+	public Sprite SandCD1;
+
+	public Sprite TreeSprite;
+	public Sprite TreeCD3;
+	public Sprite TreeCD2;
+	public Sprite TreeCD1;
+
 	//next two variables can also be instantiated using unity editor
 	public int gridSideLength;
 
 	//Hexagon tile width and height in game world
 	private float hexWidth;
 	private float hexHeight;
-	private GameObject mouseHex;
+	public GameObject mouseHex;
 
 	private GameObject hexGridGO;
 
 	static IList<GameObject> grid;
+
+	public enum TileType
+	{
+		ORE, TREE, CLAY, SAND, FACTORY, EMPTY
+	}
 
 	public int GetSideLength() {
 		return gridSideLength;
@@ -98,6 +124,7 @@ public class GridManager: MonoBehaviour
 		bool factory3 = true;
 		bool factory4 = true;
 
+		int sort = 0;
 		for (int y = 0; y < (gridSideLength * 2) - 1; y++)
 		{
 			for (int x = 0; x < (gridSideLength * 2) - 1; x++)
@@ -107,6 +134,8 @@ public class GridManager: MonoBehaviour
 					Vector2 gridPos = new Vector2 (x, y);
 					factory.transform.position = calcWorldCoord (gridPos);
 					factory.transform.SetParent(hexGridGO.transform);
+					factory.GetComponent<SpriteRenderer> ().sortingLayerName = "Hex2";
+					factory.GetComponent<SpriteRenderer> ().sortingOrder = sort;
 					FactoryManager fm = factory.GetComponent<FactoryManager> ();
 					fm.x = x;
 					fm.y = y;
@@ -119,6 +148,8 @@ public class GridManager: MonoBehaviour
 					Vector2 gridPos = new Vector2 (x, y);
 					factory.transform.position = calcWorldCoord (gridPos);
 					factory.transform.SetParent(hexGridGO.transform);
+					factory.GetComponent<SpriteRenderer> ().sortingLayerName = "Hex2";
+					factory.GetComponent<SpriteRenderer> ().sortingOrder = sort;
 					FactoryManager fm = factory.GetComponent<FactoryManager> ();
 					fm.x = x;
 					fm.y = y;
@@ -131,6 +162,8 @@ public class GridManager: MonoBehaviour
 					Vector2 gridPos = new Vector2 (x, y);
 					factory.transform.position = calcWorldCoord (gridPos);
 					factory.transform.SetParent(hexGridGO.transform);
+					factory.GetComponent<SpriteRenderer> ().sortingLayerName = "Hex2";
+					factory.GetComponent<SpriteRenderer> ().sortingOrder = sort;
 					FactoryManager fm = factory.GetComponent<FactoryManager> ();
 					fm.x = x;
 					fm.y = y;
@@ -143,6 +176,8 @@ public class GridManager: MonoBehaviour
 					Vector2 gridPos = new Vector2 (x, y);
 					factory.transform.position = calcWorldCoord (gridPos);
 					factory.transform.SetParent(hexGridGO.transform);
+					factory.GetComponent<SpriteRenderer> ().sortingLayerName = "Hex2";
+					factory.GetComponent<SpriteRenderer> ().sortingOrder = sort;
 					FactoryManager fm = factory.GetComponent<FactoryManager> ();
 					fm.x = x;
 					fm.y = y;
@@ -155,12 +190,49 @@ public class GridManager: MonoBehaviour
 					GameObject hex = (GameObject)Instantiate (Hex);
 					//Current position in grid
 					Vector2 gridPos = new Vector2 (x, y);
+					float rng = Random.value;
+					if (rng <= 0.20) {
+						hex.GetComponent<HexManager> ().tile = TileType.ORE;
+						hex.GetComponent<HexManager> ().sprite = OreSprite;
+						hex.GetComponent<HexManager> ().CD3sprite = OreCD3;
+						hex.GetComponent<HexManager> ().CD2sprite = OreCD2;
+						hex.GetComponent<HexManager> ().CD1sprite = OreCD1;
+						hex.GetComponent<SpriteRenderer> ().sprite = OreSprite;
+						hex.GetComponent<SpriteRenderer> ().sortingLayerName = "Hex2";
+						hex.GetComponent<SpriteRenderer> ().sortingOrder = sort;
+					} else if (rng <= 0.40) {
+						hex.GetComponent<HexManager> ().tile = TileType.CLAY;
+						hex.GetComponent<HexManager> ().sprite = ClaySprite;
+						hex.GetComponent<HexManager> ().CD3sprite = ClayCD3;
+						hex.GetComponent<HexManager> ().CD2sprite = ClayCD2;
+						hex.GetComponent<HexManager> ().CD1sprite = ClayCD1;
+						hex.GetComponent<SpriteRenderer> ().sprite = ClaySprite;
+					} else if (rng <= 0.60) {
+						hex.GetComponent<HexManager> ().tile = TileType.TREE;
+						hex.GetComponent<HexManager> ().sprite = TreeSprite;
+						hex.GetComponent<HexManager> ().CD3sprite = TreeCD3;
+						hex.GetComponent<HexManager> ().CD2sprite = TreeCD2;
+						hex.GetComponent<HexManager> ().CD1sprite = TreeCD1;
+						hex.GetComponent<SpriteRenderer> ().sprite = TreeSprite;
+						hex.GetComponent<SpriteRenderer> ().sortingLayerName = "Hex2";
+						hex.GetComponent<SpriteRenderer> ().sortingOrder = sort;
+					} else if (rng <= 0.80) {
+						hex.GetComponent<HexManager> ().tile = TileType.SAND;
+						hex.GetComponent<HexManager> ().sprite = SandSprite;
+						hex.GetComponent<HexManager> ().CD3sprite = SandCD3;
+						hex.GetComponent<HexManager> ().CD2sprite = SandCD2;
+						hex.GetComponent<HexManager> ().CD1sprite = SandCD1;
+						hex.GetComponent<SpriteRenderer> ().sprite = SandSprite;
+					} else {
+						hex.GetComponent<HexManager> ().tile = TileType.EMPTY;
+					}
 					hex.transform.position = calcWorldCoord (gridPos);
 					hex.transform.SetParent(hexGridGO.transform);
 					HexManager hm = hex.GetComponent<HexManager> ();
 					hm.x = x;
 					hm.y = y;
 					grid.Add (hex);
+					sort--;
 				} else {
 					grid.Add(null);
 				}
