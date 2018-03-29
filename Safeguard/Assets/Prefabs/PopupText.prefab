@@ -115,7 +115,7 @@ TextMesh:
   m_GameObject: {fileID: 1272755690577076}
   m_Text: 'Tile Type: CLAY
 
-    Pollution Level: 0
+    Pollution Level: 3
 
     Gathering Cooldown: 0
 

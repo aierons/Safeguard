@@ -21,11 +21,14 @@ public class TeamManager : MonoBehaviour {
 	public Button moveButton;
 	public Button cleanButton;
 	public Button endTurnButton;
+	public Button rushButton;
 
 	public int ore; 
 	public int wood;
 	public int clay;
 	public int sand;
+	public int shell;
+	public int leather;
 
 	public double totalHexes;
 	public double pollutedHexes;
@@ -43,6 +46,8 @@ public class TeamManager : MonoBehaviour {
 		wood = 0;
 		clay = 0;
 		sand = 0;
+		shell = 0;
+		leather = 0;
 
 
 		bankText.text = "";
@@ -52,6 +57,7 @@ public class TeamManager : MonoBehaviour {
 		moveButton.onClick.AddListener (Move);
 		cleanButton.onClick.AddListener (Clean);
 		endTurnButton.onClick.AddListener (EndTurn);
+		rushButton.onClick.AddListener (Rush);
 
 		replacedFactories = 0;
 		
@@ -61,7 +67,8 @@ public class TeamManager : MonoBehaviour {
 	void Update () {
 
 		//bankText.text = "Ore: " + ore.ToString() + "\nWood: " + wood.ToString();
-		bankText.text = "x" + ore.ToString() +"\n\n" + "x" + wood.ToString() + "\n\n" + "x" + clay.ToString() +"\n\n" + "x" + sand.ToString();
+		bankText.text = "x" + ore.ToString() +"\n\n" + "x" + wood.ToString() + "\n\n" + "x" + clay.ToString() +"\n\n" + "x" + sand.ToString()
+			+ "\n\n" + "Shell x" + shell.ToString () + "\n\n" + " Leather x" + leather.ToString ();
 
 		if (getActivePlayer ()) {
 			actText.text = "Active Character: " + getActivePlayer ().tag + "\nAction Count: " + getActivePlayer ().getActionCount ().ToString ()
@@ -69,7 +76,8 @@ public class TeamManager : MonoBehaviour {
 		}
 		else {
 			actText.text = "No Active Character";
-			bankText.text = "x" + ore.ToString() +"\n\n" + "x" + wood.ToString() + "\n\n" + "x" + clay.ToString() +"\n\n" + "x" + sand.ToString();
+			bankText.text = "x" + ore.ToString() +"\n\n" + "x" + wood.ToString() + "\n\n" + "x" + clay.ToString() +"\n\n" + "x" + sand.ToString()
+				+ "\n\n" + "Shell x" + shell.ToString () + "\n\n" + " Leather x" + leather.ToString ();
 		}
 
 		if (replacedFactories >= 4) {
@@ -98,6 +106,12 @@ public class TeamManager : MonoBehaviour {
 	void Gather() {
 		if (getActivePlayer() != null) {
 			getActivePlayer ().Gather ();
+		}
+	}
+
+	void Rush() {
+		if (getActivePlayer() != null) {
+			getActivePlayer ().Rush ();
 		}
 	}
 
