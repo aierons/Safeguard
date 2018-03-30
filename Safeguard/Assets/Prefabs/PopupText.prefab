@@ -113,9 +113,9 @@ TextMesh:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1272755690577076}
-  m_Text: 'Tile Type: CLAY
+  m_Text: 'Tile Type: EMPTY
 
-    Pollution Level: 3
+    Pollution Level: 0
 
     Gathering Cooldown: 0
 

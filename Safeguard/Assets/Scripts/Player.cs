@@ -73,7 +73,7 @@ public class Player : MonoBehaviour {
 		if (active) {
 			this.gameObject.GetComponent<SpriteRenderer> ().color = new Color32 (255, 255, 255, 255);
 		} else {
-			this.gameObject.GetComponent<SpriteRenderer> ().color = new Color32 (255, 255, 255, 100);
+			this.gameObject.GetComponent<SpriteRenderer> ().color = new Color32 (255, 255, 255, 150);
 		}
 
 	}

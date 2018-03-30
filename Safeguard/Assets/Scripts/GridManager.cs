@@ -29,6 +29,11 @@ public class GridManager: MonoBehaviour
 	public Sprite TreeCD2;
 	public Sprite TreeCD1;
 
+	public Sprite EmptySprite;
+	public Sprite EmptyCD3;
+	public Sprite EmptyCD2;
+	public Sprite EmptyCD1;
+
 	//next two variables can also be instantiated using unity editor
 	public int gridSideLength;
 
@@ -225,6 +230,11 @@ public class GridManager: MonoBehaviour
 						hex.GetComponent<SpriteRenderer> ().sprite = SandSprite;
 					} else {
 						hex.GetComponent<HexManager> ().tile = TileType.EMPTY;
+						hex.GetComponent<HexManager> ().sprite = EmptySprite;
+						hex.GetComponent<HexManager> ().CD3sprite = EmptyCD3;
+						hex.GetComponent<HexManager> ().CD2sprite = EmptyCD2;
+						hex.GetComponent<HexManager> ().CD1sprite = EmptyCD1;
+						hex.GetComponent<SpriteRenderer> ().sprite = EmptySprite;
 					}
 					hex.transform.position = calcWorldCoord (gridPos);
 					hex.transform.SetParent(hexGridGO.transform);
