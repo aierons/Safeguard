@@ -226,7 +226,7 @@ public class HexManager : MonoBehaviour {
 		}
 		if (!textStatus && !this.isFactory()) {
 			popupText.GetComponent<TextMesh> ().text = 
-				"Tile Type: " + tile.ToString() +
+				tile.ToString() +
 				"\nPollution Level: " + getPollution().ToString() +
 				"\nGathering Cooldown: " + GetGCoolDown ().ToString () + 
 				"\nBuilding Cooldown: " + GetBuildingCoolDown ().ToString ();

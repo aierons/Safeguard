@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 public class TeamManager : MonoBehaviour {
 
+	//pollution bar
+	public Slider pollutionBar; 
+
 	private Player Jayson;
 	private Player Zoya;
 	private Player Mariana;
@@ -17,12 +20,18 @@ public class TeamManager : MonoBehaviour {
 	public int pollutionLimit;
 
 	public Button gatherButton;
-	public Button buildButton;
-	public Button moveButton;
+	//public Button buildButton;
 	public Button cleanButton;
 	public Button endTurnButton;
 	public Button rushButton;
 
+	//build specific temp buildings buttons
+	public Button buildSingleWindmillButton;
+	public Button buildSingleSolarPanelButton; 
+	public Button buildSingleRecyclingHouseButton; 
+
+	//build specific eco-friendly replacement buttons
+	public Button buildReplacementButton;
 	public int ore; 
 	public int wood;
 	public int clay;
@@ -33,7 +42,7 @@ public class TeamManager : MonoBehaviour {
 	public double totalHexes;
 	public double pollutedHexes;
 
-
+	private string team;
 	// Use this for initialization
 	void Start () {
 		totalHexes = Mathf.Infinity;
@@ -49,18 +58,27 @@ public class TeamManager : MonoBehaviour {
 		shell = 0;
 		leather = 0;
 
-
 		bankText.text = "";
 
 		gatherButton.onClick.AddListener (Gather);
-		buildButton.onClick.AddListener (Build);
-		moveButton.onClick.AddListener (Move);
+//		buildButton.onClick.AddListener (Build);
 		cleanButton.onClick.AddListener (Clean);
 		endTurnButton.onClick.AddListener (EndTurn);
 		rushButton.onClick.AddListener (Rush);
 
+		buildSingleWindmillButton.onClick.AddListener(BuildSingleWindmill);
+		buildSingleSolarPanelButton.onClick.AddListener(BuildSingleSolarPanel); 
+		buildSingleRecyclingHouseButton.onClick.AddListener(BuildSingleRecyclingHouse); 
+
+		//build specific eco-friendly replacement buttons
+		buildReplacementButton.onClick.AddListener(BuildReplacement);
+
 		replacedFactories = 0;
-		
+
+		team = "JAYSONZOYAMARIANA";
+
+		pollutionBar.value = calculatePollution();
+
 	}
 	
 	// Update is called once per frame
@@ -68,16 +86,33 @@ public class TeamManager : MonoBehaviour {
 
 		//bankText.text = "Ore: " + ore.ToString() + "\nWood: " + wood.ToString();
 		bankText.text = "x" + ore.ToString() +"\n\n" + "x" + wood.ToString() + "\n\n" + "x" + clay.ToString() +"\n\n" + "x" + sand.ToString()
-			+ "\n\n" + "Shell x" + shell.ToString () + "\n\n" + " Leather x" + leather.ToString ();
+			+ "\n\n" + "x" + shell.ToString () + "\n\n" + "x" + leather.ToString ();
+		/*
+		 * if (getActivePlayer ().Equals (Jayson)) {
+				actText.text = team.Substring (0, 6) + "\nAction Count: " + getActivePlayer ().getActionCount ().ToString ()
+				+ "\nMovement Left: " + getActivePlayer ().movement.ToString ();
+			}*/
 
 		if (getActivePlayer ()) {
-			actText.text = "Active Character: " + getActivePlayer ().tag + "\nAction Count: " + getActivePlayer ().getActionCount ().ToString ()
-			+ "\nMovement Left: " + getActivePlayer ().movement.ToString ();
-		}
-		else {
-			actText.text = "No Active Character";
+			if (getActivePlayer ().Equals (Jayson)) {
+				actText.text = team.Substring (0, 6) + "\nACTIONS LEFT: " + "\nMOVEMENT LEFT: ";
+				Jayson.getActionCount ();
+				Jayson.getMovementCount ();
+			}
+			if (getActivePlayer ().Equals (Zoya)) {
+				actText.text = team.Substring (6, 4) + "\nACTIONS LEFT: " + "\nMOVEMENT LEFT: ";
+				Zoya.getActionCount ();
+				Zoya.getMovementCount ();
+			}
+			if (getActivePlayer ().Equals (Mariana)) {
+				actText.text = team.Substring (10, 7) + "\nACTIONS LEFT: " + "\nMOVEMENT LEFT: ";
+				Mariana.getActionCount ();
+				Mariana.getMovementCount ();
+			}
+		} else {
+			actText.text = team;
 			bankText.text = "x" + ore.ToString() +"\n\n" + "x" + wood.ToString() + "\n\n" + "x" + clay.ToString() +"\n\n" + "x" + sand.ToString()
-				+ "\n\n" + "Shell x" + shell.ToString () + "\n\n" + " Leather x" + leather.ToString ();
+				+ "\n\n" + "x" + shell.ToString () + "\n\n" + "x" + leather.ToString ();
 		}
 
 		if (replacedFactories >= 4) {
@@ -88,8 +123,13 @@ public class TeamManager : MonoBehaviour {
 			actText.text = "You lose!";
 		}
 		pollText.text = ((int)((pollutedHexes / totalHexes) * 100)).ToString () + "% of Tiles Polluted\n(Limit = " + pollutionLimit.ToString () + "%)";
+
+		pollutionBar.value = calculatePollution();
 	}
-		
+
+	float calculatePollution() {
+		return (float) (pollutedHexes / totalHexes); 
+	}
 
 	Player getActivePlayer() {
 		if (Jayson.isActive ()) {
@@ -115,21 +155,41 @@ public class TeamManager : MonoBehaviour {
 		}
 	}
 
+	/*
 	void Build() {
 		if (getActivePlayer() != null) {
 			getActivePlayer ().Build ();
 		}
 	}
-
-	void Move() {
-		if (getActivePlayer() != null) {
-			getActivePlayer ().Move ();
-		}
-	}
+	*/
 
 	void Clean() {
 		if (getActivePlayer() != null) {
 			getActivePlayer ().Clean ();
+		}
+	}
+
+	void BuildSingleWindmill() {
+		if (getActivePlayer () != null) {
+			getActivePlayer ().BuildSingleWindmill ();
+		}	
+	}
+
+	void BuildSingleSolarPanel() {
+		if (getActivePlayer () != null) {
+			getActivePlayer ().BuildSingleSolarPanel ();
+		}
+	}
+
+	void BuildSingleRecyclingHouse() {
+		if (getActivePlayer () != null) {
+			getActivePlayer ().BuildSingleRecyclingHouse ();
+		}
+	}
+
+	void BuildReplacement() {
+		if (getActivePlayer () != null) {
+			getActivePlayer ().BuildReplacement ();
 		}
 	}
 
