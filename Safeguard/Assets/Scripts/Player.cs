@@ -174,6 +174,8 @@ public class Player : MonoBehaviour
 					currentHex.GetComponent<HexManager> ().StartGCoolDown ();
 					msgText.text = "You have gathered " + s.ToString () + " sand";
 				}
+				team.gather_p += 50;
+				team.gather_c++;
 			}
 		}
 	}
@@ -196,6 +198,8 @@ public class Player : MonoBehaviour
 				currentHex.GetComponent<HexManager> ().incrememntPollution ();
 				currentHex.GetComponent<HexManager> ().StartGCoolDown ();
 				msgText.text = "You have Rush Gathered " + shell.ToString () + " shell and " + leather.ToString () + " leather. \n Pollution in this area has increased";
+				team.rush_p -= 70;
+				team.rush_c++;
 			}
 		}
 	}
@@ -242,6 +246,8 @@ public class Player : MonoBehaviour
 					//building = (GameObject)Instantiate (buildingSprite);
 					//building.transform.position = this.transform.position;
 					actionCount--;
+					team.build_p += 100;
+					team.build_c++;
 
 					currentHex.GetComponent<HexManager> ().MakeBuilding ();
 					currentHex.GetComponent<HexManager> ().StartBuildingCoolDown ();
@@ -317,6 +323,8 @@ public class Player : MonoBehaviour
 						msgText.text += "1 Clay ";
 					}
 
+					team.build_p += 100;
+					team.build_c++;
 					actionCount--;
 				
 					currentHex.GetComponent<HexManager> ().MakeBuilding ();
@@ -394,6 +402,8 @@ public class Player : MonoBehaviour
 				}
 					
 				actionCount--;
+				team.build_p += 100;
+				team.build_c++;
 		
 				currentHex.GetComponent<HexManager> ().MakeBuilding ();
 				currentHex.GetComponent<HexManager> ().StartBuildingCoolDown ();
@@ -486,6 +496,8 @@ public class Player : MonoBehaviour
 					team.sand -= 3;
 					actionCount--;
 					team.replacedFactories++;
+					team.build_p += 400;
+					team.build_c++;
 				} else if (currentHex.GetComponent<HexManager> ().isFactory ()) {
 					return;
 				}
@@ -755,6 +767,8 @@ public class Player : MonoBehaviour
 				TeamManager tm = t.GetComponent<TeamManager> ();
 				--tm.pollutedHexes;
 			}
+			team.clean_p += 100;
+			team.clean_c++;
 			--actionCount;
 		}
 	}

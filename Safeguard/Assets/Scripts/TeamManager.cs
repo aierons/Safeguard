@@ -8,6 +8,18 @@ public class TeamManager : MonoBehaviour {
 	//pollution bar
 	public Slider pollutionBar; 
 
+	public int build_p;
+	public int rush_p;
+	public int gather_p;
+	public int clean_p;
+	public int build_c;
+	public int rush_c;
+	public int gather_c;
+	public int clean_c;
+	public int turn_c;
+	public int turn_p;
+	private int total_p;
+
 	private Player Jayson;
 	private Player Zoya;
 	private Player Mariana;
@@ -57,6 +69,20 @@ public class TeamManager : MonoBehaviour {
 		sand = 0;
 		shell = 0;
 		leather = 0;
+
+		build_p = 0;
+		rush_p = 0;
+		gather_p = 0;
+		clean_p = 0;
+		turn_p = 0;
+
+		build_c = 0;
+		rush_c = 0;
+		gather_c = 0;
+		clean_c = 0;
+		turn_c = 0;
+
+		total_p = 0;
 
 		bankText.text = "";
 
@@ -109,18 +135,40 @@ public class TeamManager : MonoBehaviour {
 				Mariana.getActionCount ();
 				Mariana.getMovementCount ();
 			}
+			/*
+			if (getActivePlayer().tag == "Jayson") {
+				actText.text += "\nMobility: His quick feet gives him 1 extra movement every turn";
+			} else if (getActivePlayer().tag == "Zoya") {
+				actText.text += "\nBuilder: Her expertise with construction allows her to decrease the cost of building by 1 of each resource required.";
+			} else {
+				actText.text += "\nGatherer: Her experience with minimizing waste allows her to gather more resources (on average).";
+			}
+			*/
 		} else {
 			actText.text = team;
 			bankText.text = "x" + ore.ToString() +"\n\n" + "x" + wood.ToString() + "\n\n" + "x" + clay.ToString() +"\n\n" + "x" + sand.ToString()
 				+ "\n\n" + "x" + shell.ToString () + "\n\n" + "x" + leather.ToString ();
 		}
+		total_p = build_p + gather_p + rush_p + clean_p + turn_p;
 
 		if (replacedFactories >= 4) {
 			actText.text = "You win!"; 
+			actText.text += "\nBuilding Built : " + build_c.ToString () + "\n\tPoints : " + build_p.ToString() + 
+				"\nTimes Gathered : " + gather_c.ToString () + "\n\tPoints : " + gather_p.ToString() +
+				"\nTimes Rushed : " + rush_c.ToString () + "\n\tPoints : " + rush_p.ToString() + 
+				"\nTimes Cleaned : " + clean_c.ToString () + "\n\tPoints : " + clean_p.ToString() +
+				"\nTurn Count : " + turn_c.ToString() + "\n\tPoints : " + turn_p.ToString() + 
+				"\nTotal Score : " + total_p.ToString();
 		}
 
 		if ((int)((pollutedHexes/totalHexes)*100) >= pollutionLimit) {
 			actText.text = "You lose!";
+			actText.text += "\nBuilding Built : " + build_c.ToString () + "\n\tPoints : " + build_p.ToString() + 
+				"\nTimes Gathered : " + gather_c.ToString () + "\n\tPoints : " + gather_p.ToString() +
+				"\nTimes Rushed : " + rush_c.ToString () + "\n\tPoints : " + rush_p.ToString() + 
+				"\nTimes Cleaned : " + clean_c.ToString () + "\n\tPoints : " + clean_p.ToString() +
+				"\nTurn Count : " + turn_c.ToString() + "\n\tPoints : " + turn_p.ToString() + 
+				"\nTotal Score : " + total_p.ToString();
 		}
 		pollText.text = ((int)((pollutedHexes / totalHexes) * 100)).ToString () + "% of Tiles Polluted\n(Limit = " + pollutionLimit.ToString () + "%)";
 
@@ -197,6 +245,8 @@ public class TeamManager : MonoBehaviour {
 		Jayson.EndTurn ();
 		Zoya.EndTurn ();
 		Mariana.EndTurn ();
+		turn_c++;
+		turn_p -= 10;
 
 		GameObject gm = GameObject.Find ("GameManager");
 		IList<GameObject> grid = gm.GetComponent<GridManager> ().getGrid ();
