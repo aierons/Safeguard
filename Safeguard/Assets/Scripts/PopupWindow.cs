@@ -2,31 +2,42 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class PopupWindow : MonoBehaviour {
 
 	public GameObject window;
-	//public Text message;
+	private int timeAway;
 
-
-	// Use this for initialization
 	void Start () {
-
+		timeAway = 0;
 	}
 
-	// Update is called once per frame
-	void Update () {
+	void OnEnable() {
+		timeAway = 0;
+	}
 
+	void Update () {
+		bool hit = false;
+		List<RaycastResult> results = GameObject.Find ("GameManager").GetComponent<GridManager> ().getRaycastResults ();
+		foreach (RaycastResult result in results) {
+			if (result.gameObject == this.gameObject) {
+				hit = true;
+				timeAway = 0;
+			}
+		}
+		if (!hit && timeAway > 70) {
+			window.SetActive (false);
+		}
+		++timeAway;
 	}
 
 	public void Show() {
-	//	message.text = "buildingrecipe";
 		window.SetActive (true);
 	}
 
 	public void Hide() {
 		window.SetActive (false);
 	}
-
 
 }

@@ -10,10 +10,6 @@ public class FactoryManager : HexManager {
 		this.GetComponent<HexManager> ().refresh ();
 		this.tile = GridManager.TileType.FACTORY;
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	}
 
 	void decrementPollution() {
 		this.pollution = 0;

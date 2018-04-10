@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.EventSystems;
 
 public class GridManager: MonoBehaviour
 {
@@ -43,6 +45,11 @@ public class GridManager: MonoBehaviour
 	public GameObject mouseHex;
 
 	private GameObject hexGridGO;
+
+	private GraphicRaycaster graphicRaycaster;
+	private PointerEventData pointerEventData;
+	private EventSystem eventSystem;
+	private List<RaycastResult> raycastResults;
 
 	static IList<GameObject> grid;
 
@@ -259,5 +266,19 @@ public class GridManager: MonoBehaviour
 		setSizes();
 		createGrid();
 		mouseHex = getHex (0, 0);
+		graphicRaycaster = GameObject.Find("Canvas").GetComponent<GraphicRaycaster> ();
+		eventSystem = GameObject.Find ("EventSystem").GetComponent<EventSystem> ();
+		raycastResults = new List<RaycastResult> ();
+	}
+
+	void Update() {
+		pointerEventData = new PointerEventData (eventSystem);
+		pointerEventData.position = Input.mousePosition;
+		raycastResults = new List<RaycastResult> ();
+		graphicRaycaster.Raycast (pointerEventData, raycastResults);
+	}
+
+	public List<RaycastResult> getRaycastResults() {
+		return raycastResults;
 	}
 }

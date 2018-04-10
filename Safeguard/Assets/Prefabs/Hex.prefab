@@ -38,7 +38,7 @@ PolygonCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -73,8 +73,10 @@ MonoBehaviour:
   tile: 5
   buildingText: {fileID: 114747438614262534, guid: 7fb28d9b9b671b243a8069f81059c692,
     type: 2}
-  buildingSprite: {fileID: 1955740828192640, guid: 5a1b2b192494cdc45b9ca2f730057d7f,
-    type: 2}
+  buildingSolarPanel: {fileID: 21300000, guid: 092f00e7c7b2e98438e265774f439902, type: 3}
+  buildingCompost: {fileID: 21300000, guid: 01084d52dd977884fa0d46965cdcebf0, type: 3}
+  buildingWindmill: {fileID: 21300000, guid: 553e69239889e844a9ce4ab6a99ed41d, type: 3}
+  building: {fileID: 1955740828192640, guid: 5a1b2b192494cdc45b9ca2f730057d7f, type: 2}
   GCDText: {fileID: 114006702055890062, guid: 224d3389bb919b44a9f1b2234e4fea5c, type: 2}
   x: 0
   y: 0

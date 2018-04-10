@@ -101,7 +101,7 @@ public class TeamManager : MonoBehaviour {
 
 		replacedFactories = 0;
 
-		team = "JAYSONZOYAMARIANA";
+		team = "No character selected";
 
 		pollutionBar.value = calculatePollution();
 
@@ -121,17 +121,17 @@ public class TeamManager : MonoBehaviour {
 
 		if (getActivePlayer ()) {
 			if (getActivePlayer ().Equals (Jayson)) {
-				actText.text = team.Substring (0, 6) + "\nACTIONS LEFT: " + "\nMOVEMENT LEFT: ";
+				actText.text = "JAYSON\nACTIONS LEFT: " + "\nMOVEMENT LEFT: ";
 				Jayson.getActionCount ();
 				Jayson.getMovementCount ();
 			}
 			if (getActivePlayer ().Equals (Zoya)) {
-				actText.text = team.Substring (6, 4) + "\nACTIONS LEFT: " + "\nMOVEMENT LEFT: ";
+				actText.text = "ZOYA\nACTIONS LEFT: " + "\nMOVEMENT LEFT: ";
 				Zoya.getActionCount ();
 				Zoya.getMovementCount ();
 			}
 			if (getActivePlayer ().Equals (Mariana)) {
-				actText.text = team.Substring (10, 7) + "\nACTIONS LEFT: " + "\nMOVEMENT LEFT: ";
+				actText.text = "MARINA\nACTIONS LEFT: " + "\nMOVEMENT LEFT: ";
 				Mariana.getActionCount ();
 				Mariana.getMovementCount ();
 			}

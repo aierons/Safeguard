@@ -12,20 +12,20 @@ public class HexManager : MonoBehaviour {
 	public GridManager.TileType tile = GridManager.TileType.EMPTY;
 
 	//building variables
-	public Text buildingText;
 	private bool hasBuilding;
 	private int buildingLife;
 	private int adjBuilds;
 
-	public GameObject buildingSprite;
+	public Sprite buildingSolarPanel;
+	public Sprite buildingCompost;
+	public Sprite buildingWindmill;
 
-	private GameObject building;
+	public GameObject building;
 
 	private float hexWidth;
 	private float hexHeight;
 
 	//gathering variables
-	public Text GCDText;
 	private int GCoolDown;
 
 	public int x;
@@ -36,9 +36,13 @@ public class HexManager : MonoBehaviour {
 	public Sprite CD2sprite;
 	public Sprite CD1sprite;
 
-	public Text infoText;
 	public Transform popupText;
 	public static bool textStatus = false;
+
+	public enum BuildingType
+	{
+		SOLAR, WIND, COMPOST
+	}
 
 	public int getPollution() {
 		return pollution;
@@ -52,7 +56,7 @@ public class HexManager : MonoBehaviour {
 		return tile == GridManager.TileType.FACTORY;
 	}
 
-	public void incrememntPollution() {
+	public void incrementPollution() {
 		if (pollution < 3 && !pollutedThisTurn) {
 			++pollution;
 			pollutedThisTurn = true;
@@ -158,57 +162,60 @@ public class HexManager : MonoBehaviour {
 		hexWidth = GetComponent<Renderer>().bounds.size.x;
 		hexHeight = GetComponent<Renderer>().bounds.size.y;
 
-		GCDText = (UnityEngine.UI.Text)Instantiate (GCDText);
-		GCDText.transform.SetParent(GameObject.FindGameObjectWithTag("UICanvas").transform);
-		GCDText.text = "";
-
-		buildingText = (UnityEngine.UI.Text)Instantiate (buildingText);
-		buildingText.transform.SetParent(GameObject.FindGameObjectWithTag("UICanvas").transform);
-		buildingText.text = "";
-
 		hasBuilding = false;
 		pollution = 0;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if (GCoolDown == 3) {
-			this.gameObject.GetComponent<SpriteRenderer> ().sprite = CD3sprite;
-		}
-		if (GCoolDown == 2) {
-			this.gameObject.GetComponent<SpriteRenderer> ().sprite = CD2sprite;
-		}
-		if (GCoolDown == 1) {
-			this.gameObject.GetComponent<SpriteRenderer> ().sprite = CD1sprite;
-		}
-		if (GCoolDown == 0) {
-			this.gameObject.GetComponent<SpriteRenderer> ().sprite = sprite;
-		}
-		if (pollution == 0) {
-			this.gameObject.GetComponent<SpriteRenderer> ().color = new Color32 (255, 255, 255, 255);
-		}
-		if (pollution == 1) {
-			this.gameObject.GetComponent<SpriteRenderer> ().color = new Color32 (255, 175, 255, 255);
-		}
-		if (pollution == 2) {
-			this.gameObject.GetComponent<SpriteRenderer> ().color = new Color32 (255, 125, 255, 255);
-		}
-		if (pollution == 3) {
-			this.gameObject.GetComponent<SpriteRenderer> ().color = new Color32 (255, 25, 255, 255);
-		}
-		if (hasBuilding) {
-			if (buildingLife == 3) {
-				building.GetComponent<SpriteRenderer> ().color = new Color (1, 1, 1);
+		if (!isFactory()) {
+			if (GCoolDown == 3) {
+				this.gameObject.GetComponent<SpriteRenderer> ().sprite = CD3sprite;
 			}
-			if (buildingLife == 2) {
-				building.GetComponent<SpriteRenderer> ().color = new Color (0, 1, 0);
+			if (GCoolDown == 2) {
+				this.gameObject.GetComponent<SpriteRenderer> ().sprite = CD2sprite;
 			}
-			if (buildingLife == 1) {
-				building.GetComponent<SpriteRenderer> ().color = new Color (1, 0, 0);
+			if (GCoolDown == 1) {
+				this.gameObject.GetComponent<SpriteRenderer> ().sprite = CD1sprite;
 			}
+			if (GCoolDown == 0) {
+				this.gameObject.GetComponent<SpriteRenderer> ().sprite = sprite;
+			}
+			if (pollution == 0) {
+				this.gameObject.GetComponent<SpriteRenderer> ().color = new Color32 (255, 255, 255, 255);
+			}
+			if (pollution == 1) {
+				this.gameObject.GetComponent<SpriteRenderer> ().color = new Color32 (155, 125, 155, 255);
+			}
+			if (pollution == 2) {
+				this.gameObject.GetComponent<SpriteRenderer> ().color = new Color32 (125, 100, 125, 255);
+			}
+			if (pollution == 3) {
+				this.gameObject.GetComponent<SpriteRenderer> ().color = new Color32 (100, 75, 100, 255);
+			}
+			if (hasBuilding) {
+				if (buildingLife == 3) {
+					building.GetComponent<SpriteRenderer> ().color = new Color32 (255, 255, 255, 255);
+				}
+				if (buildingLife == 2) {
+					building.GetComponent<SpriteRenderer> ().color = new Color32 (200, 200, 200, 255);
+				}
+				if (buildingLife == 1) {
+					building.GetComponent<SpriteRenderer> ().color = new Color32 (90, 90, 90, 255);
+				}
+			}
+			GameObject thisPopup = GameObject.Find ("PopupText(Clone)");
+			if (thisPopup != null) {
+				GameObject gm = GameObject.Find ("GameManager");
+				GridManager gridManager = gm.GetComponent<GridManager> ();
+				if (gridManager.getRaycastResults().Count != 0) {
+					thisPopup.transform.localScale = Vector3.zero;
+				} else {
+					thisPopup.transform.localScale = new Vector3 (1, 1, 1);
+				}
+			}
+
 		}
-		GameObject gm = GameObject.Find ("GameManager");
-		GridManager gridManager = gm.GetComponent<GridManager> ();
 	}
 
 	public void SwitchHasBuilding() {
@@ -224,6 +231,7 @@ public class HexManager : MonoBehaviour {
 		if (pop != null) {
 			Destroy (pop);
 		}
+
 		if (!textStatus && !this.isFactory()) {
 			popupText.GetComponent<TextMesh> ().text = 
 				tile.ToString() +
@@ -236,39 +244,6 @@ public class HexManager : MonoBehaviour {
 
 		Vector3 offset = new Vector3 (700, 300, 0);
 	}
-
-	/*void pls() {
-		popupText.GetComponent<TextMesh> ().text = "Gathering Cooldown: " + GetGCoolDown ().ToString () + "\nBuilding Cooldown: " + GetBuildingCoolDown ().ToString ();
-		textStatus = true;
-		Instantiate (popupText, new Vector3 (transform.position.x, transform.position.y + 2, 0), popupText.rotation);
-	}
-
-	void DisplayCooldownInfo() {
-		Vector3 offset = new Vector3 (700, 300, 0);
-		if (Input.GetMouseButton (0)) {
-			if (!textStatus) { 
-				infoText.text = "Gathering Cooldown: " + GetGCoolDown ().ToString () + "\nBuilding Cooldown: " + GetBuildingCoolDown ().ToString ();
-				Debug.Log ("mouse down");
-				textStatus = true;
-			} else if (textStatus) {
-				textStatus = false; 
-				infoText.text = "";
-			}
-		}
-	}
-
-	void DisplayPopUp() {
-		if (textStatus == false) {
-			popupText.GetComponent<TextMesh> ().text = "Gathering Cooldown: " + GetGCoolDown ().ToString () + "\nBuilding Cooldown: " + GetBuildingCoolDown ().ToString ();
-			Instantiate (popupText, new Vector3 (transform.position.x, transform.position.y + 2, 0), popupText.rotation);
-		}
-
-		if (textStatus == true) {
-			textStatus = false;
-			Instantiate (popupText, new Vector3 (transform.position.x, transform.position.y + 2, 0), popupText.rotation);
-			//popupText.GetComponent<TextMesh> ().text = "";
-		}
-	}*/
 				
 	void OnMouseExit() {
 		GameObject gm = GameObject.Find ("GameManager");
@@ -280,9 +255,21 @@ public class HexManager : MonoBehaviour {
 		}
 	}
 
-	public void MakeBuilding() {
-		building = (GameObject)Instantiate (buildingSprite);
-		building.transform.position = this.transform.position;
+	public void MakeBuilding(BuildingType type) {
+		building.SetActive (true);
+		building.transform.position = this.gameObject.transform.position;
+		switch(type) {
+		case BuildingType.SOLAR:
+			building.GetComponent<SpriteRenderer> ().sprite = buildingSolarPanel;
+			break;
+		case BuildingType.WIND:
+			building.GetComponent<SpriteRenderer> ().sprite = buildingWindmill;
+			break;
+		case BuildingType.COMPOST:
+			building.GetComponent<SpriteRenderer> ().sprite = buildingCompost;
+			break;
+		}
+		Instantiate (building);
 	}
 
 	public void RemoveBuilding() {
@@ -303,27 +290,27 @@ public class HexManager : MonoBehaviour {
 			GameObject n6 = gridManager.getHex (fx + 1, fy - 1);
 			if (n1 != null && n1.GetComponent<HexManager>().getAdjBuilds() == 0
 				&& !n1.GetComponent<HexManager>().getHasBuilding() && !n1.GetComponent<HexManager>().isFactory()) {
-				n1.GetComponent<HexManager> ().incrememntPollution ();
+				n1.GetComponent<HexManager> ().incrementPollution ();
 			}
 			if (n2 != null && n2.GetComponent<HexManager>().getAdjBuilds() == 0
 				&& !n2.GetComponent<HexManager>().getHasBuilding() && !n2.GetComponent<HexManager>().isFactory()) {
-				n2.GetComponent<HexManager> ().incrememntPollution ();
+				n2.GetComponent<HexManager> ().incrementPollution ();
 			}
 			if (n3 != null && n3.GetComponent<HexManager>().getAdjBuilds() == 0
 				&& !n3.GetComponent<HexManager>().getHasBuilding() && !n3.GetComponent<HexManager>().isFactory()) {
-				n3.GetComponent<HexManager> ().incrememntPollution ();
+				n3.GetComponent<HexManager> ().incrementPollution ();
 			}
 			if (n4 != null && n4.GetComponent<HexManager>().getAdjBuilds() == 0
 				&& !n4.GetComponent<HexManager>().getHasBuilding() && !n4.GetComponent<HexManager>().isFactory()) {
-				n4.GetComponent<HexManager> ().incrememntPollution ();
+				n4.GetComponent<HexManager> ().incrementPollution ();
 			}
 			if (n5 != null && n5.GetComponent<HexManager>().getAdjBuilds() == 0
 				&& !n5.GetComponent<HexManager>().getHasBuilding() && !n5.GetComponent<HexManager>().isFactory()) {
-				n5.GetComponent<HexManager> ().incrememntPollution ();
+				n5.GetComponent<HexManager> ().incrementPollution ();
 			}
 			if (n6 != null && n6.GetComponent<HexManager>().getAdjBuilds() == 0
 				&& !n6.GetComponent<HexManager>().getHasBuilding() && !n6.GetComponent<HexManager>().isFactory()) {
-				n6.GetComponent<HexManager> ().incrememntPollution ();
+				n6.GetComponent<HexManager> ().incrementPollution ();
 			}
 		}
 	}

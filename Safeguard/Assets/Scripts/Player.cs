@@ -70,7 +70,7 @@ public class Player : MonoBehaviour
 		GameObject gm = GameObject.Find ("GameManager");
 		GridManager gridManager = gm.GetComponent<GridManager> ();
 		GameObject mouseHex = gridManager.getMouseHex ();
-		if (active && movement > 0 && mouseHex != null) {
+		if (active && movement > 0 && mouseHex != null && gridManager.getRaycastResults().Count == 0) {
 			HexManager mhMan = mouseHex.GetComponent<HexManager> ();
 			if (Input.GetKeyDown (KeyCode.Mouse0) && mhMan.checkLegalMove (currentHex, this, 1) && !mouseHex.Equals (currentHex)) {
 				this.applyMinMove ();
@@ -176,7 +176,15 @@ public class Player : MonoBehaviour
 				}
 				team.gather_p += 50;
 				team.gather_c++;
+			} else if (actionCount <= 1 && active) {
+				msgText.text = "Insufficient actions";
 			}
+		} else if (currentHex.GetComponent<HexManager> ().isFactory () && active) {
+			msgText.text = "Cannot gather on factory tiles";
+		} else if (currentHex.GetComponent<HexManager> ().getPollution () != 0 && active) {
+			msgText.text = "Cannot gather on polluted tiles";
+		} else if (currentHex.GetComponent<HexManager> ().GetGCoolDown () != 0 && active) {
+			msgText.text = "Tile not ready to be gathered from again";
 		}
 	}
 
@@ -195,12 +203,22 @@ public class Player : MonoBehaviour
 				team.leather += leather;
 
 				actionCount -= 1;
-				currentHex.GetComponent<HexManager> ().incrememntPollution ();
+				currentHex.GetComponent<HexManager> ().incrementPollution ();
 				currentHex.GetComponent<HexManager> ().StartGCoolDown ();
 				msgText.text = "You have Rush Gathered " + shell.ToString () + " shell and " + leather.ToString () + " leather. \n Pollution in this area has increased";
 				team.rush_p -= 70;
 				team.rush_c++;
-			}
+			} else if (actionCount < 1 && active) {
+				msgText.text = "Insufficient actions";
+		}
+		} else if (actionCount <= 1 && active) {
+			msgText.text = "Insufficient actions";
+		} else if (currentHex.GetComponent<HexManager> ().isFactory () && active) {
+			msgText.text = "Cannot gather on factory tiles";
+		} else if (currentHex.GetComponent<HexManager> ().getPollution () != 0 && active) {
+			msgText.text = "Cannot gather on polluted tiles";
+		} else if (currentHex.GetComponent<HexManager> ().GetGCoolDown () != 0 && active) {
+			msgText.text = "Tile not ready to be gathered from again";
 		}
 	}
 
@@ -211,7 +229,7 @@ public class Player : MonoBehaviour
 
 		if ((currentHex.GetComponent<HexManager> ().GetBuildingCoolDown () == 0 && currentHex.GetComponent<HexManager> ().getHasBuilding () == false
 		    && currentHex.GetComponent<HexManager> ().getPollution () == 0) ||
-		    currentHex.GetComponent<HexManager> ().isFactory ()) {
+		    !currentHex.GetComponent<HexManager> ().isFactory ()) {
 			if (active && actionCount > 0) {
 				if (currentHex.GetComponent<HexManager> ().isFactory ()) {
 					return;
@@ -249,7 +267,7 @@ public class Player : MonoBehaviour
 					team.build_p += 100;
 					team.build_c++;
 
-					currentHex.GetComponent<HexManager> ().MakeBuilding ();
+					currentHex.GetComponent<HexManager> ().MakeBuilding (HexManager.BuildingType.WIND);
 					currentHex.GetComponent<HexManager> ().StartBuildingCoolDown ();
 					currentHex.GetComponent<HexManager> ().SwitchHasBuilding ();
 
@@ -280,7 +298,15 @@ public class Player : MonoBehaviour
 						n6.GetComponent<HexManager> ().incrementBuilding ();
 					}
 				}
-			}
+			} else if (active) {
+					msgText.text = "Insufficient actions";
+			} 
+		} else if (active && currentHex.GetComponent<HexManager> ().getHasBuilding () == true) {
+			msgText.text = "Tile already has building";
+		} else if (active && currentHex.GetComponent<HexManager> ().getPollution () != 0) {
+			msgText.text = "Cannot build on a polluted tile";
+		} else if (actionCount > 0 && active) {
+			msgText.text = "Insufficient resources to build";
 		}
 	}
 
@@ -297,8 +323,8 @@ public class Player : MonoBehaviour
 					return;
 					//Solar Panel 3 sand 2 clay
 				} else if ((team.ore >= 1 - buildingDiscount || team.shell >= 1 - buildingDiscount)
-					&& (team.sand >= 2 - buildingDiscount || team.leather >= 2 - buildingDiscount)
-					&& (team.clay >= 1 - buildingDiscount || team.shell >= 1 - buildingDiscount)) {
+				           && (team.sand >= 2 - buildingDiscount || team.leather >= 2 - buildingDiscount)
+				           && (team.clay >= 1 - buildingDiscount || team.shell >= 1 - buildingDiscount)) {
 
 					msgText.text = "Built Solar Panel, used:\n ";
 					if (team.shell >= 1 - buildingDiscount) {
@@ -327,7 +353,7 @@ public class Player : MonoBehaviour
 					team.build_c++;
 					actionCount--;
 				
-					currentHex.GetComponent<HexManager> ().MakeBuilding ();
+					currentHex.GetComponent<HexManager> ().MakeBuilding (HexManager.BuildingType.SOLAR);
 					currentHex.GetComponent<HexManager> ().StartBuildingCoolDown ();
 					currentHex.GetComponent<HexManager> ().SwitchHasBuilding ();
 
@@ -358,7 +384,15 @@ public class Player : MonoBehaviour
 						n6.GetComponent<HexManager> ().incrementBuilding ();
 					}
 				}
-			}
+			} else if (active) {
+				msgText.text = "Insufficient actions";
+			} 
+		} else if (active && currentHex.GetComponent<HexManager> ().getHasBuilding () == true) {
+			msgText.text = "Tile already has building";
+		} else if (active && currentHex.GetComponent<HexManager> ().getPollution () != 0) {
+			msgText.text = "Cannot build on a polluted tile";
+		} else if (actionCount > 0 && active) {
+			msgText.text = "Insufficient resources to build";
 		}
 	}
 
@@ -373,69 +407,77 @@ public class Player : MonoBehaviour
 			if (active && actionCount > 0) {
 				if (currentHex.GetComponent<HexManager> ().isFactory ()) {
 					return;
-				} //Compost Station 3 clay, 2 sand
-			} else if ((team.sand >= 1 - buildingDiscount || team.leather >= 1 - buildingDiscount)
-				&& (team.wood >= 2 - buildingDiscount || team.leather >= 2 - buildingDiscount)
-				&& (team.clay >= 1 - buildingDiscount || team.shell >= 1 - buildingDiscount)) {
+				} else if ((team.sand >= 1 - buildingDiscount || team.leather >= 1 - buildingDiscount)
+					&& (team.wood >= 2 - buildingDiscount || team.leather >= 2 - buildingDiscount)
+					&& (team.clay >= 1 - buildingDiscount || team.shell >= 1 - buildingDiscount)) {
 
-				msgText.text = "Built Compost Station, used:\n ";
-				if (team.leather >= 1 - buildingDiscount) {
-					team.leather -= 1;
-					msgText.text += "1 Leather, ";
-				} else {
-					team.sand -= 1;
-					msgText.text += "1 Sand, ";
-				}
-				if (team.leather >= 2 - buildingDiscount) {
-					team.leather -= 2;
-					msgText.text += "2 Leather, ";
-				} else {
-					team.wood -= 2;
-					msgText.text += "2 Wood, ";
-				}
-				if (team.shell >= 1 - buildingDiscount) {
-					team.shell -= 1;
-					msgText.text += "1 Shell, ";
-				} else {
-					team.clay -= 1;
-					msgText.text += "1 Clay ";
-				}
-					
-				actionCount--;
-				team.build_p += 100;
-				team.build_c++;
-		
-				currentHex.GetComponent<HexManager> ().MakeBuilding ();
-				currentHex.GetComponent<HexManager> ().StartBuildingCoolDown ();
-				currentHex.GetComponent<HexManager> ().SwitchHasBuilding ();
+					msgText.text = "Built Compost Station, used:\n ";
+					if (team.leather >= 1 - buildingDiscount) {
+						team.leather -= 1;
+						msgText.text += "1 Leather, ";
+					} else {
+						team.sand -= 1;
+						msgText.text += "1 Sand, ";
+					}
+					if (team.leather >= 2 - buildingDiscount) {
+						team.leather -= 2;
+						msgText.text += "2 Leather, ";
+					} else {
+						team.wood -= 2;
+						msgText.text += "2 Wood, ";
+					}
+					if (team.shell >= 1 - buildingDiscount) {
+						team.shell -= 1;
+						msgText.text += "1 Shell, ";
+					} else {
+						team.clay -= 1;
+						msgText.text += "1 Clay ";
+					}
+						
+					actionCount--;
+					team.build_p += 100;
+					team.build_c++;
+			
+					currentHex.GetComponent<HexManager> ().MakeBuilding (HexManager.BuildingType.COMPOST);
+					currentHex.GetComponent<HexManager> ().StartBuildingCoolDown ();
+					currentHex.GetComponent<HexManager> ().SwitchHasBuilding ();
 
-				int fx = currentHex.GetComponent<HexManager> ().x - gridManager.gridSideLength + 1;
-				int fy = currentHex.GetComponent<HexManager> ().y - gridManager.gridSideLength + 1;
-				GameObject n1 = gridManager.getHex (fx + 1, fy);
-				GameObject n2 = gridManager.getHex (fx, fy + 1);
-				GameObject n3 = gridManager.getHex (fx - 1, fy);
-				GameObject n4 = gridManager.getHex (fx, fy - 1);
-				GameObject n5 = gridManager.getHex (fx - 1, fy + 1);
-				GameObject n6 = gridManager.getHex (fx + 1, fy - 1);
-				if (n1 != null) {
-					n1.GetComponent<HexManager> ().incrementBuilding ();
+					int fx = currentHex.GetComponent<HexManager> ().x - gridManager.gridSideLength + 1;
+					int fy = currentHex.GetComponent<HexManager> ().y - gridManager.gridSideLength + 1;
+					GameObject n1 = gridManager.getHex (fx + 1, fy);
+					GameObject n2 = gridManager.getHex (fx, fy + 1);
+					GameObject n3 = gridManager.getHex (fx - 1, fy);
+					GameObject n4 = gridManager.getHex (fx, fy - 1);
+					GameObject n5 = gridManager.getHex (fx - 1, fy + 1);
+					GameObject n6 = gridManager.getHex (fx + 1, fy - 1);
+					if (n1 != null) {
+						n1.GetComponent<HexManager> ().incrementBuilding ();
+					}
+					if (n2 != null) {
+						n2.GetComponent<HexManager> ().incrementBuilding ();
+					}
+					if (n3 != null) {
+						n3.GetComponent<HexManager> ().incrementBuilding ();
+					}
+					if (n4 != null) {
+						n4.GetComponent<HexManager> ().incrementBuilding ();
+					}
+					if (n5 != null) {
+						n5.GetComponent<HexManager> ().incrementBuilding ();
+					}
+					if (n6 != null) {
+						n6.GetComponent<HexManager> ().incrementBuilding ();
+					}
 				}
-				if (n2 != null) {
-					n2.GetComponent<HexManager> ().incrementBuilding ();
-				}
-				if (n3 != null) {
-					n3.GetComponent<HexManager> ().incrementBuilding ();
-				}
-				if (n4 != null) {
-					n4.GetComponent<HexManager> ().incrementBuilding ();
-				}
-				if (n5 != null) {
-					n5.GetComponent<HexManager> ().incrementBuilding ();
-				}
-				if (n6 != null) {
-					n6.GetComponent<HexManager> ().incrementBuilding ();
-				}
-			}
+			} else if (active) {
+				msgText.text = "Insufficient actions";
+			} 
+		} else if (active && currentHex.GetComponent<HexManager> ().getHasBuilding () == true) {
+			msgText.text = "Tile already has building";
+		} else if (active && currentHex.GetComponent<HexManager> ().getPollution () != 0) {
+			msgText.text = "Cannot build on a polluted tile";
+		} else if (actionCount > 0 && active) {
+			msgText.text = "Insufficient resources to build";
 		}
 	}
 
@@ -445,7 +487,7 @@ public class Player : MonoBehaviour
 		GridManager gridManager = gaman.GetComponent<GridManager> ();
 
 		if ((currentHex.GetComponent<HexManager> ().GetBuildingCoolDown () == 0 && currentHex.GetComponent<HexManager> ().getHasBuilding () == false
-		    && currentHex.GetComponent<HexManager> ().getPollution () == 0) ||
+		    && currentHex.GetComponent<HexManager> ().getPollution () == 0) &&
 		    currentHex.GetComponent<HexManager> ().isFactory ()) {
 			if (active && actionCount > 0) {
 				if (team.ore >= 3 - buildingDiscount && team.wood >= 3 - buildingDiscount && team.clay >= 3 - buildingDiscount && team.sand >= 3 - buildingDiscount
@@ -459,21 +501,27 @@ public class Player : MonoBehaviour
 					GameObject n5 = gridManager.getHex (fx - 1, fy + 1);
 					GameObject n6 = gridManager.getHex (fx + 1, fy - 1);
 					if (n1 != null && n1.GetComponent<HexManager> ().getPollution () != 0) {
+						msgText.text += "Cannot build replacement while there are adjacent polluted tiles";
 						return;
 					}
 					if (n2 != null && n2.GetComponent<HexManager> ().getPollution () != 0) {
+						msgText.text += "Cannot build replacement while there are adjacent polluted tiles";
 						return;
 					}
 					if (n3 != null && n3.GetComponent<HexManager> ().getPollution () != 0) {
+						msgText.text += "Cannot build replacement while there are adjacent polluted tiles";
 						return;
 					}
 					if (n4 != null && n4.GetComponent<HexManager> ().getPollution () != 0) {
+						msgText.text += "Cannot build replacement while there are adjacent polluted tiles";
 						return;
 					}
 					if (n5 != null && n5.GetComponent<HexManager> ().getPollution () != 0) {
+						msgText.text += "Cannot build replacement while there are adjacent polluted tiles";
 						return;
 					}
 					if (n6 != null && n6.GetComponent<HexManager> ().getPollution () != 0) {
+						msgText.text += "Cannot build replacement while there are adjacent polluted tiles";
 						return;
 					}
 					if (team.replacedFactories == 0) {
@@ -498,264 +546,16 @@ public class Player : MonoBehaviour
 					team.replacedFactories++;
 					team.build_p += 400;
 					team.build_c++;
-				} else if (currentHex.GetComponent<HexManager> ().isFactory ()) {
+				} else if (currentHex.GetComponent<HexManager> ().isFactory () && actionCount > 0 && active) {
+					msgText.text = "Insufficient resources to replace factory";
 					return;
 				}
-			}
-		}
-	}
-
-	/*
-
-	public void Build() {
-		canMove = false;
-		GameObject gaman = GameObject.Find ("GameManager");
-		GridManager gridManager = gaman.GetComponent<GridManager> ();
-
-		if ((currentHex.GetComponent<HexManager> ().GetBuildingCoolDown () == 0 && currentHex.GetComponent<HexManager> ().getHasBuilding () == false
-			&& currentHex.GetComponent<HexManager>().getPollution() == 0) ||
-			currentHex.GetComponent<HexManager>().isFactory()) {
-			if (active && actionCount > 0) {
-				if (team.ore >= 3 - buildingDiscount && team.wood >= 3 - buildingDiscount && team.clay >= 3 - buildingDiscount && team.sand >= 3 - buildingDiscount
-				    && currentHex.GetComponent<HexManager> ().isFactory ()) {
-					int fx = currentHex.GetComponent<HexManager> ().x - gridManager.gridSideLength + 1;
-					int fy = currentHex.GetComponent<HexManager> ().y - gridManager.gridSideLength + 1;
-					GameObject n1 = gridManager.getHex (fx + 1, fy);
-					GameObject n2 = gridManager.getHex (fx, fy + 1);
-					GameObject n3 = gridManager.getHex (fx - 1, fy);
-					GameObject n4 = gridManager.getHex (fx, fy - 1);
-					GameObject n5 = gridManager.getHex (fx - 1, fy + 1);
-					GameObject n6 = gridManager.getHex (fx + 1, fy - 1);
-					if (n1 != null && n1.GetComponent<HexManager> ().getPollution () != 0) {
-						return;
-					}
-					if (n2 != null && n2.GetComponent<HexManager> ().getPollution () != 0) {
-						return;
-					}
-					if (n3 != null && n3.GetComponent<HexManager> ().getPollution () != 0) {
-						return;
-					}
-					if (n4 != null && n4.GetComponent<HexManager> ().getPollution () != 0) {
-						return;
-					}
-					if (n5 != null && n5.GetComponent<HexManager> ().getPollution () != 0) {
-						return;
-					}
-					if (n6 != null && n6.GetComponent<HexManager> ().getPollution () != 0) {
-						return;
-					}
-					if (team.replacedFactories == 0) {
-                        currentHex.GetComponent<SpriteRenderer> ().sprite = currentHex.GetComponent<HexManager> ().CD1sprite;
-                    } else if (team.replacedFactories == 1) {
-                        currentHex.GetComponent<SpriteRenderer> ().sprite = currentHex.GetComponent<HexManager> ().CD2sprite;
-                    } else if (team.replacedFactories == 2) {
-                        currentHex.GetComponent<SpriteRenderer> ().sprite = currentHex.GetComponent<HexManager> ().CD3sprite;
-                    } else {
-                        currentHex.GetComponent<SpriteRenderer> ().sprite = currentHex.GetComponent<HexManager> ().sprite;
-                    }
-					currentHex.GetComponent<HexManager> ().decrementPollution ();
-					team.ore -= 3;
-					team.wood -= 3;
-					team.clay -= 3;
-					team.sand -= 3;
-					actionCount--;
-					team.replacedFactories++;
-				} else if (currentHex.GetComponent<HexManager> ().isFactory ()) {
+			} else if (currentHex.GetComponent<HexManager> ().isFactory () && actionCount < 1 && active) {
+					msgText.text = "Insufficient actions";
 					return;
-					//Windmill 3 ore 2 wood
-				}  else if ((team.ore >= team.wood || team.shell >= team.wood || team.shell >= team.leather) 
-					&& ((team.ore >= 3 - buildingDiscount || team.shell >= 3 - buildingDiscount)
-						&& (team.wood >= 2 - buildingDiscount || team.leather >= 2 - buildingDiscount))) {
-
-					if (team.shell >= 3 - buildingDiscount) {
-						team.shell -= 3;
-					} else {
-						team.ore -= 3;
-					}
-					if (team.leather >= 2 - buildingDiscount) {
-						team.leather -= 2;
-					} else {
-						team.wood -= 2;
-					}
-
-					//building = (GameObject)Instantiate (buildingSprite);
-					//building.transform.position = this.transform.position;
-					actionCount--;
-					msgText.text = "Built Windmill";
-
-					currentHex.GetComponent<HexManager> ().MakeBuilding ();
-					currentHex.GetComponent<HexManager> ().StartBuildingCoolDown ();
-					currentHex.GetComponent<HexManager> ().SwitchHasBuilding ();
-
-					int fx = currentHex.GetComponent<HexManager> ().x - gridManager.gridSideLength + 1;
-					int fy = currentHex.GetComponent<HexManager> ().y - gridManager.gridSideLength + 1;
-					GameObject n1 = gridManager.getHex (fx + 1, fy);
-					GameObject n2 = gridManager.getHex (fx, fy + 1);
-					GameObject n3 = gridManager.getHex (fx - 1, fy);
-					GameObject n4 = gridManager.getHex (fx, fy - 1);
-					GameObject n5 = gridManager.getHex (fx - 1, fy + 1);
-					GameObject n6 = gridManager.getHex (fx + 1, fy - 1);
-					if (n1 != null) {
-						n1.GetComponent<HexManager> ().incrementBuilding ();
-					}
-					if (n2 != null) {
-						n2.GetComponent<HexManager> ().incrementBuilding ();
-					}
-					if (n3 != null) {
-						n3.GetComponent<HexManager> ().incrementBuilding ();
-					}
-					if (n4 != null) {
-						n4.GetComponent<HexManager> ().incrementBuilding ();
-					}
-					if (n5 != null) {
-						n5.GetComponent<HexManager> ().incrementBuilding ();
-					}
-					if (n6 != null) {
-						n6.GetComponent<HexManager> ().incrementBuilding ();
-					}
-					//Water Wheel 3 wood, 2 ore
-				} else if (((team.ore >= 2 - buildingDiscount || (team.shell >= 2 - buildingDiscount))
-					&& (team.wood >= 3 - buildingDiscount || team.leather >= 3 - buildingDiscount))) {
-					if (team.shell >= 2 - buildingDiscount) {
-						team.shell -= 2;
-					} else {
-						team.ore -= 2;
-					}
-					if (team.leather >= 3 - buildingDiscount) {
-						team.leather -= 3;
-					} else {
-						team.wood -= 3;
-					}
-					//GameObject building = (GameObject)Instantiate (buildingSprite);
-					//building.transform.position = this.transform.position;
-					actionCount--;
-					msgText.text = "Built Water Wheel";
-
-					currentHex.GetComponent<HexManager> ().MakeBuilding ();
-					currentHex.GetComponent<HexManager> ().StartBuildingCoolDown ();
-					currentHex.GetComponent<HexManager> ().SwitchHasBuilding ();
-				}
-				//Solar Panel 3 sand 2 clay
-				else if ((team.sand >= team.clay || team.leather >= team.wood || team.leather >= team.shell) 
-					&& ((team.sand >= 3 - buildingDiscount || team.leather >= 3 - buildingDiscount)
-						&& (team.clay >= 2 - buildingDiscount || team.shell >= 2 - buildingDiscount))) {
-					if (team.shell >= 2 - buildingDiscount) {
-						team.shell -= 2;
-					} else {
-						team.clay -= 2;
-					}
-					if (team.leather >= 3 - buildingDiscount) {
-						team.leather -= 3;
-					} else {
-						team.sand -= 3;
-					}
-
-					actionCount--;
-					msgText.text = "Built Solar Panel";
-
-					currentHex.GetComponent<HexManager> ().MakeBuilding ();
-					currentHex.GetComponent<HexManager> ().StartBuildingCoolDown ();
-					currentHex.GetComponent<HexManager> ().SwitchHasBuilding ();
-					//Compost Station 3 clay, 2 sand
-				} else if (((team.sand >= 2 - buildingDiscount || (team.leather >= 2 - buildingDiscount))
-					&& (team.clay >= 3 - buildingDiscount || team.shell >= 3 - buildingDiscount))) {
-
-					if (team.shell >= 3- buildingDiscount) {
-						team.shell -= 3;
-					} else {
-						team.clay -= 3;
-					}
-					if (team.leather >= 2 - buildingDiscount) {
-						team.leather -= 2;
-					} else {
-						team.sand -= 2;
-					}
-					actionCount--;
-					msgText.text = "Built Compost Station, Clay -3, Sand -2";
-
-					currentHex.GetComponent<HexManager> ().MakeBuilding ();
-					currentHex.GetComponent<HexManager> ().StartBuildingCoolDown ();
-					currentHex.GetComponent<HexManager> ().SwitchHasBuilding ();
-				}
-				/*else if (team.ore >= 1 -buildingDiscount && team.wood >= 1 - buildingDiscount && team.clay >= 1 - buildingDiscount && team.sand >= 1 - buildingDiscount) {
-					team.ore -= 1;
-					team.wood -= 1;
-					team.clay -= 1;
-					team.sand -= 1;
-					actionCount--;
-
-					currentHex.GetComponent<HexManager> ().MakeBuilding ();
-					currentHex.GetComponent<HexManager> ().StartBuildingCoolDown ();
-					currentHex.GetComponent<HexManager> ().SwitchHasBuilding ();
-
-					int fx = currentHex.GetComponent<HexManager> ().x - gridManager.gridSideLength + 1;
-					int fy = currentHex.GetComponent<HexManager> ().y - gridManager.gridSideLength + 1;
-					GameObject n1 = gridManager.getHex (fx + 1, fy);
-					GameObject n2 = gridManager.getHex (fx, fy + 1);
-					GameObject n3 = gridManager.getHex (fx - 1, fy);
-					GameObject n4 = gridManager.getHex (fx, fy - 1);
-					GameObject n5 = gridManager.getHex (fx - 1, fy + 1);
-					GameObject n6 = gridManager.getHex (fx + 1, fy - 1);
-					if (n1 != null) {
-						n1.GetComponent<HexManager> ().incrementBuilding ();
-					}
-					if (n2 != null) {
-						n2.GetComponent<HexManager> ().incrementBuilding ();
-					}
-					if (n3 != null) {
-						n3.GetComponent<HexManager> ().incrementBuilding ();
-					}
-					if (n4 != null) {
-						n4.GetComponent<HexManager> ().incrementBuilding ();
-					}
-					if (n5 != null) {
-						n5.GetComponent<HexManager> ().incrementBuilding ();
-					}
-					if (n6 != null) {
-						n6.GetComponent<HexManager> ().incrementBuilding ();
-					}
-
-				} else if ((team.ore >= 2 - buildingDiscount && team.wood >= 3 - buildingDiscount)) {
-					team.ore -= 2;
-					team.wood -= 3;
-					actionCount--;
-
-					currentHex.GetComponent<HexManager> ().MakeBuilding ();
-					currentHex.GetComponent<HexManager> ().StartBuildingCoolDown ();
-					currentHex.GetComponent<HexManager> ().DisplayBuilding ();
-					currentHex.GetComponent<HexManager> ().SwitchHasBuilding ();
-
-					int fx = currentHex.GetComponent<HexManager> ().x - gridManager.gridSideLength + 1;
-					int fy = currentHex.GetComponent<HexManager> ().y - gridManager.gridSideLength + 1;
-					GameObject n1 = gridManager.getHex (fx + 1, fy);
-					GameObject n2 = gridManager.getHex (fx, fy + 1);
-					GameObject n3 = gridManager.getHex (fx - 1, fy);
-					GameObject n4 = gridManager.getHex (fx, fy - 1);
-					GameObject n5 = gridManager.getHex (fx - 1, fy + 1);
-					GameObject n6 = gridManager.getHex (fx + 1, fy - 1);
-					if (n1 != null) {
-						n1.GetComponent<HexManager> ().incrementBuilding ();
-					}
-					if (n2 != null) {
-						n2.GetComponent<HexManager> ().incrementBuilding ();
-					}
-					if (n3 != null) {
-						n3.GetComponent<HexManager> ().incrementBuilding ();
-					}
-					if (n4 != null) {
-						n4.GetComponent<HexManager> ().incrementBuilding ();
-					}
-					if (n5 != null) {
-						n5.GetComponent<HexManager> ().incrementBuilding ();
-					}
-					if (n6 != null) {
-						n6.GetComponent<HexManager> ().incrementBuilding ();
-					}
-				}
 			}
-		}
+		} 
 	}
-*/
 
 	public void Clean ()
 	{
@@ -770,7 +570,17 @@ public class Player : MonoBehaviour
 			team.clean_p += 100;
 			team.clean_c++;
 			--actionCount;
+		} else if (currentHex.GetComponent<HexManager> ().isFactory () && active) {
+			msgText.text = "Cannot clean factory tiles";
+			return;
+		} else if (currentHex.GetComponent<HexManager> ().getPollution () != 0 && active) {
+			msgText.text = "Current tile is not polluted";
+			return;
+		} else if (actionCount == 0 && active) {
+			msgText.text = "Insufficient actions";
+			return;
 		}
+			
 	}
 
 	void OnMouseDown ()
