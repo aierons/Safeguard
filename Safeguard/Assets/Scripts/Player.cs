@@ -6,10 +6,14 @@ using UnityEngine.UI;
 public class Player : MonoBehaviour
 {
 
+	public AudioClip moveSound;
+	public AudioClip move2Sound;
+	public AudioClip gatherSound;
+	public AudioClip buildSound;
+	public AudioClip build2Sound;
+	public AudioClip cleanSound;
+	public AudioClip clean2Sound;
 
-	//public GameObject buildingSprite;
-
-	//private GameObject building;
 
 	private TeamManager team;
 
@@ -79,6 +83,7 @@ public class Player : MonoBehaviour
 				transform.position -= new Vector3 (0, 0, 1);
 				transform.position += new Vector3 (xoffset, yoffset, 0);
 				currentHex = mouseHex;
+				SoundManager.instance.RandomizeSfx (moveSound, move2Sound);
 			}
 		}
 
@@ -176,6 +181,8 @@ public class Player : MonoBehaviour
 				}
 				team.gather_p += 50;
 				team.gather_c++;
+				SoundManager.instance.PlaySingle (gatherSound);
+
 			} else if (actionCount <= 1 && active) {
 				msgText.text = "Insufficient actions";
 			}
@@ -208,6 +215,7 @@ public class Player : MonoBehaviour
 				msgText.text = "You have Rush Gathered " + shell.ToString () + " shell and " + leather.ToString () + " leather. \n Pollution in this area has increased";
 				team.rush_p -= 70;
 				team.rush_c++;
+				SoundManager.instance.PlaySingle (gatherSound);
 			} else if (actionCount < 1 && active) {
 				msgText.text = "Insufficient actions";
 		}
@@ -266,6 +274,7 @@ public class Player : MonoBehaviour
 					actionCount--;
 					team.build_p += 100;
 					team.build_c++;
+					SoundManager.instance.RandomizeSfx (buildSound, build2Sound);
 
 					currentHex.GetComponent<HexManager> ().MakeBuilding (HexManager.BuildingType.WIND);
 					currentHex.GetComponent<HexManager> ().StartBuildingCoolDown ();
@@ -352,6 +361,7 @@ public class Player : MonoBehaviour
 					team.build_p += 100;
 					team.build_c++;
 					actionCount--;
+					SoundManager.instance.RandomizeSfx (buildSound, build2Sound);
 				
 					currentHex.GetComponent<HexManager> ().MakeBuilding (HexManager.BuildingType.SOLAR);
 					currentHex.GetComponent<HexManager> ().StartBuildingCoolDown ();
@@ -437,6 +447,7 @@ public class Player : MonoBehaviour
 					actionCount--;
 					team.build_p += 100;
 					team.build_c++;
+					SoundManager.instance.RandomizeSfx (buildSound, build2Sound);
 			
 					currentHex.GetComponent<HexManager> ().MakeBuilding (HexManager.BuildingType.COMPOST);
 					currentHex.GetComponent<HexManager> ().StartBuildingCoolDown ();
@@ -546,6 +557,7 @@ public class Player : MonoBehaviour
 					team.replacedFactories++;
 					team.build_p += 400;
 					team.build_c++;
+					SoundManager.instance.RandomizeSfx (buildSound, build2Sound);
 				} else if (currentHex.GetComponent<HexManager> ().isFactory () && actionCount > 0 && active) {
 					msgText.text = "Insufficient resources to replace factory";
 					return;
@@ -570,10 +582,12 @@ public class Player : MonoBehaviour
 			team.clean_p += 100;
 			team.clean_c++;
 			--actionCount;
+			SoundManager.instance.RandomizeSfx (cleanSound, clean2Sound);
+
 		} else if (currentHex.GetComponent<HexManager> ().isFactory () && active) {
 			msgText.text = "Cannot clean factory tiles";
 			return;
-		} else if (currentHex.GetComponent<HexManager> ().getPollution () != 0 && active) {
+		} else if (currentHex.GetComponent<HexManager> ().getPollution () == 0 && active) {
 			msgText.text = "Current tile is not polluted";
 			return;
 		} else if (actionCount == 0 && active) {

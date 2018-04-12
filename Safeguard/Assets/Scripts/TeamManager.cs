@@ -5,6 +5,10 @@ using UnityEngine.UI;
 
 public class TeamManager : MonoBehaviour {
 
+	public AudioClip alarmSound;
+	public AudioClip clickSound;
+	public AudioClip sadMusic;
+
 	//pollution bar
 	public Slider pollutionBar; 
 
@@ -32,7 +36,7 @@ public class TeamManager : MonoBehaviour {
 	public int pollutionLimit;
 
 	public Button gatherButton;
-	//public Button buildButton;
+	public Button buildButton;
 	public Button cleanButton;
 	public Button endTurnButton;
 	public Button rushButton;
@@ -57,6 +61,7 @@ public class TeamManager : MonoBehaviour {
 	private string team;
 	// Use this for initialization
 	void Start () {
+
 		totalHexes = Mathf.Infinity;
 		pollutedHexes = 0;
 
@@ -87,7 +92,6 @@ public class TeamManager : MonoBehaviour {
 		bankText.text = "";
 
 		gatherButton.onClick.AddListener (Gather);
-//		buildButton.onClick.AddListener (Build);
 		cleanButton.onClick.AddListener (Clean);
 		endTurnButton.onClick.AddListener (EndTurn);
 		rushButton.onClick.AddListener (Rush);
@@ -169,10 +173,46 @@ public class TeamManager : MonoBehaviour {
 				"\nTimes Cleaned : " + clean_c.ToString () + "\n\tPoints : " + clean_p.ToString() +
 				"\nTurn Count : " + turn_c.ToString() + "\n\tPoints : " + turn_p.ToString() + 
 				"\nTotal Score : " + total_p.ToString();
+			gatherButton.interactable = false;
+			cleanButton.interactable = false;
+			endTurnButton.interactable = false;
+			rushButton.interactable = false;
+			buildButton.interactable = false;
+
 		}
 		pollText.text = ((int)((pollutedHexes / totalHexes) * 100)).ToString () + "% of Tiles Polluted\n(Limit = " + pollutionLimit.ToString () + "%)";
 
 		pollutionBar.value = calculatePollution();
+
+		if (.8 > calculatePollution ()) {
+			if (Input.GetKeyDown ("g")) {
+				Gather ();
+			}
+			if (Input.GetKeyDown ("r")) {
+				Rush ();
+			}
+			if (Input.GetKeyDown ("c")) {
+				Clean ();
+			}
+			if (Input.GetKeyDown ("e")) {
+				EndTurn ();
+			}
+			if (Input.GetKeyDown ("b")) {
+				buildButton.onClick.Invoke ();
+			}
+			if (Input.GetKeyDown ("1") && buildSingleWindmillButton.IsActive ()) {
+				BuildSingleWindmill ();
+			}
+			if (Input.GetKeyDown ("2") && buildSingleSolarPanelButton.IsActive ()) {
+				BuildSingleSolarPanel ();
+			}
+			if (Input.GetKeyDown ("3") && buildSingleRecyclingHouseButton.IsActive ()) {
+				BuildSingleRecyclingHouse ();
+			}
+			if (Input.GetKeyDown ("4") && buildReplacementButton.IsActive ()) {
+				BuildReplacement ();
+			}
+		}
 	}
 
 	float calculatePollution() {
@@ -202,14 +242,6 @@ public class TeamManager : MonoBehaviour {
 			getActivePlayer ().Rush ();
 		}
 	}
-
-	/*
-	void Build() {
-		if (getActivePlayer() != null) {
-			getActivePlayer ().Build ();
-		}
-	}
-	*/
 
 	void Clean() {
 		if (getActivePlayer() != null) {
@@ -247,6 +279,7 @@ public class TeamManager : MonoBehaviour {
 		Mariana.EndTurn ();
 		turn_c++;
 		turn_p -= 10;
+		SoundManager.instance.PlaySingle (clickSound);
 
 		GameObject gm = GameObject.Find ("GameManager");
 		IList<GameObject> grid = gm.GetComponent<GridManager> ().getGrid ();
@@ -308,5 +341,15 @@ public class TeamManager : MonoBehaviour {
 		}
 		totalHexes = hexes;
 		pollutedHexes = pHexes;
+
+		if (calculatePollution() >= .6 && calculatePollution() <= .8) { 
+			SoundManager.instance.PlaySingle (alarmSound);
+		}
+
+		AudioSource audio = GameObject.FindGameObjectWithTag ("SoundManager").GetComponent<SoundManager> ().musicSource;
+		if (calculatePollution () >= .8) {
+			audio.clip = sadMusic;
+			audio.Play ();
+		}
 	}
 }

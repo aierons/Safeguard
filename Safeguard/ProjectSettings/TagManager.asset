@@ -9,6 +9,8 @@ TagManager:
   - Mariana
   - Zoya
   - Team
+  - SoundManager
+  - Popup
   layers:
   - Default
   - TransparentFX

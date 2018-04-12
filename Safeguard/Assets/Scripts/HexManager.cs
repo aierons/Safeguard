@@ -203,6 +203,9 @@ public class HexManager : MonoBehaviour {
 				if (buildingLife == 1) {
 					building.GetComponent<SpriteRenderer> ().color = new Color32 (90, 90, 90, 255);
 				}
+				if (buildingLife == 0) {
+					RemoveBuilding ();
+				}
 			}
 			GameObject thisPopup = GameObject.Find ("PopupText(Clone)");
 			if (thisPopup != null) {
