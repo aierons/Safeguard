@@ -117,11 +117,6 @@ public class TeamManager : MonoBehaviour {
 		//bankText.text = "Ore: " + ore.ToString() + "\nWood: " + wood.ToString();
 		bankText.text = "x" + ore.ToString() +"\n\n" + "x" + wood.ToString() + "\n\n" + "x" + clay.ToString() +"\n\n" + "x" + sand.ToString()
 			+ "\n\n" + "x" + shell.ToString () + "\n\n" + "x" + leather.ToString ();
-		/*
-		 * if (getActivePlayer ().Equals (Jayson)) {
-				actText.text = team.Substring (0, 6) + "\nAction Count: " + getActivePlayer ().getActionCount ().ToString ()
-				+ "\nMovement Left: " + getActivePlayer ().movement.ToString ();
-			}*/
 
 		if (getActivePlayer ()) {
 			if (getActivePlayer ().Equals (Jayson)) {
@@ -139,15 +134,13 @@ public class TeamManager : MonoBehaviour {
 				Mariana.getActionCount ();
 				Mariana.getMovementCount ();
 			}
-			/*
 			if (getActivePlayer().tag == "Jayson") {
-				actText.text += "\nMobility: His quick feet gives him 1 extra movement every turn";
+				actText.text += "\nAbility: Quick Footed";
 			} else if (getActivePlayer().tag == "Zoya") {
-				actText.text += "\nBuilder: Her expertise with construction allows her to decrease the cost of building by 1 of each resource required.";
+				actText.text += "\nAbility: Resource Affinity";
 			} else {
-				actText.text += "\nGatherer: Her experience with minimizing waste allows her to gather more resources (on average).";
+				actText.text += "\nAbility: Nothing Goes To Waste";
 			}
-			*/
 		} else {
 			actText.text = team;
 			bankText.text = "x" + ore.ToString() +"\n\n" + "x" + wood.ToString() + "\n\n" + "x" + clay.ToString() +"\n\n" + "x" + sand.ToString()
@@ -294,7 +287,6 @@ public class TeamManager : MonoBehaviour {
 				}
 				if (hex.GetComponent<HexManager> ().GetBuildingCoolDown () == 0
 					&& hex.GetComponent<HexManager> ().getHasBuilding ()) {
-					//building.SetActive (false);
 					hex.GetComponent<HexManager> ().RemoveBuilding();
 					hex.GetComponent<HexManager> ().SwitchHasBuilding ();
 

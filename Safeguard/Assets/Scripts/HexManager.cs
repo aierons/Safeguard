@@ -21,6 +21,7 @@ public class HexManager : MonoBehaviour {
 	public Sprite buildingWindmill;
 
 	public GameObject building;
+	private GameObject buildingclone;
 
 	private float hexWidth;
 	private float hexHeight;
@@ -203,9 +204,6 @@ public class HexManager : MonoBehaviour {
 				if (buildingLife == 1) {
 					building.GetComponent<SpriteRenderer> ().color = new Color32 (90, 90, 90, 255);
 				}
-				if (buildingLife == 0) {
-					RemoveBuilding ();
-				}
 			}
 			GameObject thisPopup = GameObject.Find ("PopupText(Clone)");
 			if (thisPopup != null) {
@@ -260,6 +258,8 @@ public class HexManager : MonoBehaviour {
 
 	public void MakeBuilding(BuildingType type) {
 		building.SetActive (true);
+		buildingLife = 3;
+		building.GetComponent<SpriteRenderer> ().color = new Color32 (255, 255, 255, 255);
 		building.transform.position = this.gameObject.transform.position;
 		switch(type) {
 		case BuildingType.SOLAR:
@@ -272,11 +272,12 @@ public class HexManager : MonoBehaviour {
 			building.GetComponent<SpriteRenderer> ().sprite = buildingCompost;
 			break;
 		}
-		Instantiate (building);
+		buildingclone = Instantiate(building);
 	}
 
 	public void RemoveBuilding() {
 		building.SetActive (false);
+		Destroy (buildingclone);
 	}
 
 	public void pollute() {
