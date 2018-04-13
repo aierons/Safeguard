@@ -45,6 +45,8 @@ public class HexManager : MonoBehaviour {
 		SOLAR, WIND, COMPOST
 	}
 
+	public bool sheepPresent;
+
 	public int getPollution() {
 		return pollution;
 	}

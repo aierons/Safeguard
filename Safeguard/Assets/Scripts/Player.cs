@@ -40,6 +40,7 @@ public class Player : MonoBehaviour
 
 	private GameObject currentHex;
 	private float minMove = Mathf.Infinity;
+	public AudioClip sheep;
 
 	// Use this for initialization
 	void Start ()
@@ -83,7 +84,11 @@ public class Player : MonoBehaviour
 				transform.position -= new Vector3 (0, 0, 1);
 				transform.position += new Vector3 (xoffset, yoffset, 0);
 				currentHex = mouseHex;
-				SoundManager.instance.RandomizeSfx (moveSound, move2Sound);
+				if (currentHex.GetComponent<HexManager> ().sheepPresent) {
+					SoundManager.instance.PlaySingle (sheep);
+				} else {
+					SoundManager.instance.RandomizeSfx (moveSound, move2Sound);
+				}
 			}
 		}
 
@@ -497,9 +502,7 @@ public class Player : MonoBehaviour
 		GameObject gaman = GameObject.Find ("GameManager");
 		GridManager gridManager = gaman.GetComponent<GridManager> ();
 
-		if ((currentHex.GetComponent<HexManager> ().GetBuildingCoolDown () == 0 && currentHex.GetComponent<HexManager> ().getHasBuilding () == false
-		    && currentHex.GetComponent<HexManager> ().getPollution () == 0) &&
-		    currentHex.GetComponent<HexManager> ().isFactory ()) {
+		if (currentHex.GetComponent<HexManager> ().isFactory () && currentHex.GetComponent<HexManager> ().getPollution() != 0) {
 			if (active && actionCount > 0) {
 				if (team.ore >= 3 - buildingDiscount && team.wood >= 3 - buildingDiscount && team.clay >= 3 - buildingDiscount && team.sand >= 3 - buildingDiscount
 				    && currentHex.GetComponent<HexManager> ().isFactory ()) {
@@ -512,47 +515,47 @@ public class Player : MonoBehaviour
 					GameObject n5 = gridManager.getHex (fx - 1, fy + 1);
 					GameObject n6 = gridManager.getHex (fx + 1, fy - 1);
 					if (n1 != null && n1.GetComponent<HexManager> ().getPollution () != 0) {
-						msgText.text += "Cannot build replacement while there are adjacent polluted tiles";
+						msgText.text = "Cannot build replacement while there are adjacent polluted tiles";
 						return;
 					}
 					if (n2 != null && n2.GetComponent<HexManager> ().getPollution () != 0) {
-						msgText.text += "Cannot build replacement while there are adjacent polluted tiles";
+						msgText.text = "Cannot build replacement while there are adjacent polluted tiles";
 						return;
 					}
 					if (n3 != null && n3.GetComponent<HexManager> ().getPollution () != 0) {
-						msgText.text += "Cannot build replacement while there are adjacent polluted tiles";
+						msgText.text = "Cannot build replacement while there are adjacent polluted tiles";
 						return;
 					}
 					if (n4 != null && n4.GetComponent<HexManager> ().getPollution () != 0) {
-						msgText.text += "Cannot build replacement while there are adjacent polluted tiles";
+						msgText.text = "Cannot build replacement while there are adjacent polluted tiles";
 						return;
 					}
 					if (n5 != null && n5.GetComponent<HexManager> ().getPollution () != 0) {
-						msgText.text += "Cannot build replacement while there are adjacent polluted tiles";
+						msgText.text = "Cannot build replacement while there are adjacent polluted tiles";
 						return;
 					}
 					if (n6 != null && n6.GetComponent<HexManager> ().getPollution () != 0) {
-						msgText.text += "Cannot build replacement while there are adjacent polluted tiles";
+						msgText.text = "Cannot build replacement while there are adjacent polluted tiles";
 						return;
 					}
 					if (team.replacedFactories == 0) {
-						msgText.text += "Built Windmill Field";
+						msgText.text = "Built Windmill Field";
 						currentHex.GetComponent<SpriteRenderer> ().sprite = currentHex.GetComponent<HexManager> ().CD1sprite;
 					} else if (team.replacedFactories == 1) {
-						msgText.text += "Built Solar Panel Field";
+						msgText.text = "Built Solar Panel Field";
 						currentHex.GetComponent<SpriteRenderer> ().sprite = currentHex.GetComponent<HexManager> ().CD2sprite;
 					} else if (team.replacedFactories == 2) {
-						msgText.text += "Built Green Conservatory";
+						msgText.text = "Built Green Conservatory";
 						currentHex.GetComponent<SpriteRenderer> ().sprite = currentHex.GetComponent<HexManager> ().CD3sprite;
 					} else {
-						msgText.text += "Built Recycling Center";
+						msgText.text = "Built Recycling Center";
 						currentHex.GetComponent<SpriteRenderer> ().sprite = currentHex.GetComponent<HexManager> ().sprite;
 					}
 					currentHex.GetComponent<HexManager> ().decrementPollution ();
-					team.ore -= 3;
-					team.wood -= 3;
-					team.clay -= 3;
-					team.sand -= 3;
+					team.ore -= 3 - buildingDiscount;
+					team.wood -= 3 - buildingDiscount;
+					team.clay -= 3 - buildingDiscount;
+					team.sand -= 3 - buildingDiscount;
 					actionCount--;
 					team.replacedFactories++;
 					team.build_p += 400;
@@ -566,7 +569,10 @@ public class Player : MonoBehaviour
 					msgText.text = "Insufficient actions";
 					return;
 			}
-		} 
+		} else if (currentHex.GetComponent<HexManager> ().isFactory () && currentHex.GetComponent<HexManager> ().getPollution() != 0 && active) {
+			msgText.text = "Replacement already built";
+			return;
+		}
 	}
 
 	public void Clean ()

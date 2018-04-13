@@ -58,6 +58,8 @@ public class GridManager: MonoBehaviour
 		ORE, TREE, CLAY, SAND, FACTORY, EMPTY
 	}
 
+	public GameObject sheep;
+
 	public int GetSideLength() {
 		return gridSideLength;
 	}
@@ -249,6 +251,13 @@ public class GridManager: MonoBehaviour
 					hm.x = x;
 					hm.y = y;
 					grid.Add (hex);
+					if (Random.value * 10000 < 1 && !hm.isFactory ()) {
+						sheep.transform.position = new Vector3 (hex.transform.position.x, hex.transform.position.y + 9, hex.transform.position.z);
+						hm.sheepPresent = true;
+						Instantiate (sheep);
+					} else {
+						hm.sheepPresent = false;
+					}
 					sort--;
 				} else {
 					grid.Add(null);

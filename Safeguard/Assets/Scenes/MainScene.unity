@@ -482,6 +482,7 @@ MonoBehaviour:
   EmptyCD1: {fileID: 21300000, guid: 0a6463d724d13b54ea5f037cecea6a36, type: 3}
   gridSideLength: 5
   mouseHex: {fileID: 0}
+  sheep: {fileID: 1475752917363220, guid: a51ae2b99badbb84fb1fd03082f004c5, type: 2}
 --- !u!4 &203564995
 Transform:
   m_ObjectHideFlags: 0
@@ -805,6 +806,21 @@ Prefab:
       propertyPath: clean2Sound
       value: 
       objectReference: {fileID: 8300000, guid: 010b90b2441681746bf23f94507dfd78, type: 3}
+    - target: {fileID: 114703130350118290, guid: ab5977d89f8759140a7f06211d6fe79f,
+        type: 2}
+      propertyPath: buildingDiscount
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114703130350118290, guid: ab5977d89f8759140a7f06211d6fe79f,
+        type: 2}
+      propertyPath: gatherBonus
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114703130350118290, guid: ab5977d89f8759140a7f06211d6fe79f,
+        type: 2}
+      propertyPath: sheep
+      value: 
+      objectReference: {fileID: 8300000, guid: 4eca5bbff036c5440979d8c44747aea6, type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ab5977d89f8759140a7f06211d6fe79f, type: 2}
   m_IsPrefabParent: 0
@@ -1007,6 +1023,21 @@ Prefab:
       propertyPath: clean2Sound
       value: 
       objectReference: {fileID: 8300000, guid: 010b90b2441681746bf23f94507dfd78, type: 3}
+    - target: {fileID: 114334968954714422, guid: 93eab8aabcd6ebf40b6dce6cbc5f1be8,
+        type: 2}
+      propertyPath: buildingDiscount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114334968954714422, guid: 93eab8aabcd6ebf40b6dce6cbc5f1be8,
+        type: 2}
+      propertyPath: gatherBonus
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114334968954714422, guid: 93eab8aabcd6ebf40b6dce6cbc5f1be8,
+        type: 2}
+      propertyPath: sheep
+      value: 
+      objectReference: {fileID: 8300000, guid: 4eca5bbff036c5440979d8c44747aea6, type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 93eab8aabcd6ebf40b6dce6cbc5f1be8, type: 2}
   m_IsPrefabParent: 0
@@ -1421,6 +1452,11 @@ Prefab:
       propertyPath: clean2Sound
       value: 
       objectReference: {fileID: 8300000, guid: 010b90b2441681746bf23f94507dfd78, type: 3}
+    - target: {fileID: 114836357895158114, guid: 8904b2da288b82b449cefd90d37c6da8,
+        type: 2}
+      propertyPath: sheep
+      value: 
+      objectReference: {fileID: 8300000, guid: 4eca5bbff036c5440979d8c44747aea6, type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 8904b2da288b82b449cefd90d37c6da8, type: 2}
   m_IsPrefabParent: 0
