@@ -156,6 +156,12 @@ public class TeamManager : MonoBehaviour {
 				"\nTimes Cleaned : " + clean_c.ToString () + "\n\tPoints : " + clean_p.ToString() +
 				"\nTurn Count : " + turn_c.ToString() + "\n\tPoints : " + turn_p.ToString() + 
 				"\nTotal Score : " + total_p.ToString();
+			gatherButton.interactable = false;
+			cleanButton.interactable = false;
+			endTurnButton.interactable = false;
+			rushButton.interactable = false;
+			buildButton.interactable = false;
+
 		}
 
 		if ((int)((pollutedHexes/totalHexes)*100) >= pollutionLimit) {
