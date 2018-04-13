@@ -251,7 +251,7 @@ public class GridManager: MonoBehaviour
 					hm.x = x;
 					hm.y = y;
 					grid.Add (hex);
-					if (Random.value * 10000 < 1 && !hm.isFactory ()) {
+					if (Random.value * 1000 < 1 && !hm.isFactory ()) {
 						sheep.transform.position = new Vector3 (hex.transform.position.x, hex.transform.position.y + 9, hex.transform.position.z);
 						hm.sheepPresent = true;
 						Instantiate (sheep);

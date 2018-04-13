@@ -211,7 +211,7 @@ public class HexManager : MonoBehaviour {
 			if (thisPopup != null) {
 				GameObject gm = GameObject.Find ("GameManager");
 				GridManager gridManager = gm.GetComponent<GridManager> ();
-				if (gridManager.getRaycastResults().Count != 0) {
+				if (gridManager.getRaycastResults() != null && gridManager.getRaycastResults().Count != 0) {
 					thisPopup.transform.localScale = Vector3.zero;
 				} else {
 					thisPopup.transform.localScale = new Vector3 (1, 1, 1);
