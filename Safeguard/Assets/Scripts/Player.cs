@@ -247,26 +247,35 @@ public class Player : MonoBehaviour
 				if (currentHex.GetComponent<HexManager> ().isFactory ()) {
 					return;
 					//Windmill 3 ore 2 wood
-				} else if ((team.ore >= 2 - buildingDiscount || team.shell >= 2 - buildingDiscount)
-				           && (team.wood >= 1 - buildingDiscount || team.leather >= 1 - buildingDiscount)
-				           && (team.clay >= 1 - buildingDiscount || team.shell >= 1 - buildingDiscount)) {
+				} else if (((team.ore >= 2 - buildingDiscount)
+				        && (team.wood >= 1 || team.leather >= 1)
+						&& (team.clay >= 1))
+						|| ((team.ore >= 2 - buildingDiscount)
+						&& (team.wood >= 1 || team.leather >= 1)
+						&& (team.shell >= 1))
+						|| ((team.shell >= 2 - buildingDiscount)
+						&& (team.wood >= 1 || team.leather >= 1)
+						&& (team.clay >= 1))
+						|| ((team.shell >= 2 - buildingDiscount)
+						&& (team.wood >= 1 || team.leather >= 1)
+						&& (team.shell - (2 - buildingDiscount) >= 1))) {
 
 					msgText.text = "Built Windmill, used:\n ";
 					if (team.shell >= 2 - buildingDiscount) {
-						team.shell -= 2;
-						msgText.text += "2 Shell, ";
+						team.shell -= 2 - buildingDiscount;
+						msgText.text += (2 - buildingDiscount) + " Shell, ";
 					} else {
-						team.ore -= 2;
-						msgText.text += "2 Ore, ";
+						team.ore -= 2 - buildingDiscount;
+						msgText.text += (2 - buildingDiscount) + " Ore, ";
 					}
-					if (team.leather >= 1 - buildingDiscount) {
+					if (team.leather >= 1) {
 						team.leather -= 1;
 						msgText.text += "1 Leather, ";
 					} else {
 						team.wood -= 1;
 						msgText.text += "1 Wood, ";
 					}
-					if (team.shell >= 1 - buildingDiscount) {
+					if (team.shell >= 1) {
 						team.shell -= 1;
 						msgText.text += "1 Shell, ";
 					} else {
@@ -336,12 +345,21 @@ public class Player : MonoBehaviour
 				if (currentHex.GetComponent<HexManager> ().isFactory ()) {
 					return;
 					//Solar Panel 3 sand 2 clay
-				} else if ((team.ore >= 1 - buildingDiscount || team.shell >= 1 - buildingDiscount)
-				           && (team.sand >= 2 - buildingDiscount || team.leather >= 2 - buildingDiscount)
-				           && (team.clay >= 1 - buildingDiscount || team.shell >= 1 - buildingDiscount)) {
+				} else if (((team.ore >= 1)
+					&& (team.sand >= 2 - buildingDiscount || team.leather >= 2 - buildingDiscount)
+					&& (team.clay >= 1))
+					|| ((team.ore >= 1)
+					&& (team.sand >= 2 - buildingDiscount || team.leather >= 2 - buildingDiscount)
+					&& (team.shell >= 1))
+					|| ((team.shell >= 1)
+					&& (team.sand >= 2 - buildingDiscount || team.leather >= 2 - buildingDiscount)
+					&& (team.clay >= 1))
+					|| ((team.shell >= 1)
+					&& (team.sand >= 2 - buildingDiscount || team.leather >= 2 - buildingDiscount)
+					&& (team.shell - 1 >= 1))) {
 
 					msgText.text = "Built Solar Panel, used:\n ";
-					if (team.shell >= 1 - buildingDiscount) {
+					if (team.shell >= 1) {
 						team.shell -= 1;
 						msgText.text += "1 Shell, ";
 					} else {
@@ -349,13 +367,13 @@ public class Player : MonoBehaviour
 						msgText.text += "1 Ore, ";
 					}
 					if (team.leather >= 2 - buildingDiscount) {
-						team.leather -= 2;
-						msgText.text += "2 Leather, ";
+						team.leather -= 2 - buildingDiscount;
+						msgText.text += (2 - buildingDiscount) + " Leather, ";
 					} else {
-						team.sand -= 2;
-						msgText.text += "2 Sand, ";
+						team.sand -= 2 - buildingDiscount;
+						msgText.text += (2 - buildingDiscount) + " Sand, ";
 					}
-					if (team.shell >= 1 - buildingDiscount) {
+					if (team.shell >= 1) {
 						team.shell -= 1;
 						msgText.text += "1 Shell, ";
 					} else {
@@ -422,12 +440,21 @@ public class Player : MonoBehaviour
 			if (active && actionCount > 0) {
 				if (currentHex.GetComponent<HexManager> ().isFactory ()) {
 					return;
-				} else if ((team.sand >= 1 - buildingDiscount || team.leather >= 1 - buildingDiscount)
-					&& (team.wood >= 2 - buildingDiscount || team.leather >= 2 - buildingDiscount)
-					&& (team.clay >= 1 - buildingDiscount || team.shell >= 1 - buildingDiscount)) {
+				} else if (((team.sand >= 1)
+					&& (team.wood >= 2 - buildingDiscount)
+					&& (team.clay >= 1))
+					|| ((team.sand >= 1)
+					&& (team.leather >= 2 - buildingDiscount)
+					&& (team.shell >= 1))
+					|| ((team.leather >= 1)
+					&& (team.wood >= 2 - buildingDiscount)
+					&& (team.clay >= 1)
+					|| (team.leather >= 1)
+					&& (team.leather >= 2 - 1 - buildingDiscount)
+					&& (team.shell >= 1))) {
 
 					msgText.text = "Built Compost Station, used:\n ";
-					if (team.leather >= 1 - buildingDiscount) {
+					if (team.leather >= 1) {
 						team.leather -= 1;
 						msgText.text += "1 Leather, ";
 					} else {
@@ -435,13 +462,13 @@ public class Player : MonoBehaviour
 						msgText.text += "1 Sand, ";
 					}
 					if (team.leather >= 2 - buildingDiscount) {
-						team.leather -= 2;
-						msgText.text += "2 Leather, ";
+						team.leather -= 2 - buildingDiscount;
+						msgText.text += (2 - buildingDiscount) + " Leather, ";
 					} else {
-						team.wood -= 2;
-						msgText.text += "2 Wood, ";
+						team.wood -= 2 - buildingDiscount;
+						msgText.text += (2 - buildingDiscount) + " Wood, ";
 					}
-					if (team.shell >= 1 - buildingDiscount) {
+					if (team.shell >= 1) {
 						team.shell -= 1;
 						msgText.text += "1 Shell, ";
 					} else {
