@@ -25,5 +25,7 @@ when playing throughout the game.
 panel for more than 3 seconds.
 
 
-
+Download the zip file here to play the game! 
+https://drive.google.com/open?id=1tMwRCs1IFHm1UClQzlxpKyOFtxQYG7Xv
+ 
 The feedback form is linked here: https://goo.gl/forms/j67GGW6Or3W9056g1
